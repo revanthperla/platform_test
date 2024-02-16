@@ -1,0 +1,43 @@
+.employee-dashboard-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .navbar {
+    background-color: #ccc; /* Set background color */
+    overflow: hidden; /* Ensure content doesn't overflow */
+  }
+  
+  .navbar ul {
+    list-style-type: none; /* Remove bullet points */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    height: 100%; /* Set navbar height */
+  }
+  
+  .navbar li {
+    display: inline-block; /* Display list items inline */
+  }
+  
+  .navbar li a {
+    color: white; /* Set text color */
+    text-align: center;
+    padding: 5px 5px; /* Adjust padding as needed */
+    text-decoration: none; /* Remove underline from links */
+  }
+  
+  /* Change the link color on hover */
+  .active {
+    background-color: #ccc;
+    padding-right: 20px; /* Set background color for active tab */
+  }
+
+  .image{
+    padding-top: 5px;
+  }
+  
+  

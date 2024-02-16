@@ -1,0 +1,69 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.job-details {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.job-details p {
+    margin: 10px 0;
+}
+
+.label {
+    font-weight: bold;
+    display: inline-block; /* Display the label as an inline-block element */
+    width: 200px; /* Set a fixed width for the label */
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 20px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 250px;
+    text-align: center;
+    margin-bottom: 20px;
+    align-self: center;
+  }
+
+.static-text {
+    font-weight: bold;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Increase margin-bottom for additional spacing */
+}
+
+.checkbox-container {
+    margin-right: 20px; /* Increase margin-right for additional spacing */
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 5px; /* Increase margin-right for additional spacing between checkbox and label */
+}
+
+.report {
+    margin-left: 50px;
+  }

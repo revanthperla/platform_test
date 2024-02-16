@@ -1,0 +1,66 @@
+/* Calendar Styles */
+.InterviewScheduling {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+/* Current month dates */
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #ccc; /* Grey color for dates from other months */
+}
+
+/* Active date */
+.react-calendar__tile--active {
+  background-color: #007bff; /* Background color for active (selected) date */
+  color: white; /* Text color for active (selected) date */
+}
+
+/* Appointment Form Styles */
+.calendar-container {
+  margin: 20px auto;
+  max-width: 400px;
+}
+
+.appointment-form {
+  max-width: 400px;
+  margin: 20px auto;
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.appointment-form h2 {
+  margin-bottom: 20px;
+}
+
+.appointment-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.appointment-form input[type="text"],
+.appointment-form input[type="time"],
+.appointment-form textarea {
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.appointment-form button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.appointment-form button:hover {
+  background-color: #007bff;
+}
