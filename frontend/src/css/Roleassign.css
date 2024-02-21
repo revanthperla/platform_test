@@ -1,0 +1,40 @@
+/* styles.css */
+
+.user-list-container {
+    margin-bottom: 20px;
+  }
+  
+  .user-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .user-table th, .user-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .user-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: left;
+  }
+  
+  .user-table tbody tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .user-table tbody tr:nth-child(even) {
+    background-color: #fff;
+  }
+  
+  .user-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+  }
+
+.search input{
+    width: 100%;
+    padding: 10px; /* Adjust padding as needed */
+    margin: 20%; /* Add margin to create space on the left and right */
+    box-sizing: border-box;
+}

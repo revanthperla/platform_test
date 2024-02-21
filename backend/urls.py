@@ -18,12 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from backend_app.views import *
 from django.views.generic import TemplateView
+from backend_app.views import *
 
 urlpatterns = [
     # Other URL patterns (if any)
     path('admin/', admin.site.urls),
     # API endpoints for your app
-    path('api/', include('backend_app.urls')),  # Include app-specific API endpoints
+    path('', index, name="index.html"),
+    path('', include('backend_app.urls')),  # Include app-specific API endpoints
 ]
 
 # Add a catch-all URL pattern to serve your React.js application

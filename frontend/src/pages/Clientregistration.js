@@ -145,7 +145,7 @@ function ClientRegistration() {
           <input
             type="text"
             name="officeAddres"
-            value={userData.officeAddres}
+            value={userData.officeAddress}
             onChange={handleInputChange}
           />
         </label>

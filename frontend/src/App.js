@@ -9,10 +9,12 @@ import JobDescriptionDetails from './pages/Jobdescriptionview';
 import Dashboard from './pages/Employeedashboard';
 import ClientDetails from './pages/Clientview';
 import BdpDashboard from './pages/Bdpdashboard';
+import UserList from './pages/Roleassign';
+import AdminDashboard from './pages/Admindashboard';
 
 function App() {
   return(
-    <EmployeeRegistration />
+    <AdminDashboard />
   )
 }
 

@@ -105,7 +105,7 @@ function EmployeeRegistration() {
     event.preventDefault();
     
     // Make an HTTP POST request using Axios
-    axios.post('/api/userdata/', userData)
+    axios.post('/userdata', userData)
       .then(response => {
         console.log('Data sent successfully:', response.data);
         // Reset the form after successful submission
@@ -241,7 +241,7 @@ function EmployeeRegistration() {
         <label>
           Department/Team:
           <input
-            type="email"
+            type="text"
             name="departmentName"
             value={userData.departmentName}
             onChange={handleInputChange}
@@ -382,17 +382,6 @@ function EmployeeRegistration() {
           />
         </label>
         <br />
-        <div>
-          <h3>Document</h3>
-          <Document file={'../Docs/test.pdf'} >
-            <Page pageNumber={pageNumber} />
-          </Document>
-          {!userData.documentAcknowledged && (
-            <button type="button" onClick={handleDocumentAcknowledgement}>
-              Acknowledge Document
-            </button>
-          )}
-        </div>  
         <button type="submit" class="btn btn-default btn-sm">Submit</button>
       </form>
     </div>
