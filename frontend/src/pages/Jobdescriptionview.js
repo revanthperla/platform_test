@@ -1,9 +1,15 @@
 import React , { useState } from 'react';
 import '../css/Jobdescriptionview.css';
 import AssesmentModal from './Assesmentmodal.js';
+import { Navigate, useNavigate } from 'react-router-dom'; 
 
 function JobDescriptionDetails() {
 
+    let navigate = useNavigate();
+    const handleBackClick = () => {
+        // Navigate back to the assigned jobs page
+        navigate('/assigned-jobs');
+    };
     const [showModal, setShowModal] = useState(false);
     // Dummy job description data
     const dummyJobDescription = {
@@ -109,6 +115,7 @@ function JobDescriptionDetails() {
             <button onClick={handleUploadResume}>Upload Resume</button>
             {/* Render the modal if showModal is true */}
             {showModal && <AssesmentModal onClose={handleCloseModal} />}
+            <button onClick={handleBackClick}>Back to Assigned Jobs</button>
             <h2>Select fields to be used for generating report</h2>
             <div>
                 {keywords.map(keyword => (

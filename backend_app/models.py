@@ -9,6 +9,7 @@ class Role(models.Model):
         ('Manager', 'Manager'),
         ('Business Development Partner', 'Business Development Partner'),
         ('Business Development Partner Manager', 'Business Development Partner Manager'),
+        ('Account Manager', 'Account Manager'),
     )
     role = models.CharField(max_length=50, choices=ROLE_CHOICES)
 
@@ -98,6 +99,28 @@ class ClientRegistration(models.Model):
     def __str__(self):
         return self.entityName  # Change this based on what you want to display for each instance
     
+class PendingClientRegistration(models.Model):
+    client_registration = models.OneToOneField(ClientRegistration, on_delete=models.CASCADE)
+    approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Pending: {self.client_registration.entityName}"
+    
+class RejectionReason(models.Model):
+    client = models.ForeignKey(PendingClientRegistration, on_delete=models.CASCADE)
+    reason = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Rejection Reason for {self.client.entityName}"
+    
+class Notification(models.Model):
+    user = models.ForeignKey(UserData, on_delete=models.CASCADE)  # Reference UserData model for user information
+    client_registration = models.OneToOneField(ClientRegistration, on_delete=models.CASCADE)
+    approved = models.BooleanField(default=False)
+    rejection_reason = models.OneToOneField(RejectionReason, on_delete=models.CASCADE, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
 class JobDescription(models.Model):
     titleDesignation = models.CharField(max_length=255)
     clientName = models.CharField(max_length=255)
@@ -116,6 +139,7 @@ class JobDescription(models.Model):
     mandatorySkills = models.TextField()
     desirableSkills = models.TextField()
     client = models.ForeignKey(ClientRegistration, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.titleDesignation  # Change this based on what you want to display for each instance
