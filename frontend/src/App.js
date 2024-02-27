@@ -17,10 +17,13 @@ import BdpmDashboard from './pages/Bdpmdashboard';
 import Notifications from './pages/Clientstatusnotifications';
 import InvoiceForm from './pages/Invoicegeneration';
 import ManagerDashboard from './pages/Managerdashboard';
+import JobList from './pages/Joblist';
+import AssessmentForm from './pages/Assessmentview';
+import JobListWithAssessments from './pages/Shortlisting';
 
 function App() {
   return(
-    <ManagerDashboard />
+    <JobListWithAssessments/>
   )
 }
 

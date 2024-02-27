@@ -15,4 +15,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api/recruiters/', get_recruiters, name='get_recruiters'),
     path('api/clients/', get_clients, name='get_clients'),
+    path('submit-assessment/', submit_assessment, name='submit_assessment'),
 ]

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Profile from './Employeeprofile';
-import AssignedJobs from './Assignedjobs';
+import JobList from './Joblist';
 import InterviewScheduling from './Interviewscheduling';
 import '../css/Employeedashboard.css'; // Import CSS file
 import { Link } from 'react-router-dom';
@@ -29,7 +29,7 @@ function Dashboard() {
         <div className="employee-content"> {/* Apply CSS class */}
             {/* Render content based on activeTab */}
             {activeTab === 'Profile' && <Profile />}
-            {activeTab === 'Assigned Jobs' && <AssignedJobs />}
+            {activeTab === 'Assigned Jobs' && <JobList />}
             {activeTab === 'Interview Scheduling' && <InterviewScheduling />}
         </div>
         </div>

@@ -1,0 +1,63 @@
+.assessment-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .assessment-form-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .assessment-form-container form {
+    margin-bottom: 20px;
+  }
+  
+  .assessment-form-container label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .assessment-form-container input[type="text"],
+  .assessment-form-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .assessment-form-container button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .assessment-form-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  .assessment-form-container .edit-button {
+    background-color: #28a745;
+  }
+  
+  .assessment-form-container .edit-button:hover {
+    background-color: #218838;
+  }
+  
+  .assessment-form-container .reject-button {
+    background-color: #dc3545;
+  }
+  
+  .assessment-form-container .reject-button:hover {
+    background-color: #c82333;
+  }
+  
