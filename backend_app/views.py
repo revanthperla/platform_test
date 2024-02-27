@@ -3,6 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
+from django.http import JsonResponse
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -69,3 +70,11 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
 def index(request):
     return render(request, 'index.html')
+
+def get_clients(request):
+    clients = ClientRegistration.objects.all().values('id', 'entityName')  # Serialize relevant fields
+    return JsonResponse({'clients': list(clients)})
+
+def get_recruiters(request):
+    recruiters = UserData.objects.filter(role__role='Recruiter').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
+    return JsonResponse({'recruiters': list(recruiters)})

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/JobDescriptionform.css';
 
 function JobDescription() {
@@ -40,9 +40,37 @@ function JobDescription() {
         '8+ Years',
       ];
 
-    const clientOptions = [];
+      const [clientOptions, setClientOptions] = useState([]);
 
-    const recruiterOptions = [];
+      // Fetch clients from Django backend
+      useEffect(() => {
+          fetchClients();
+      }, []);
+  
+      const fetchClients = async () => {
+          try {
+              const response = await fetch('/api/clients');
+              const data = await response.json();
+              setClientOptions(data.clients);
+          } catch (error) {
+              console.error('Error fetching clients:', error);
+          }
+      };
+
+    const [recruiterOptions, setRecruiterOptions] = useState([]);
+      useEffect(() => {
+        fetchRecruiters();
+    }, []);
+
+    const fetchRecruiters = async () => {
+        try {
+            const response = await fetch('/api/recruiters'); // Update the API endpoint
+            const data = await response.json();
+            setRecruiterOptions(data.recruiters); // Assuming the response contains a 'recruiters' key with the list of recruiter users
+        } catch (error) {
+            console.error('Error fetching recruiters:', error);
+        }
+    };
 
     const jobStatusOptions = [
         'In progress',
@@ -114,14 +142,14 @@ function JobDescription() {
               name="clientName"
               value={userData.clientName}
               onChange={handleInputChange}
-            >
-              <option value="">Select</option>
-              {clientOptions.map((clientName) => (
-                <option key={clientName} value={clientName}>
-                  {clientName}
-                </option>
-              ))}
-            </select>
+              >
+                <option value="">Select</option>
+                {clientOptions.map((client) => (
+                  <option key={client.id} value={client.entityName}>
+                    {client.entityName}
+                  </option>
+                  ))}
+              </select>
           </label>
           <br />
           <label>
@@ -135,20 +163,19 @@ function JobDescription() {
           </label>
           <br />
           <label>
-            Assigned Recruiters:
+            Assigned Recruiter:
             <select
-              type="text"
               name="assignedRecruiters"
               value={userData.assignedRecruiters}
               onChange={handleInputChange}
-            >
-              <option value="">Select</option>
-              {recruiterOptions.map((assignedRecruiters) => (
-                <option key={assignedRecruiters} value={assignedRecruiters}>
-                  {assignedRecruiters}
-                </option>
-              ))}
-            </select>
+              >
+                <option value="">Select</option>
+                {recruiterOptions.map((recruiter) => (
+                  <option key={recruiter.id} value={recruiter.fullName}>
+                    {recruiter.fullName}
+                  </option>
+                  ))}
+              </select>
           </label>
           <br />
           <label>

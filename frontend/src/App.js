@@ -16,10 +16,11 @@ import Clientapproval from './pages/Clientapproval';
 import BdpmDashboard from './pages/Bdpmdashboard';
 import Notifications from './pages/Clientstatusnotifications';
 import InvoiceForm from './pages/Invoicegeneration';
+import ManagerDashboard from './pages/Managerdashboard';
 
 function App() {
   return(
-    <BdpmDashboard />
+    <ManagerDashboard />
   )
 }
 

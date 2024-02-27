@@ -157,6 +157,7 @@ class Assessment(models.Model):
     relocate = models.CharField(max_length=255)
     comments = models.TextField()
     remarks = models.TextField()
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.candidateName  # Change this based on what you want to display for each instance

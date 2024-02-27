@@ -4,7 +4,9 @@ import ClientRegistration from './Clientregistration';
 import ClientDetails from './Clientview';
 import { Link } from 'react-router-dom';
 import profileImage from '../images/user.png';
+import ClientList from './Clientlist';
 import '../css/Bdpdashboard.css'
+import JobDescription from './Jobdescriptionform';
 
 function ManagerDashboard() {
     const [activeTab, setActiveTab] = useState('Profile');
@@ -18,7 +20,7 @@ function ManagerDashboard() {
         <div className="navbar">
             <ul>
             <li className={activeTab === 'Clients' ? 'active' : ''} onClick={() => handleTabChange('Clients')}>Clients</li>
-            <li className={activeTab === 'Client Registration' ? 'active' : ''} onClick={() => handleTabChange('Client Registration')}>Client Registration</li>
+            <li className={activeTab === 'Job Descriptions' ? 'active' : ''} onClick={() => handleTabChange('Job Description')}>Job Description</li>
             <li className={activeTab === 'Profile' ? 'active' : ''} onClick={() => handleTabChange('Profile')}>
                 <Link to="/profile">
                     <img src={profileImage} className='image' alt="Profile" style={{ width: '30px', height: '30px', position: 'relative' }} />
@@ -29,8 +31,8 @@ function ManagerDashboard() {
         <div className="employee-content"> {/* Apply CSS class */}
             {/* Render content based on activeTab */}
             {activeTab === 'Profile' && <Profile />}
-            {activeTab === 'Clients' && <ClientDetails />}
-            {activeTab === 'Client Registration' && <AssignClients />}
+            {activeTab === 'Clients' && <ClientList />}
+            {activeTab === 'Job Description' && <JobDescription />}
         </div>
         </div>
     );
