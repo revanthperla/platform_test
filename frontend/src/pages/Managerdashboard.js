@@ -7,6 +7,9 @@ import profileImage from '../images/user.png';
 import ClientList from './Clientlist';
 import '../css/Bdpdashboard.css'
 import JobDescription from './Jobdescriptionform';
+import JobList from './Joblist';
+import JobListWithAssessment from './Candidateapproval';
+import JobAndCandidateList from './Reportgeneration';
 
 function ManagerDashboard() {
     const [activeTab, setActiveTab] = useState('Profile');
@@ -21,6 +24,8 @@ function ManagerDashboard() {
             <ul>
             <li className={activeTab === 'Clients' ? 'active' : ''} onClick={() => handleTabChange('Clients')}>Clients</li>
             <li className={activeTab === 'Job Descriptions' ? 'active' : ''} onClick={() => handleTabChange('Job Description')}>Job Description</li>
+            <li className={activeTab === 'Candidate Approval' ? 'active' : ''} onClick={() => handleTabChange('Candidate Approval')}>Candidate Approval</li>
+            <li className={activeTab === 'Report generation' ? 'active' : ''} onClick={() => handleTabChange('Report Generation')}>Report Generation</li>
             <li className={activeTab === 'Profile' ? 'active' : ''} onClick={() => handleTabChange('Profile')}>
                 <Link to="/profile">
                     <img src={profileImage} className='image' alt="Profile" style={{ width: '30px', height: '30px', position: 'relative' }} />
@@ -30,9 +35,11 @@ function ManagerDashboard() {
         </div>
         <div className="employee-content"> {/* Apply CSS class */}
             {/* Render content based on activeTab */}
-            {activeTab === 'Profile' && <Profile />}
             {activeTab === 'Clients' && <ClientList />}
             {activeTab === 'Job Description' && <JobDescription />}
+            {activeTab === 'Candidate Approval' && <JobListWithAssessment />}
+            {activeTab === 'Profile' && <Profile />}
+            {activeTab === 'Report Generation' && <JobAndCandidateList />}
         </div>
         </div>
     );

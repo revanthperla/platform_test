@@ -82,6 +82,10 @@ def get_recruiters(request):
     recruiters = UserData.objects.filter(role__role='Recruiter').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
     return JsonResponse({'recruiters': list(recruiters)})
 
+def get_accoutmanagers(request):
+    accountManagers = UserData.objects.filter(role__role='Account Manager').values('id', 'fullName')  # Assuming 'Account Manager' is the role name
+    return JsonResponse({'Account Managers': list(accountManagers)})
+
 @csrf_exempt  # Use this decorator to bypass CSRF protection for this view (only for demonstration, ensure to handle CSRF properly in production)
 @require_POST  # Ensure that this view only accepts POST requests
 def submit_assessment(request):
@@ -118,4 +122,23 @@ def submit_assessment(request):
 
     # Return a success response
     return JsonResponse({'success': True})
+
+def get_job_descriptions(request):
+    if request.method == 'GET':
+        job_descriptions = JobDescription.objects.filter(added_by__role__role='Manager')
+        data = [{'id': job.id, 'titleDesignation': job.titleDesignation} for job in job_descriptions]
+        return JsonResponse(data, safe=False)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+def get_assessments_for_job(request, job_id):
+    if request.method == 'GET':
+        try:
+            assessments = Assessment.objects.filter(job_description_id=job_id)
+            data = [{'id': assessment.id, 'candidateName': assessment.candidateName} for assessment in assessments]
+            return JsonResponse(data, safe=False)
+        except JobDescription.DoesNotExist:
+            return JsonResponse({'error': 'Job not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 

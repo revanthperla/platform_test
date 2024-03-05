@@ -72,6 +72,22 @@ function JobDescription() {
         }
     };
 
+    const [AmOptions, setAmOptions] = useState([]);
+      useEffect(() => {
+        fetchAm();
+    }, []);
+
+    const fetchAm = async () => {
+        try {
+            const response = await fetch('/api/am'); // Update the API endpoint
+            const data = await response.json();
+            setRecruiterOptions(data.accountManager); // Assuming the response contains a 'recruiters' key with the list of recruiter users
+        } catch (error) {
+            console.error('Error fetching Account Managers:', error);
+        }
+    };
+
+
     const jobStatusOptions = [
         'In progress',
         'On hold',
@@ -154,12 +170,18 @@ function JobDescription() {
           <br />
           <label>
             Account Manager:
-            <input
-              type="text"
+            <select
               name="accountManager"
               value={userData.accountManager}
               onChange={handleInputChange}
-            />
+              >
+                <option value="">Select</option>
+                {AmOptions.map((accountManager) => (
+                  <option key={accountManager.id} value={accountManager.fullName}>
+                    {accountManager.fullName}
+                  </option>
+                  ))}
+              </select>
           </label>
           <br />
           <label>

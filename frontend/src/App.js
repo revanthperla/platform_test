@@ -19,11 +19,14 @@ import InvoiceForm from './pages/Invoicegeneration';
 import ManagerDashboard from './pages/Managerdashboard';
 import JobList from './pages/Joblist';
 import AssessmentForm from './pages/Assessmentview';
-import JobListWithAssessments from './pages/Shortlisting';
+import JobListWithAssessments from './pages/Candidateapproval';
+import JobAndCandidateList from './pages/Reportgeneration';
+import JobAndCandidateSelection from './pages/Inovicerequest';
+import GenerateInvoice from './pages/Generateinvoice';
 
 function App() {
   return(
-    <JobListWithAssessments/>
+    <ClientRegistration/>
   )
 }
 

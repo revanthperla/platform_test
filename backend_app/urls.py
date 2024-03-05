@@ -16,4 +16,8 @@ urlpatterns = [
     path('api/recruiters/', get_recruiters, name='get_recruiters'),
     path('api/clients/', get_clients, name='get_clients'),
     path('submit-assessment/', submit_assessment, name='submit_assessment'),
+    path('api/amanager/', get_accoutmanagers, name='get_accountmanagers'),
+    path('api/job-descriptions/', get_job_descriptions, name='get_job_descriptions'),
+    path('api/job-descriptions/<int:job_id>/assessments/', get_assessments_for_job, name='get_assessments_for_job'),
+    path('clientregistration/', ClientRegistrationViewSet.as_view({'post': 'create'}), name='clientregistration'),
 ]

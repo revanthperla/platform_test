@@ -21,7 +21,7 @@ function Dashboard() {
             <li className={activeTab === 'Interview Scheduling' ? 'active' : ''} onClick={() => handleTabChange('Interview Scheduling')}>Interview Scheduling</li>
             <li className={activeTab === 'Profile' ? 'active' : ''} onClick={() => handleTabChange('Profile')}>
                 <Link to="/profile">
-                    <img src={profileImage} className='image' alt="Profile" style={{ width: '30px', height: '30px', position: 'relative'}} />
+                    <img src={profileImage}  className='image' alt="Profile" style={{ width: '30px', height: '30px', position: 'relative' }} />
                 </Link>
             </li>
             </ul>

@@ -84,14 +84,14 @@ class ClientRegistration(models.Model):
     companyPerson = models.CharField(max_length=255)
     companyDesignation = models.CharField(max_length=255)
     companyNumber = models.IntegerField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)])  # Assuming company number is a string field
-    companyFax = models.CharField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)])  # Assuming fax is a string field
+    companyFax = models.IntegerField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)])  # Assuming fax is a string field
     companyEmail = models.EmailField(validators=[EmailValidator()])
     industryNature = models.CharField(max_length=255)
     companyCIN = models.CharField(max_length=255)
     companyPAN = models.CharField(max_length=10)  # Assuming PAN is a string field
     companyGST = models.CharField(max_length=15)  # Assuming GST is a string field
-    bdpName = models.ForeignKey(UserData, on_delete=models.CASCADE, limit_choices_to={'role__role': 'Business Development Partner'})
-    bdpmName = models.ForeignKey(UserData, on_delete=models.CASCADE, limit_choices_to={'role__role': 'Business Development Partner Manager'})
+    bdpName = models.ForeignKey(UserData, on_delete=models.CASCADE, limit_choices_to={'role__role': 'Business Development Partner'}, related_name='bdp_clientregistrations')
+    bdpmName = models.ForeignKey(UserData, on_delete=models.CASCADE, limit_choices_to={'role__role': 'Business Development Partner Manager'}, related_name='bdpm_clientregistrations')
     accountManager = models.CharField(max_length=255)
     billingCity = models.CharField(max_length=255)
     billingCountry = models.CharField(max_length=255)
@@ -124,8 +124,9 @@ class Notification(models.Model):
 class JobDescription(models.Model):
     titleDesignation = models.CharField(max_length=255)
     clientName = models.CharField(max_length=255)
-    accountManager = models.CharField(max_length=255)
-    assignedRecruiters = models.ForeignKey(UserData, on_delete=models.CASCADE, limit_choices_to={'role__role': 'Recruiter'})
+    accountManager = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='job_descriptions_as_account_manager', limit_choices_to={'role__role': 'Account Manager'})
+    added_by = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='added_job_descriptions')
+    assignedRecruiters = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='assigned_job_descriptions', limit_choices_to={'role__role': 'Recruiter'})
     startDate = models.DateField()
     closureDate = models.DateField()
     jobType = models.CharField(max_length=255)
@@ -139,10 +140,12 @@ class JobDescription(models.Model):
     mandatorySkills = models.TextField()
     desirableSkills = models.TextField()
     client = models.ForeignKey(ClientRegistration, on_delete=models.CASCADE)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
+    done = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.titleDesignation  # Change this based on what you want to display for each instance
+        return self.titleDesignation
+
     
 class Assessment(models.Model):
     job_description = models.ForeignKey(JobDescription, on_delete=models.SET_NULL, null=True)
@@ -157,7 +160,9 @@ class Assessment(models.Model):
     relocate = models.CharField(max_length=255)
     comments = models.TextField()
     remarks = models.TextField()
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
+    done = models.BooleanField(default=False)
+    interview = models.BooleanField(default=False)
 
     def __str__(self):
         return self.candidateName  # Change this based on what you want to display for each instance
@@ -167,6 +172,7 @@ class Appointment(models.Model):
     date = models.DateField()
     time = models.TimeField()
     description = models.TextField()
+    done = done = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Appointment for {self.assessment} on {self.date} at {self.time}"

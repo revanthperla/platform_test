@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import '../css/Clientregistration.css';
 
 function ClientRegistration() {
@@ -52,32 +53,41 @@ function ClientRegistration() {
     'Insurance',
   ];
   
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Here you can implement storing the userData, e.g., sending it to a backend server
-    console.log('User Data:', userData);
+    
+    try {
+      const response = await axios.post(`'http://127.0.0.1:8000/clientregistration/'`, userData);
+      
+      console.log('Form submitted successfully:', response.data);
+      // You can add any additional logic here after the form is successfully submitted
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      // Handle any errors here
+    }
+
     // Reset the form after submission
     setUserData({
       entityName: '',
       organizationStatus: '',
       estYear: '',
-      proprieterName : '',
-      officeAddress : '',
-      branchAddress : '',
-      companyPerson : '',
-      companyDesignation : '',
-      companyNumber : '',
-      companyFax : '',
-      companyEmail : '',
-      industryNature : '',
-      companyCIN : '',
-      companyPAN : '',
-      companyGST : '',
-      bdpName : '',
-      bdpmName : '',
-      accountManager : '',
-      billingCity : '',
-      billingCountry : '',
+      proprieterName: '',
+      officeAddress: '',
+      branchAddress: '',
+      companyPerson: '',
+      companyDesignation: '',
+      companyNumber: '',
+      companyFax: '',
+      companyEmail: '',
+      industryNature: '',
+      companyCIN: '',
+      companyPAN: '',
+      companyGST: '',
+      bdpName: '',
+      bdpmName: '',
+      accountManager: '',
+      billingCity: '',
+      billingCountry: '',
     });
   };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AssessmentForm from './Assessmentview'; // Assuming you have the AssessmentForm component
-import '../css/Shortlisting.css';
+import '../css/Candidateapproval.css';
 
 function JobListWithAssessment() {
     const [jobs] = useState([

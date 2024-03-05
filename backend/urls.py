@@ -24,13 +24,5 @@ urlpatterns = [
     # Other URL patterns (if any)
     path('admin/', admin.site.urls),
     # API endpoints for your app
-    path('', index, name="index.html"),
     path('', include('backend_app.urls')),  # Include app-specific API endpoints
-]
-
-# Add a catch-all URL pattern to serve your React.js application
-urlpatterns += [
-    # This pattern will match any URL and serve the React.js application
-    # Make sure it's the last pattern in urlpatterns to avoid conflicts
-    path('<path:resource>/', TemplateView.as_view(template_name='index.html')),
 ]

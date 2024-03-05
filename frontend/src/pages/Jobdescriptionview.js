@@ -27,33 +27,6 @@ function JobDescriptionDetails() {
         desirableSkills: 'Python, MongoDB',
     };
 
-    const keywords = [
-        'Candidate name',
-        'Position applied for',
-        'Current location',
-        'Current employer',
-        'Total-experience',
-        'Total CTC',
-        'Expected CTC',
-        'Notice period (also if there is an option to buy-out)',
-        'Willingness to relocate with FAMILY – at the time of joining itself',
-        'Assessment Comments by HRINPUTS',
-        'Remarks'
-    ];
-
-    const [selectedKeywords, setSelectedKeywords] = useState([]);
-
-    const [selectedCheckboxes, setSelectedCheckboxes] = useState({});
-    
-    const handleKeywordChange = (e) => {
-        const { value, checked } = e.target;
-        if (checked) {
-            setSelectedKeywords([...selectedKeywords, value]);
-        } else {
-            setSelectedKeywords(selectedKeywords.filter(keyword => keyword !== value));
-        }
-    };
-
     const handleUploadResume = () => {
         // Implement your logic to handle resume upload
         console.log('Upload resume button clicked');
@@ -65,22 +38,7 @@ function JobDescriptionDetails() {
         console.log('Upload resume button clicked');
     };
 
-    const handleReport = () => {
-        // Implement your logic to handle resume upload
-        console.log('Upload resume button clicked');
-    };
-
-    const handleClearCheckboxes = () => {
-        setSelectedKeywords([]);
-    };
-
-    const handleCheckboxChange = (event) => {
-        const { name, checked } = event.target;
-        setSelectedCheckboxes(prevState => ({
-            ...prevState,
-            [name]: checked
-        }));
-    };
+    
 
     const handleCloseModal = () => {
         // Close the modal
@@ -111,26 +69,6 @@ function JobDescriptionDetails() {
             <button onClick={handleUploadResume}>Upload Resume</button>
             {/* Render the modal if showModal is true */}
             {showModal && <AssesmentModal onClose={handleCloseModal} />}
-            <h2>Select fields to be used for generating report</h2>
-            <div>
-                {keywords.map(keyword => (
-                    <div className="checkbox-wrapper" key={keyword}>
-                        <div className="checkbox-container">
-                            <input
-                                type="checkbox"
-                                id={keyword}
-                                value={keyword}
-                                checked={selectedKeywords.includes(keyword)}
-                                onChange={handleKeywordChange}
-                            />
-                        </div>
-                        <label htmlFor={keyword}>{keyword}</label>
-                    </div>
-                ))}
-            </div>
-            <button onClick={handleClearCheckboxes}>Clear Checkboxes</button>
-            <button className="report" onClick={handleReport}>Generate Report</button>
-            {/* {reportUrl && <a href={reportUrl} download>Download Report</a>} */}
         </div>
     );
 }
