@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.contrib.auth import get_user_model
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -86,9 +87,17 @@ def get_accoutmanagers(request):
     accountManagers = UserData.objects.filter(role__role='Account Manager').values('id', 'fullName')  # Assuming 'Account Manager' is the role name
     return JsonResponse({'Account Managers': list(accountManagers)})
 
+def get_bdp(request):
+    bdp = UserData.objects.filter(role__role='Business Development Partner').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
+    return JsonResponse({'recruiters': list(bdp)})
+
+def get_bdpm(request):
+    bdpm = UserData.objects.filter(role__role='Business Development Partner').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
+    return JsonResponse({'recruiters': list(bdpm)})
+
 @csrf_exempt  # Use this decorator to bypass CSRF protection for this view (only for demonstration, ensure to handle CSRF properly in production)
 @require_POST  # Ensure that this view only accepts POST requests
-def submit_assessment(request):
+def submit_assessment(request, job_id):
     # Parse the JSON data from the request body
     try:
         data = json.loads(request.body)
@@ -125,7 +134,8 @@ def submit_assessment(request):
 
 def get_job_descriptions(request):
     if request.method == 'GET':
-        job_descriptions = JobDescription.objects.filter(added_by__role__role='Manager')
+        logged_in_user = request.user
+        job_descriptions = JobDescription.objects.filter(assigned_to=logged_in_user)
         data = [{'id': job.id, 'titleDesignation': job.titleDesignation} for job in job_descriptions]
         return JsonResponse(data, safe=False)
     else:
@@ -134,11 +144,93 @@ def get_job_descriptions(request):
 def get_assessments_for_job(request, job_id):
     if request.method == 'GET':
         try:
-            assessments = Assessment.objects.filter(job_description_id=job_id)
+            assessments = Assessment.objects.filter(job_description=job_id)
             data = [{'id': assessment.id, 'candidateName': assessment.candidateName} for assessment in assessments]
             return JsonResponse(data, safe=False)
         except JobDescription.DoesNotExist:
             return JsonResponse({'error': 'Job not found'}, status=404)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
-
+    
+def get_assessment_details(request, assessment_id):
+    if request.method == 'GET':
+        try:
+            assessment = Assessment.objects.get(id=assessment_id)
+            data = {
+                'id': assessment.id,
+                'candidateName': assessment.candidateName,
+                'position': assessment.position,
+                'location': assessment.location,
+                'currentEmployer': assessment.currentEmployer,
+                'totalExperience': assessment.totalExperience,
+                'ctc': assessment.ctc,
+                'ectc': assessment.ectc,
+                'noticePeriod': assessment.noticePeriod,
+                'relocate': assessment.relocate,
+                'comments': assessment.comments,
+                'remarks': assessment.remarks
+                # Add more fields as needed
+            }
+            return JsonResponse(data)
+        except Assessment.DoesNotExist:
+            return JsonResponse({'error': 'Assessment not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
+def get_interviews(request, assessment_id):
+    if request.method == 'GET':
+        try:
+            interview = Appointment.objects.filter(assessment=assessment_id)
+            data = [{'id': assessment.id, 'candidateName': assessment.candidateName} for assessment in assessments]
+            return JsonResponse(data, safe=False)
+        except JobDescription.DoesNotExist:
+            return JsonResponse({'error': 'Job not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
+def get_user_details(request):
+    User = get_user_model()
+    user = request.user
+    try:
+        user_data = User.objects.get(pk=user.pk)
+        education_data = Education.objects.filter(user=user_data)
+        work_experience_data = WorkExperience.objects.filter(user=user_data)
+        
+        education_list = []
+        for education in education_data:
+            education_list.append({
+                'degree': education.degree,
+                'graduationYear': education.graduationYear,
+                'grade': education.grade
+            })
+        
+        work_experience_list = []
+        for work_experience in work_experience_data:
+            work_experience_list.append({
+                'companyName': work_experience.companyName,
+                'designation': work_experience.designation,
+                'duration': work_experience.duration
+            })
+        
+        data = {
+            'fullName': user_data.fullName,
+            'gender': user_data.gender,
+            'aadhaarNumber': user_data.aadhaarNumber,
+            'dateOfBirth': user_data.dateOfBirth,
+            'maritalStatus': user_data.maritalStatus,
+            'emergencyContact': user_data.emergencyContact,
+            'address': user_data.address,
+            'phoneNumber': user_data.phoneNumber,
+            'emailID': user_data.emailID,
+            'emergencyContactNumber': user_data.emergencyContactNumber,
+            'jobTitle': user_data.jobTitle,
+            'departmentName': user_data.departmentName,
+            'joiningDate': user_data.joiningDate,
+            'employmentType': user_data.employmentType,
+            'prevCompany': user_data.prevCompany,
+            'prevDesignation': user_data.prevDesignation,
+            'relevantSkills': user_data.relevantSkills,
+        }
+        return JsonResponse(data)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'User data not found'}, status=404)
