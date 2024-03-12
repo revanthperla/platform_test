@@ -311,3 +311,56 @@ def upload_file(file_name, object_name=None):
         logging.error(e)
         return False
     return True
+
+@csrf_exempt
+def user_data_list(request):
+    if request.method == 'GET':
+        users = UserData.objects.all()
+        data = [{'id': user.id, 'fullName': user.fullName, 'emailID': user.emailID, 'phoneNumber': user.phoneNumber, 'selectedRole': user.role_id} for user in users]
+        return JsonResponse(data, safe=False)
+
+@csrf_exempt
+def roles_list(request):
+    roles = Role.objects.all().values('id', 'role')  # Serialize relevant fields
+    return JsonResponse({'roles': list(roles)})
+
+@csrf_exempt
+def update_user_role(request, user_id):
+    if request.method == 'PATCH':
+        try:
+            user = UserData.objects.get(id=user_id)
+            role_id = int(request.POST.get('role'))
+            user.role_id = role_id
+            user.save()
+            return JsonResponse({'success': True})
+        except UserData.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'User not found'})
+        
+@csrf_exempt
+def submit_job_description(request):
+    if request.method == 'POST':
+        data = request.POST
+
+        # Create JobDescription object
+        job_description = JobDescription.objects.create(
+            title_designation=data.get('titleDesignation'),
+            client_name=data.get('clientName'),
+            account_manager=data.get('accountManager'),
+            assigned_recruiters=data.get('assignedRecruiters'),
+            start_date=data.get('startDate'),
+            closure_date=data.get('closureDate'),
+            job_type=data.get('jobType'),
+            job_status=data.get('jobStatus'),
+            work_experience=data.get('workExperience'),
+            industry_nature=data.get('industryNature'),
+            compensation=data.get('compensation'),
+            location=data.get('location'),
+            eligibility_criteria=data.get('eligibilityCriteria'),
+            primary_responsibilities=data.get('primaryResponsibilities'),
+            mandatory_skills=data.get('mandatorySkills'),
+            desirable_skills=data.get('desirableSkills'),
+        )
+
+        return JsonResponse({'id': job_description.pk})
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)

@@ -1,25 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import '../css/JobDescriptionform.css';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import axios from 'axios';
 
 function JobDescription() {
-    const [userData, setUserData] = useState({
-        titleDesignation: '',
-        clientName: '',
-        accountManager: '',
-        assignedRecruiters : '',
-        startDate : '',
-        closureDate : '',
-        jobType : '',
-        jobStatus : '',
-        workExperience : '',
-        industryNature : '',
-        compensation: '',
-        location : '',
-        eligibilityCriteria : '',
-        primaryResponsibilities : '',
-        mandatorySkills : '',
-        desirableSkills : '',
-    });
+  const initialUserData = {
+    titleDesignation: '',
+    clientName: '',
+    accountManager: '',
+    assignedRecruiters: '',
+    startDate: '',
+    closureDate: '',
+    jobType: '',
+    jobStatus: '',
+    workExperience: '',
+    industryNature: '',
+    compensation: '',
+    location: '',
+    eligibilityCriteria: '',
+    primaryResponsibilities: '',
+    mandatorySkills: '',
+    desirableSkills: '',
+  };
+  
+  // Inside your component function
+  const [userData, setUserData] = useState({ ...initialUserData });
   
     const handleInputChange = (event) => {
       const { name, value } = event.target;
@@ -49,7 +55,7 @@ function JobDescription() {
   
       const fetchClients = async () => {
           try {
-              const response = await fetch('/api/clients');
+              const response = await fetch('http://127.0.0.1:8000/api/clients');
               const data = await response.json();
               setClientOptions(data.clients);
           } catch (error) {
@@ -64,7 +70,7 @@ function JobDescription() {
 
     const fetchRecruiters = async () => {
         try {
-            const response = await fetch('/api/recruiters'); // Update the API endpoint
+            const response = await fetch('http://127.0.0.1:8000/api/recruiters'); // Update the API endpoint
             const data = await response.json();
             setRecruiterOptions(data.recruiters); // Assuming the response contains a 'recruiters' key with the list of recruiter users
         } catch (error) {
@@ -79,7 +85,7 @@ function JobDescription() {
 
     const fetchAm = async () => {
         try {
-            const response = await fetch('/api/am'); // Update the API endpoint
+            const response = await fetch('http://127.0.0.1:8000/api/am'); // Update the API endpoint
             const data = await response.json();
             setRecruiterOptions(data.accountManager); // Assuming the response contains a 'recruiters' key with the list of recruiter users
         } catch (error) {
@@ -113,28 +119,17 @@ function JobDescription() {
       'Insurance',
     ];
     
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       event.preventDefault();
-      // Here you can implement storing the userData, e.g., sending it to a backend server
-      console.log('User Data:', userData);
-      // Reset the form after submission
-      setUserData({
-        titleDesignation: '',
-        clientName: '',
-        accountManager: '',
-        assignedRecruiters : '',
-        startDate : '',
-        closureDate : '',
-        jobType : '',
-        jobStatus : '',
-        workExperience : '',
-        industryNature : '',
-        compensation: '',
-        location : '',
-        eligibilityCriteria : '',
-        primaryResponsibilities : '',
-        mandatorySkills : '',
-        desirableSkills : '',
+      
+      axios.post('http://127.0.0.1:8000/api/submit_job_description/', userData)
+      .then(response => {
+        console.log('Data sent successfully:', response.data);
+        // Reset the form after successful submission
+        setUserData({ ...userData, /* reset fields */ });
+      })
+      .catch(error => {
+        console.error('Error sending data:', error);
       });
     };
   
@@ -202,22 +197,28 @@ function JobDescription() {
           <br />
           <label>
             Start Date:
-            <input
-              type="text"
-              name="startDate"
-              value={userData.startDate}
-              onChange={handleInputChange}
-            />
+            <DatePicker
+            selected={userData.startDate}
+            onChange={(date) => setUserData({ ...userData, startDate: date })}
+            dateFormat="MMMM d, yyyy"
+            scrollableYearDropdown
+            showMonthDropdown
+            showYearDropdown
+            yearDropdownItemNumber={60}
+          />
           </label>
           <br />
           <label>
             Expected Date of closure:
-            <input
-              type="text"
-              name="closureDate"
-              value={userData.closureDate}
-              onChange={handleInputChange}
-            />
+            <DatePicker
+            selected={userData.closureDate}
+            onChange={(date) => setUserData({ ...userData, closureDate: date })}
+            dateFormat="MMMM d, yyyy"
+            scrollableYearDropdown
+            showMonthDropdown
+            showYearDropdown
+            yearDropdownItemNumber={60}
+          />
           </label>
           <br />
           <label>
@@ -331,8 +332,8 @@ function JobDescription() {
             <input
               type="text"
               strng="strng"
-              name="primaryyResponsibilities"
-              value={userData.companyGST}
+              name="primaryResponsibilities"
+              value={userData.primaryResponsibilities}
               onChange={handleInputChange}
             />
           </label>
