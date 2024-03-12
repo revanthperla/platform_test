@@ -57,7 +57,7 @@ function ClientRegistration() {
     event.preventDefault();
     
     try {
-      const response = await axios.post(`'http://127.0.0.1:8000/clientregistration/'`, userData);
+      const response = await axios.post('http://127.0.0.1:8000/clientregistration/', userData);
       
       console.log('Form submitted successfully:', response.data);
       // You can add any additional logic here after the form is successfully submitted
@@ -154,14 +154,14 @@ function ClientRegistration() {
           Registered Office Address:
           <input
             type="text"
-            name="officeAddres"
+            name="officeAddress"
             value={userData.officeAddress}
             onChange={handleInputChange}
           />
         </label>
         <br />
         <label>
-          Address of Branch Office:
+          Address of the branch:
           <input
             type="text"
             name="branchAddress"
@@ -193,9 +193,9 @@ function ClientRegistration() {
         <label>
           Phone Number:
           <input
-            type="number"
-            name="compnayNumber"
-            value={userData.compnayNumber}
+            type="text"
+            name="companyNumber"
+            value={userData.companyNumber}
             onChange={handleInputChange}
           />
         </label>

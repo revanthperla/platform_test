@@ -25,4 +25,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # API endpoints for your app
     path('', include('backend_app.urls')),  # Include app-specific API endpoints
+    path('s3direct/', include('s3direct.urls')),
 ]

@@ -1,34 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/Employeeprofile.css';
+import axios from 'axios';
 
 function Profile() {
-  const [isEditing, setIsEditing] = useState(false); // State to manage editing mode
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileData, setProfileData] = useState(null);
 
-  const [profileData, setProfileData] = useState({
-    fullName: 'John Doe',
-    gender: 'Male',
-    aadhaarNumber: '1234 5678 9012',
-    dateOfBirth: '1990-01-01',
-    maritalStatus: 'Single',
-    emergencyContactName: 'Jane Doe',
-    address: '123 Main St, City, Country',
-    phoneNumber: '+1234567890',
-    emailID: 'john.doe@example.com',
-    emergencyContactNumber: '+9876543210',
-    jobTitle: 'Software Engineer',
-    departmentName: 'Engineering',
-    joiningDate: '2020-01-01',
-    employmentType: 'Full-time',
-    education: [
-      { degree: 'Bachelors in Computer Science', graduationYear: '2015', grade: 'A' }
-    ],
-    workExperience: [
-      { companyName: 'ABC Inc.', designation: 'Software Developer', duration: '3 years' }
-    ],
-    relevantSkills: 'JavaScript, React, Node.js',
-    pfUAN: '1234567890',
-    esiNO: 'ESI1234567890',
-  });
+  useEffect(() => {
+    axios.get('/api/get_user_details/')
+      .then(response => {
+        setProfileData(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching user details:', error);
+      });
+  }, []);
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);

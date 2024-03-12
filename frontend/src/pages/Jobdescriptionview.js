@@ -1,7 +1,8 @@
-import React , { useState } from 'react';
+import React , { useState, useEffect } from 'react';
 import '../css/Jobdescriptionview.css';
 import AssesmentModal from './Assesmentmodal.js';
 import { Navigate, useNavigate } from 'react-router-dom'; 
+import axios from 'axios';
 
 function JobDescriptionDetails() {
 
@@ -28,9 +29,24 @@ function JobDescriptionDetails() {
     };
 
     const handleUploadResume = () => {
-        // Implement your logic to handle resume upload
-        console.log('Upload resume button clicked');
-        setShowModal(true);
+        // Assuming 'resumeFile' is the name of your file input field
+        const fileInput = document.querySelector('input[type="file"]');
+        const formData = new FormData();
+        formData.append('resume', fileInput.files[0]);
+    
+        axios.post('/upload_file/', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(response => {
+            console.log('File uploaded successfully:', response.data);
+            // Reset the form after successful submission
+            fileInput.value = ''; // Clear the file input field
+        })
+        .catch(error => {
+            console.error('Error uploading file:', error);
+        });
     };
 
     const handleUploadAssesment = () => {

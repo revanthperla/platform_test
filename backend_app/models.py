@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, EmailValidator
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from s3direct.fields import S3DirectField
 
 class Role(models.Model):
     ROLE_CHOICES = (
@@ -17,24 +18,26 @@ class Role(models.Model):
         return self.name
 
 class UserData(models.Model):
-    fullName = models.CharField(max_length=255, blank=True)
-    gender = models.CharField(max_length=10, blank=True)
-    aadhaarNumber = models.CharField(max_length=12, blank=True)
+    fullName = models.CharField(max_length=255, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    aadhaarNumber = models.CharField(max_length=12, blank=True, null=True)
     dateOfBirth = models.DateField(null=True, blank=True)
-    maritalStatus = models.CharField(max_length=20, blank=True)
-    emergencyContact = models.CharField(max_length=255, blank=True)
-    address = models.TextField(blank=True)
-    phoneNumber = models.IntegerField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)], blank=True)
-    emailID = models.EmailField(validators=[EmailValidator()], blank=True)
-    emergencyContactNumber = models.IntegerField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)], blank=True)
-    jobTitle = models.CharField(max_length=100, blank=True)
-    departmentName = models.CharField(max_length=100, blank=True)
-    joiningDate = models.DateField(blank=True)
-    employmentType = models.CharField(max_length=100, blank=True)
-    prevCompany = models.CharField(max_length=255, blank=True)
-    prevDesignation = models.CharField(max_length=100, blank=True)
-    relevantSkills = models.TextField(blank=True)
-    documentAcknowledged = models.BooleanField(default=False)
+    maritalStatus = models.CharField(max_length=20, blank=True, null=True)
+    emergencyContact = models.CharField(max_length=255, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    phoneNumber = models.IntegerField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)], blank=True, null=True)
+    emailID = models.EmailField(validators=[EmailValidator()], blank=True, null=True)
+    emergencyContactNumber = models.IntegerField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)], blank=True, null=True)
+    jobTitle = models.CharField(max_length=100, blank=True, null=True)
+    departmentName = models.CharField(max_length=100, blank=True, null=True)
+    joiningDate = models.DateField(blank=True, null=True)
+    employmentType = models.CharField(max_length=100, blank=True, null=True)
+    prevCompany = models.CharField(max_length=255, blank=True, null=True)
+    prevDesignation = models.CharField(max_length=100, blank=True, null=True)
+    relevantSkills = models.TextField(blank=True, null=True)
+    documentAcknowledged = models.BooleanField(default=False, null=True)
+    pfUAN = models.CharField(max_length=100, blank=True, null=True)
+    esiNO = models.CharField(max_length=100, blank=True, null=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
@@ -79,19 +82,19 @@ class ClientRegistration(models.Model):
     organizationStatus = models.CharField(max_length=255)
     estYear = models.CharField(max_length=4)  # Assuming year is a string field
     proprieterName = models.CharField(max_length=255)
-    officeAddress = models.TextField()
-    branchAddress = models.TextField()
+    officeAddress = models.CharField(max_length=255, blank=True)
+    branchAddress = models.CharField(max_length=255, blank=True)
     companyPerson = models.CharField(max_length=255)
     companyDesignation = models.CharField(max_length=255)
-    companyNumber = models.IntegerField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)])  # Assuming company number is a string field
+    companyNumber = models.CharField(max_length=255, default=0000000000)  # Assuming company number is a string field
     companyFax = models.IntegerField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)])  # Assuming fax is a string field
     companyEmail = models.EmailField(validators=[EmailValidator()])
     industryNature = models.CharField(max_length=255)
     companyCIN = models.CharField(max_length=255)
     companyPAN = models.CharField(max_length=10)  # Assuming PAN is a string field
     companyGST = models.CharField(max_length=15)  # Assuming GST is a string field
-    bdpName = models.ForeignKey(UserData, on_delete=models.CASCADE, limit_choices_to={'role__role': 'Business Development Partner'}, related_name='bdp_clientregistrations')
-    bdpmName = models.ForeignKey(UserData, on_delete=models.CASCADE, limit_choices_to={'role__role': 'Business Development Partner Manager'}, related_name='bdpm_clientregistrations')
+    bdpName =  models.CharField(max_length=255)
+    bdpmName =  models.CharField(max_length=255)
     accountManager = models.CharField(max_length=255)
     billingCity = models.CharField(max_length=255)
     billingCountry = models.CharField(max_length=255)
@@ -142,6 +145,7 @@ class JobDescription(models.Model):
     client = models.ForeignKey(ClientRegistration, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=False)
     done = models.BooleanField(default=False)
+    resume = S3DirectField(dest='primary_destination', blank=True)
 
     def __str__(self):
         return self.titleDesignation

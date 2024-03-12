@@ -8,6 +8,10 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth import get_user_model
+import boto3
+from botocore.exceptions import ClientError
+import os
+import logging
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -177,16 +181,16 @@ def get_assessment_details(request, assessment_id):
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
     
-def get_interviews(request, assessment_id):
-    if request.method == 'GET':
-        try:
-            interview = Appointment.objects.filter(assessment=assessment_id)
-            data = [{'id': assessment.id, 'candidateName': assessment.candidateName} for assessment in assessments]
-            return JsonResponse(data, safe=False)
-        except JobDescription.DoesNotExist:
-            return JsonResponse({'error': 'Job not found'}, status=404)
-    else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+#def get_interviews(request, assessment_id):
+ #   if request.method == 'GET':
+  #      try:
+   #         interviews = Appointment.objects.filter(assessment=assessment_id)
+    #        data = [{'id': assessment.id, 'candidateName': assessment.candidateName} for assessment in assessments]
+     #       return JsonResponse(data, safe=False)
+      #  except JobDescription.DoesNotExist:
+       #     return JsonResponse({'error': 'Job not found'}, status=404)
+    #else:
+     #   return JsonResponse({'error': 'Method not allowed'}, status=405)
     
 def get_user_details(request):
     User = get_user_model()
@@ -234,3 +238,76 @@ def get_user_details(request):
         return JsonResponse(data)
     except User.DoesNotExist:
         return JsonResponse({'error': 'User data not found'}, status=404)
+    
+@csrf_exempt 
+def submit_user_data(request):
+    if request.method == 'POST':
+        data = request.POST
+
+        # Create UserData object
+        user_data = UserData.objects.create(
+            fullName=data.get('fullName'),
+            gender=data.get('gender'),
+            aadhaarNumber=data.get('aadhaarNumber'),
+            dateOfBirth=data.get('dateOfBirth'),
+            maritalStatus=data.get('maritalStatus'),
+            emergencyContact=data.get('emergencyContactName'),
+            address=data.get('address'),
+            phoneNumber=data.get('phoneNumber'),
+            emailID=data.get('emailID'),
+            emergencyContactNumber=data.get('emergencyContactNumber'),
+            jobTitle=data.get('jobTitle'),
+            departmentName=data.get('departmentName'),
+            joiningDate=data.get('joiningDate'),
+            employmentType=data.get('employmentType'),
+            relevantSkills=data.get('relevantSkills'),
+            pfUAN=data.get('pfUAN'),
+            esiNO=data.get('esiNO'),
+            documentAcknowledged=data.get('documentAcknowledged'),
+        )
+
+        # Create Education objects
+        education_data = data.getlist('education')
+        for edu in education_data:
+            Education.objects.create(
+                user=user_data,
+                degree=edu.get('degree'),
+                graduationYear=edu.get('graduationYear'),
+                grade=edu.get('grade'),
+            )
+
+        # Create WorkExperience objects
+        work_experience_data = data.getlist('workExperience')
+        for exp in work_experience_data:
+            WorkExperience.objects.create(
+                user=user_data,
+                companyName=exp.get('companyName'),
+                designation=exp.get('designation'),
+                duration=exp.get('duration'),
+            )
+
+        return JsonResponse({'id': user_data.pk})
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+def upload_file(file_name, object_name=None):
+    """Upload a file to an S3 bucket
+
+    :param file_name: File to upload
+    :param bucket: Bucket to upload to
+    :param object_name: S3 object name. If not specified then file_name is used
+    :return: True if file was uploaded, else False
+    """
+
+    # If S3 object_name was not specified, use file_name
+    if object_name is None:
+        object_name = os.path.basename(file_name)
+
+    # Upload the file
+    s3_client = boto3.client('s3')
+    try:
+        response = s3_client.upload_file(file_name, 'hrinputs', object_name)
+    except ClientError as e:
+        logging.error(e)
+        return False
+    return True

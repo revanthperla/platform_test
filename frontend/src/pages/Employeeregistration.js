@@ -105,7 +105,7 @@ function EmployeeRegistration() {
     event.preventDefault();
     
     // Make an HTTP POST request using Axios
-    axios.post('/userdata', userData)
+    axios.post('http://127.0.0.1:8000/submit_user_data/', userData)
       .then(response => {
         console.log('Data sent successfully:', response.data);
         // Reset the form after successful submission
@@ -367,7 +367,7 @@ function EmployeeRegistration() {
           <input
             type="number"
             name="pfUAN"
-            value={userData.bdpmName}
+            value={userData.pfUAN}
             onChange={handleInputChange}
           />
         </label>

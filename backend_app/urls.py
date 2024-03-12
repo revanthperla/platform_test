@@ -20,5 +20,7 @@ urlpatterns = [
     path('api/job-descriptions/', get_job_descriptions, name='get_job_descriptions'),
     path('api/job-descriptions/<int:job_id>/assessments/', get_assessments_for_job, name='get_assessments_for_job'),
     path('clientregistration/', ClientRegistrationViewSet.as_view({'post': 'create'}), name='clientregistration'),
-    path('profile/', UserDataViewSet.as_view({'get':'list'}), name = 'userprofile')
+    path('api/get_user_details/', get_user_details, name='get_user_details'),
+    path('submit_user_data/', submit_user_data, name='submit_user_data'),
+    path('upload_file/', upload_file, name='upload_file')
 ]
