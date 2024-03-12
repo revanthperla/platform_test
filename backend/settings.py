@@ -140,14 +140,3 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AWS_ACCESS_KEY_ID = 'AKIAZI2LIX7E6TMQJLPX'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'hrinputs'
-AWS_S3_REGION_NAME = 'ap-south-2'
-AWS_S3_ENDPOINT_URL = 'https://s3.amazonaws.com'
-
-S3DIRECT_DESTINATIONS = {
-    'primary_destination': {
-        'key': '/',
-    },
-}

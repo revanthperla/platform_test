@@ -11,7 +11,7 @@ const UserList = () => {
 
   useEffect(() => {
     // Fetch users from Django backend
-    axios.get('/userdata/')
+    axios.get('http://127.0.0.1:8000/userdata/')
       .then(response => {
         setFilteredUsers(response.data);
       })
@@ -20,7 +20,7 @@ const UserList = () => {
       });
     
     // Fetch roles from Django backend
-    axios.get('/roles/')
+    axios.get('http://127.0.0.1:8000/roles/')
       .then(response => {
         setRoles(response.data);
       })
@@ -49,7 +49,7 @@ const UserList = () => {
     setFilteredUsers(updatedUsers);
 
     // Update user's role in the backend
-    axios.patch(`/userdata/${userId}/`, { role: roleId })
+    axios.patch(`http://127.0.0.1:8000/userdata/${userId}/`, { role: roleId })
       .then(response => {
         console.log('Role updated successfully in the backend:', response.data);
       })

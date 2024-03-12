@@ -26,7 +26,7 @@ import GenerateInvoice from './pages/Generateinvoice';
 
 function App() {
   return(
-    <EmployeeRegistration/>
+    <UserList/>
   )
 }
 
