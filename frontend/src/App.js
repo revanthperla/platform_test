@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
 import ClientRegistration from './pages/Clientregistration';
@@ -24,10 +25,25 @@ import JobAndCandidateList from './pages/Reportgeneration';
 import JobAndCandidateSelection from './pages/Inovicerequest';
 import GenerateInvoice from './pages/Generateinvoice';
 
-function App() {
-  return(
-    <JobDescription/>
-  )
-}
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/employeeregistration" element={<EmployeeRegistration />} />
+        <Route path="/usernameregistration" element={<RegistrationPage />} />
+        <Route path="/employeedashboard" element={<Dashboard />} />
+        <Route path="/bdpdashboard" element={<BdpDashboard />} />
+        <Route path="/bdpmdashboard" element={<BdpmDashboard />} />
+        <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/managerdashboard" element={<ManagerDashboard />} />
+        <Route path="/clientregistration" element={<ClientRegistration />} />
+        <Route path="/jobform" element={<JobDescription />} />
+        <Route path="/joblist" element={<JobList />} />
+        <Route path="/jobview" element={<JobDescriptionDetails />} />
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+export default App;

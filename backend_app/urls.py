@@ -27,5 +27,7 @@ urlpatterns = [
     path('roles/', roles_list, name='roles_list'),
     path('userlist/<int:user_id>/', update_user_role, name='update_user_role'),
     path('api/submit_job_description/', submit_job_description, name='submit_job_description'),
-
+    path('user-details/<int:user_id>/', get_user_details, name='user_details'),
+    path('client-details/<int:client_id>/', get_client_details, name='client_details'),
+    path('assessment-details/<int:assessment_id>/', get_assessment_details, name='assessment_details'),
 ]

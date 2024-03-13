@@ -12,6 +12,7 @@ import boto3
 from botocore.exceptions import ClientError
 import os
 import logging
+from django.shortcuts import get_object_or_404
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -156,31 +157,6 @@ def get_assessments_for_job(request, job_id):
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
     
-def get_assessment_details(request, assessment_id):
-    if request.method == 'GET':
-        try:
-            assessment = Assessment.objects.get(id=assessment_id)
-            data = {
-                'id': assessment.id,
-                'candidateName': assessment.candidateName,
-                'position': assessment.position,
-                'location': assessment.location,
-                'currentEmployer': assessment.currentEmployer,
-                'totalExperience': assessment.totalExperience,
-                'ctc': assessment.ctc,
-                'ectc': assessment.ectc,
-                'noticePeriod': assessment.noticePeriod,
-                'relocate': assessment.relocate,
-                'comments': assessment.comments,
-                'remarks': assessment.remarks
-                # Add more fields as needed
-            }
-            return JsonResponse(data)
-        except Assessment.DoesNotExist:
-            return JsonResponse({'error': 'Assessment not found'}, status=404)
-    else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
-    
 #def get_interviews(request, assessment_id):
  #   if request.method == 'GET':
   #      try:
@@ -192,11 +168,10 @@ def get_assessment_details(request, assessment_id):
     #else:
      #   return JsonResponse({'error': 'Method not allowed'}, status=405)
     
-def get_user_details(request):
+def get_user_details(request, user_id):
     User = get_user_model()
-    user = request.user
     try:
-        user_data = User.objects.get(pk=user.pk)
+        user_data = get_object_or_404(User, pk=user_id)
         education_data = Education.objects.filter(user=user_data)
         work_experience_data = WorkExperience.objects.filter(user=user_data)
         
@@ -343,24 +318,81 @@ def submit_job_description(request):
 
         # Create JobDescription object
         job_description = JobDescription.objects.create(
-            title_designation=data.get('titleDesignation'),
-            client_name=data.get('clientName'),
-            account_manager=data.get('accountManager'),
-            assigned_recruiters=data.get('assignedRecruiters'),
-            start_date=data.get('startDate'),
-            closure_date=data.get('closureDate'),
-            job_type=data.get('jobType'),
-            job_status=data.get('jobStatus'),
-            work_experience=data.get('workExperience'),
-            industry_nature=data.get('industryNature'),
+            titleDesignation=data.get('titleDesignation'),
+            clientName=data.get('clientName'),
+            accountManager=data.get('accountManager'),
+            assignedRecruiters=data.get('assignedRecruiters'),
+            startDate=data.get('startDate'),
+            closureDate=data.get('closureDate'),
+            jobType=data.get('jobType'),
+            jobStatus=data.get('jobStatus'),
+            workExperience=data.get('workExperience'),
+            industryNature=data.get('industryNature'),
             compensation=data.get('compensation'),
             location=data.get('location'),
-            eligibility_criteria=data.get('eligibilityCriteria'),
-            primary_responsibilities=data.get('primaryResponsibilities'),
-            mandatory_skills=data.get('mandatorySkills'),
-            desirable_skills=data.get('desirableSkills'),
+            eligibilityCriteria=data.get('eligibilityCriteria'),
+            primaryResponsibilities=data.get('primaryResponsibilities'),
+            mandatorySkills=data.get('mandatorySkills'),
+            desirableSkills=data.get('desirableSkills'),
         )
 
         return JsonResponse({'id': job_description.pk})
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+def get_client_details(request, client_id):
+    Client = ClientRegistration
+    try:
+        client_data = get_object_or_404(Client, pk=client_id)
+        
+        data = {
+            'entityName': client_data.entityName,
+            'organizationStatus': client_data.organizationStatus,
+            'estYear': client_data.estYear,
+            'proprieterName': client_data.proprieterName,
+            'officeAddress': client_data.officeAddress,
+            'branchAddress': client_data.branchAddress,
+            'companyPerson': client_data.companyPerson,
+            'companyDesignation': client_data.companyDesignation,
+            'companyNumber': client_data.companyNumber,
+            'companyFax': client_data.companyFax,
+            'companyEmail': client_data.companyEmail,
+            'industryNature': client_data.industryNature,
+            'companyCIN': client_data.companyCIN,
+            'companyPAN': client_data.companyPAN,
+            'companyGST': client_data.companyGST,
+            'bdpName': client_data.bdpName,
+            'bdpmName': client_data.bdpmName,
+            'accountManager': client_data.accountManager,
+            'billingCity': client_data.billingCity,
+            'billingCountry': client_data.billingCountry,
+        }
+        return JsonResponse(data)
+    except Client.DoesNotExist:
+        return JsonResponse({'error': 'Client data not found'}, status=404)
+    
+def get_assessment_details(request, assessment_id):
+    Assess = Assessment
+    try:
+        assessment_data = get_object_or_404(Assess, pk=assessment_id)
+        
+        data = {
+            'job_description': assessment_data.job_description.id if assessment_data.job_description else None,
+            'candidateName': assessment_data.candidateName,
+            'position': assessment_data.position,
+            'location': assessment_data.location,
+            'currentEmployer': assessment_data.currentEmployer,
+            'totalExperience': assessment_data.totalExperience,
+            'ctc': assessment_data.ctc,
+            'ectc': assessment_data.ectc,
+            'noticePeriod': assessment_data.noticePeriod,
+            'relocate': assessment_data.relocate,
+            'comments': assessment_data.comments,
+            'remarks': assessment_data.remarks,
+            'is_active': assessment_data.is_active,
+            'done': assessment_data.done,
+            'interview': assessment_data.interview,
+        }
+        return JsonResponse(data)
+    except Assessment.DoesNotExist:
+        return JsonResponse({'error': 'Assessment data not found'}, status=404)

@@ -1,18 +1,19 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from "react-router-dom";
-import {Redirect} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const RegistrationPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const navigate = useNavigate();
 
   const handleRegister = () => {
     axios.post('/api/register/', { username, password, email })
       .then(response => console.log(response.data))
       .catch(error => console.error(error));
+    navigate('/');
   };
 
   return (
