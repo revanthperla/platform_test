@@ -108,7 +108,7 @@ function EmployeeRegistration() {
     event.preventDefault();
     
     // Make an HTTP POST request using Axios
-    axios.post('http://3.109.1.193:8000/submit_user_data/', userData)
+    axios.post('http://43.204.201.158:8000/submit_user_data/', userData)
       .then(response => {
         console.log('Data sent successfully:', response.data);
         // Reset the form after successful submission
