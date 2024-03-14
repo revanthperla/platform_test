@@ -57,7 +57,7 @@ function ClientRegistration() {
     event.preventDefault();
     
     try {
-      const response = await axios.post('http://127.0.0.1:8000/clientregistration/', userData);
+      const response = await axios.post('http://43.204.201.158:8000/clientregistration/', userData);
       
       console.log('Form submitted successfully:', response.data);
       // You can add any additional logic here after the form is successfully submitted

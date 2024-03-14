@@ -40,7 +40,7 @@ function AssessmentForm({ jobId, candidateId }) {
 
     const handleApprove = () => {
         // Send a request to update the backend with the approval status
-        axios.patch(`http://127.0.0.1:8000/api/assessments/${candidateId}/`, { is_active: true })
+        axios.patch(`http://43.204.201.158:8000/api/assessments/${candidateId}/`, { is_active: true })
             .then(response => {
                 console.log('Assessment approved:', response.data);
                 // Optionally, you can update the UI to reflect the approval status

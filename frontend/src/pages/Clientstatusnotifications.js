@@ -12,7 +12,7 @@ function Notifications() {
   const fetchNotifications = async () => {
     try {
       // Make an API request to fetch notifications for the current user
-      const response = await axios.get('http://your-backend-api/notifications/');
+      const response = await axios.get('http://43.204.201.158:8000/notifications/');
       setNotifications(response.data);
     } catch (error) {
       console.error('Error fetching notifications:', error);

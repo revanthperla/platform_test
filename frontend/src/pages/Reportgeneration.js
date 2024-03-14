@@ -13,7 +13,7 @@ function JobAndCandidateList() {
   
     useEffect(() => {
       // Fetch jobs from Django backend
-      axios.get('/api/jobs')
+      axios.get('http://43.204.201.158:8000/api/jobs')
         .then(response => {
           setJobs(response.data);
         })

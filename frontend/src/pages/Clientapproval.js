@@ -16,7 +16,7 @@ function ClientApproval() {
 
     const fetchPendingClients = async () => {
         try {
-        const response = await axios.get('http://your-django-backend/api/pending-clients/');
+        const response = await axios.get('http://43.204.201.158:8000/api/pending-clients/');
         setPendingClients(response.data);
         } catch (error) {
         console.error('Error fetching pending clients:', error);

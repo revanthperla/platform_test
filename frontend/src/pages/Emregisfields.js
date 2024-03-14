@@ -52,7 +52,7 @@ function Emregisfields() {
 
   const handleSubmit = () => {
     // Send updated field settings to backend
-    axios.post('/api/update-field-settings', fieldSettings)
+    axios.post('http://43.204.201.158:8000/api/update-field-settings', fieldSettings)
       .then(response => {
         console.log('Field settings updated successfully:', response.data);
       })

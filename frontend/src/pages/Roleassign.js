@@ -11,7 +11,7 @@ const UserList = () => {
 
   useEffect(() => {
     // Fetch users from Django backend
-    axios.get('http://127.0.0.1:8000/userlist/')
+    axios.get('http://43.204.201.158:8000/userlist/')
       .then(response => {
         setFilteredUsers(response.data);
       })

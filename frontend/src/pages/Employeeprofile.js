@@ -7,7 +7,7 @@ function Profile() {
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/get_user_details/')
+    axios.get('http://43.204.201.158:8000/api/get_user_details/')
       .then(response => {
         setProfileData(response.data);
       })

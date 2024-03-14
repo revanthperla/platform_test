@@ -10,7 +10,7 @@ const RegistrationPage = () => {
   const navigate = useNavigate();
 
   const handleRegister = () => {
-    axios.post('/api/register/', { username, password, email })
+    axios.post('http://43.204.201.158:8000/api/register/', { username, password, email })
       .then(response => console.log(response.data))
       .catch(error => console.error(error));
     navigate('/');
