@@ -37,6 +37,7 @@ class ClientRegistrationSerializer(serializers.ModelSerializer):
         return client_registration
 
 
+
 class JobDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobDescription

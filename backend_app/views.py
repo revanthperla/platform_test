@@ -374,7 +374,7 @@ def get_client_details(request, client_id):
     except Client.DoesNotExist:
         return JsonResponse({'error': 'Client data not found'}, status=404)
     
-    
+
 def get_assessment_details(request, assessment_id):
     Assess = Assessment
     try:
@@ -400,6 +400,7 @@ def get_assessment_details(request, assessment_id):
         return JsonResponse(data)
     except Assessment.DoesNotExist:
         return JsonResponse({'error': 'Assessment data not found'}, status=404)
+ 
     
 class UserRegistrationView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()

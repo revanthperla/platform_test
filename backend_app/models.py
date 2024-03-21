@@ -55,7 +55,7 @@ class UserData(models.Model):
     def __str__(self):
         return self.fullName if self.fullName else "Unnamed User"
 
-    
+
 class LoginDetails(models.Model):
     user_data = models.OneToOneField(UserData, on_delete=models.CASCADE)
     username = models.CharField(max_length=255, unique=True)
@@ -63,6 +63,7 @@ class LoginDetails(models.Model):
 
     def __str__(self):
         return self.username
+
 
 def current_year_validator(value):
     current_year = timezone.now().year
