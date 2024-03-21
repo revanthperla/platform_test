@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+from django.contrib.auth.password_validation import validate_password
 
 class UserDataSerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,3 +50,33 @@ class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = '__all__'
+
+
+class UserSerializer(serializers.ModelSerializer):
+    confirm_password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'password', 'confirm_password', 'gender']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
+
+    def validate(self, data):
+        if data['password'] != data['confirm_password']:
+            raise serializers.ValidationError("Passwords do not match")
+
+        for field_name, value in data.items():
+            if value in [None, '']:
+                raise serializers.ValidationError(f"{field_name} cannot be empty")
+        
+        password = data.get('password')
+        if len(password) < 7:
+            raise serializers.ValidationError("Password must be at least 7 characters long")
+
+        return data
+
+    def create(self, validated_data):
+        validated_data.pop('confirm_password')
+        user = CustomUser.objects.create_user(**validated_data)
+        return user
