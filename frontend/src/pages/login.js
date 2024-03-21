@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import '../css/login.css';
 
 function Login() {
@@ -10,6 +11,26 @@ function Login() {
     // Handle login logic here (e.g., authentication with backend)
     console.log('Username:', username);
     console.log('Password:', password);
+
+    switch (user.role) {
+      case 'Business Development Partner':
+        navigate('/bdpdashboard'); // Redirect to the admin page
+        break;
+      case 'Recruiter':
+        navigate('/employeedashboard'); // Redirect to the employee page
+        break;
+      case 'Manager':
+        navigate('/managerdashboard'); // Redirect to the manager page
+        break;
+      case 'Business Development Partner Manager':
+        navigate('/bdpmdashboard'); // Redirect to the manager page
+        break;
+      case 'Account Manager':
+        navigate('/amanagerdashboard'); // Redirect to the manager page
+        break;
+      default:
+        console.error('Invalid role:', user.role);
+    }
   };
 
   return (
@@ -38,6 +59,10 @@ function Login() {
         </div>
         <button type="submit">Login</button>
       </form>
+      <div className="register-link">
+        <span>Don't have an account? </span>
+        <Link to="/employeeregistration">Register</Link> 
+      </div>
     </div>
   );
 }

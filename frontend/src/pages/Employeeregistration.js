@@ -4,6 +4,7 @@ import { Document, Page } from 'react-pdf';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../css/Employeeregistration.css'
 import axios from 'axios'; // Import Axios
+import { useNavigate } from 'react-router-dom';
 
 function EmployeeRegistration() {
   const [userData, setUserData] = useState({
@@ -29,6 +30,8 @@ function EmployeeRegistration() {
     documentAcknowledged: false,
   });
 
+  const navigate = useNavigate();
+  
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserData({ ...userData, [name]: value });
@@ -110,6 +113,7 @@ function EmployeeRegistration() {
         console.log('Data sent successfully:', response.data);
         // Reset the form after successful submission
         setUserData({ ...userData, /* reset fields */ });
+        navigate('/usernameregistration');
       })
       .catch(error => {
         console.error('Error sending data:', error);
