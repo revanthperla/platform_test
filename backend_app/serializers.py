@@ -36,6 +36,7 @@ class ClientRegistrationSerializer(serializers.ModelSerializer):
             PendingClientRegistration.objects.create(client_registration=client_registration)
         return client_registration
 
+
 class JobDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobDescription

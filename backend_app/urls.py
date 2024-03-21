@@ -12,6 +12,7 @@ router.register(r'assessment', AssessmentViewSet)
 router.register(r'appointment', AppointmentViewSet)
 
 
+
 urlpatterns = [
     path('', include(router.urls)),
     path('api/recruiters/', get_recruiters, name='get_recruiters'),

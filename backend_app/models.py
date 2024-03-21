@@ -14,7 +14,7 @@ class CustomUser(AbstractUser):
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
 
-    
+
 
 class Role(models.Model):
     ROLE_CHOICES = (
@@ -54,6 +54,7 @@ class UserData(models.Model):
 
     def __str__(self):
         return self.fullName if self.fullName else "Unnamed User"
+
     
 class LoginDetails(models.Model):
     user_data = models.OneToOneField(UserData, on_delete=models.CASCADE)
