@@ -374,7 +374,6 @@ def get_client_details(request, client_id):
     except Client.DoesNotExist:
         return JsonResponse({'error': 'Client data not found'}, status=404)
     
-
 def get_assessment_details(request, assessment_id):
     Assess = Assessment
     try:
