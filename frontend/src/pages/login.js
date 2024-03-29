@@ -1,48 +1,54 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/login.css';
+import axios from 'axios';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate;
-  const user = {
-    username: 'exampleUser',
-    password: 'examplePassword',
-    role: 'admin' // Mock user role
-  };
   const handleSubmit = (event) => {
-    event.preventDefault();
-    // Handle login logic here (e.g., authentication with backend)
-    console.log('Username:', username);
-    console.log('Password:', password);
-
-    switch (user.role) {
-      case 'Business Development Partner':
-        navigate('/bdpdashboard'); // Redirect to the admin page
-        break;
-      case 'Recruiter':
-        navigate('/employeedashboard'); // Redirect to the employee page
-        break;
-      case 'Manager':
-        navigate('/managerdashboard'); // Redirect to the manager page
-        break;
-      case 'Business Development Partner Manager':
-        navigate('/bdpmdashboard'); // Redirect to the manager page
-        break;
-      case 'Account Manager':
-        navigate('/amanagerdashboard'); // Redirect to the manager page
-        break;
-      default:
-        console.error('Invalid role:', user.role);
+    try {
+      const response = axios.post('http://127.0.0.1:8000/api/login/', {
+        username,
+        password
+      });
+  
+      if (response.data.message) {
+        // Login successful, navigate to appropriate dashboard
+        switch (response.data.role) {
+          case 'Business Development Partner':
+            navigate('/bdpdashboard');
+            break;
+          case 'Recruiter':
+            navigate('/employeedashboard');
+            break;
+          case 'Manager':
+            navigate('/managerdashboard');
+            break;
+          case 'Business Development Partner Manager':
+            navigate('/bdpmdashboard');
+            break;
+          case 'Account Manager':
+            navigate('/amanagerdashboard');
+            break;
+          default:
+            console.error('Invalid role:', response.data.role);
+        }
+      } else {
+        // Login failed, display error message
+        console.error('Login failed:', response.data.error);
+      }
+    } catch (error) {
+      console.error('Login failed:', error.message);
+      // Handle error, e.g., display error message to user
     }
   };
 
   return (
     <div className="login-container">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
         <div className="input-group">
           <label htmlFor="username">Username</label>
           <input
@@ -63,8 +69,7 @@ function Login() {
             required
           />
         </div>
-        <button type="submit">Login</button>
-      </form>
+        <button onClick={handleSubmit}>Login</button>
       <div className="register-link">
         <span>Don't have an account? </span>
         <Link to="/employeeregistration">Register</Link> 

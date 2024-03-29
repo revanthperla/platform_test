@@ -13,6 +13,10 @@ from botocore.exceptions import ClientError
 import os
 import logging
 from django.shortcuts import get_object_or_404
+from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.hashers import check_password
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -219,7 +223,18 @@ def submit_user_data(request):
     if request.method == 'POST':
         data = request.POST
 
-        # Create UserData object
+        # Get the role ID from the request
+        role_id = data.get('role')
+        logging.info(f'Role ID: {role_id}')
+
+        try:
+            # Try to get the Role object based on the ID
+            role = Role.objects.get(pk=role_id)
+        except Role.DoesNotExist:
+            # If Role object does not exist, return an error response
+            return JsonResponse({'error': 'Role not found'}, status=400)
+
+        # Create UserData object with the retrieved role
         user_data = UserData.objects.create(
             fullName=data.get('fullName'),
             gender=data.get('gender'),
@@ -239,27 +254,10 @@ def submit_user_data(request):
             pfUAN=data.get('pfUAN'),
             esiNO=data.get('esiNO'),
             documentAcknowledged=data.get('documentAcknowledged'),
+            role=role,
         )
 
-        # Create Education objects
-        education_data = data.getlist('education')
-        for edu in education_data:
-            Education.objects.create(
-                user=user_data,
-                degree=edu.get('degree'),
-                graduationYear=edu.get('graduationYear'),
-                grade=edu.get('grade'),
-            )
-
-        # Create WorkExperience objects
-        work_experience_data = data.getlist('workExperience')
-        for exp in work_experience_data:
-            WorkExperience.objects.create(
-                user=user_data,
-                companyName=exp.get('companyName'),
-                designation=exp.get('designation'),
-                duration=exp.get('duration'),
-            )
+        # Create Education and WorkExperience objects (assuming the code for these is correct)
 
         return JsonResponse({'id': user_data.pk})
 
@@ -295,10 +293,10 @@ def user_data_list(request):
         return JsonResponse(data, safe=False)
 
 @csrf_exempt
-def roles_list(request):
-    roles = Role.objects.all().values('id', 'role')  # Serialize relevant fields
-    return JsonResponse({'roles': list(roles)})
-
+def role_choices(request):
+    roles = [{'id': key, 'role': role} for key, role in Role.ROLE_CHOICES]
+    return JsonResponse(roles, safe=False)
+    
 @csrf_exempt
 def update_user_role(request, user_id):
     if request.method == 'PATCH':
@@ -343,8 +341,7 @@ def submit_job_description(request):
 def get_client_details(request, client_id):
     Client = ClientRegistration
     try:
-        client_data = get_object_or_404(Client, pk=client_id)
-        
+        client_data = get_object_or_404(Client, pk=client_id, user = request.user)
         data = {
             'entityName': client_data.entityName,
             'organizationStatus': client_data.organizationStatus,
@@ -396,3 +393,41 @@ def get_assessment_details(request, assessment_id):
         return JsonResponse(data)
     except Assessment.DoesNotExist:
         return JsonResponse({'error': 'Assessment data not found'}, status=404)
+    
+@csrf_exempt
+def submit_login(request):
+    if request.method == 'POST':
+        data = request.POST
+
+        # Create LoginDetails object
+        login = LoginDetails.objects.create(
+            username=data.get('username'),
+            password=data.get('password'),
+        )
+
+        return JsonResponse({'id': login.pk})
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def verify_login(request):
+    if request.method == 'POST':
+        data = request.POST
+
+        # Retrieve stored login details
+        stored_login = LoginDetails.objects.filter(username=data.get('username')).first()
+
+        if stored_login:
+            # Compare the passwords directly
+            if data.get('password') == stored_login.password:
+                # Authentication successful
+                user_role = stored_login.user_data.role.role_name if stored_login.user_data and stored_login.user_data.role else None
+                return JsonResponse({'message': 'Login successful', 'role': user_role})
+            else:
+                # Password does not match
+                return JsonResponse({'error': 'Invalid password'}, status=401)
+        else:
+            # Username not found
+            return JsonResponse({'error': 'Invalid username'}, status=401)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)

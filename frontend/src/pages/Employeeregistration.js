@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { Document, Page } from 'react-pdf';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -28,9 +28,29 @@ function EmployeeRegistration() {
     pfUAN:'',
     esiNO:'',
     documentAcknowledged: false,
+    role: '',
   });
 
   const navigate = useNavigate();
+
+  const [roleOptions, setRoleOptions] = useState([]);
+
+  useEffect(() => {
+    // Fetch role options from backend when component mounts
+    axios.get('http://127.0.0.1:8000/roles/')
+    .then(response => {
+      // Check if response data is an array
+      if (Array.isArray(response.data)) {
+        setRoleOptions(response.data);
+        console.log(response.data);
+      } else {
+        console.error('Invalid response data:', response.data);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching roles:', error);
+    });
+}, []);
   
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -108,7 +128,7 @@ function EmployeeRegistration() {
     event.preventDefault();
     
     // Make an HTTP POST request using Axios
-    axios.post('http://43.204.201.158:8000/submit_user_data/', userData)
+    axios.post('http://127.0.0.1:8000/submit_user_data/', userData)
       .then(response => {
         console.log('Data sent successfully:', response.data);
         // Reset the form after successful submission
@@ -384,6 +404,23 @@ function EmployeeRegistration() {
             value={userData.esiNO}
             onChange={handleInputChange}
           />
+        </label>
+        <br />
+        <h2>Role</h2>
+        <label>
+          Select Role:
+          <select
+            name="role"
+            value={userData.role}
+            onChange={handleInputChange}
+          >
+            <option value="">Select</option>
+            {roleOptions.map(role => (
+              <option key={role.id} value={role.role}>
+                {role.role}
+              </option>
+            ))}
+          </select>
         </label>
         <br />
         <button type="submit" class="btn btn-default btn-sm">Submit</button>

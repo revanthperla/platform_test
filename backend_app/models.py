@@ -44,10 +44,9 @@ class UserData(models.Model):
         return self.fullName if self.fullName else "Unnamed User"
     
 class LoginDetails(models.Model):
-    user_data = models.OneToOneField(UserData, on_delete=models.CASCADE)
-    username = models.CharField(max_length=255, unique=True)
-    password = models.CharField(max_length=255)  # Note: It's recommended to use hashed passwords in production
-
+    user_data = models.OneToOneField(UserData, on_delete=models.CASCADE, null = True)
+    username = models.CharField(max_length=255, unique=True, null=True)
+    password = models.CharField(max_length=255, null=True)  # Note: It's recommended to use hashed passwords in production
     def __str__(self):
         return self.username
 
