@@ -132,7 +132,7 @@ function EmployeeRegistration() {
       .then(response => {
         console.log('Data sent successfully:', response.data);
         // Reset the form after successful submission
-        setUserData({ ...userData, /* reset fields */ });
+        setUserData({ ...userData});
         navigate('/usernameregistration');
       })
       .catch(error => {

@@ -225,7 +225,7 @@ def submit_user_data(request):
 
         # Get the role ID from the request
         role_id = data.get('role')
-        logging.info(f'Role ID: {role_id}')
+        role_data = Role.objects.create(role=role_id)
 
         try:
             # Try to get the Role object based on the ID
@@ -254,12 +254,28 @@ def submit_user_data(request):
             pfUAN=data.get('pfUAN'),
             esiNO=data.get('esiNO'),
             documentAcknowledged=data.get('documentAcknowledged'),
-            role=role,
+            role=role_id,
         )
 
-        # Create Education and WorkExperience objects (assuming the code for these is correct)
+        education_data = data.getlist('education')
+        for edu in education_data:
+            Education.objects.create(
+                user=user_data,
+                degree=edu.get('degree'),
+                graduationYear=edu.get('graduationYear'),
+                grade=edu.get('grade'),
+            )
 
-        return JsonResponse({'id': user_data.pk})
+        # Create WorkExperience objects
+        work_experience_data = data.getlist('workExperience')
+        for exp in work_experience_data:
+            WorkExperience.objects.create(
+                user=user_data,
+                companyName=exp.get('companyName'),
+                designation=exp.get('designation'),
+                duration=exp.get('duration'),
+            )
+        return JsonResponse({'id': user_data.pk, 'id': role_data.pk})
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 

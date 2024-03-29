@@ -12,7 +12,7 @@ class Role(models.Model):
         ('Business Development Partner Manager', 'Business Development Partner Manager'),
         ('Account Manager', 'Account Manager'),
     )
-    role = models.CharField(max_length=50, choices=ROLE_CHOICES)
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, null=True)
 
     def __str__(self):
         return self.name
