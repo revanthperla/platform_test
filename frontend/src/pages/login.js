@@ -8,13 +8,13 @@ function Login() {
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate;
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     try {
-      const response = axios.post('http://127.0.0.1:8000/api/login/', {
+      const response = await axios.post('http://127.0.0.1:8000/api/login/', {
         username,
         password
       });
-  
+      console.log(response);
       if (response.data.message) {
         // Login successful, navigate to appropriate dashboard
         switch (response.data.role) {
@@ -41,7 +41,7 @@ function Login() {
         console.error('Login failed:', response.data.error);
       }
     } catch (error) {
-      console.error('Login failed:', error.message);
+      console.error('Login failed:', error);
       // Handle error, e.g., display error message to user
     }
   };

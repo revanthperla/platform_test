@@ -21,7 +21,7 @@ urlpatterns = [
     path('api/job-descriptions/<int:job_id>/assessments/', get_assessments_for_job, name='get_assessments_for_job'),
     path('clientregistration/', ClientRegistrationViewSet.as_view({'post': 'create'}), name='clientregistration'),
     path('api/get_user_details/', get_user_details, name='get_user_details'),
-    path('submit_user_data/', submit_user_data, name='submit_user_data'),
+    path('submit_user_data/', UserDataViewSet.as_view({'post': 'create'}), name='submit_user_data'),
     path('upload_file/', upload_file, name='upload_file'),
     path('userlist/', user_data_list, name='user_data_list'),
     path('roles/', role_choices, name='roles_list'),
@@ -30,6 +30,6 @@ urlpatterns = [
     path('user-details/<int:user_id>/', get_user_details, name='user_details'),
     path('client-details/<int:client_id>/', get_client_details, name='client_details'),
     path('assessment-details/<int:assessment_id>/', get_assessment_details, name='assessment_details'),
-    path('api/register/', submit_login, name='register'),
+    path('api/register/', LoginDetailsViewSet.as_view({'post': 'create'}), name='register'),
     path('api/login/', verify_login, name='user-login'),
 ]

@@ -54,3 +54,8 @@ class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = '__all__'
+
+class LoginDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LoginDetails
+        fields = '__all__'

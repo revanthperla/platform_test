@@ -9,7 +9,11 @@ const RegistrationPage = () => {
   const navigate = useNavigate();
 
   const handleRegister = () => {
-    axios.post('http://127.0.0.1:8000/api/register/', { username, password})
+    console.log(username, password)
+    axios.post('http://127.0.0.1:8000/api/register/', {
+      'username': username,
+      'password': password
+      })
       .then(response => console.log(response.data))
       .catch(error => console.error(error));
     navigate('/');

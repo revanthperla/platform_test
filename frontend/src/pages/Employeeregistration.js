@@ -410,17 +410,21 @@ function EmployeeRegistration() {
         <label>
           Select Role:
           <select
-            name="role"
-            value={userData.role}
-            onChange={handleInputChange}
-          >
-            <option value="">Select</option>
-            {roleOptions.map(role => (
-              <option key={role.id} value={role.role}>
-                {role.role}
-              </option>
-            ))}
-          </select>
+    name="role"
+    value={userData.role}
+    onChange={(event) => {
+      const roleId = event.target.value;
+      setUserData({ ...userData, role: roleId }); // Set role id instead of role name
+    }}
+  >
+    <option value="">Select</option>
+    {roleOptions.map(role => (
+      <option key={role.id} value={role.id}> {/* Use role.id as the value */}
+        {role.role}
+        console.log(role.role)
+      </option>
+    ))}
+  </select>
         </label>
         <br />
         <button type="submit" class="btn btn-default btn-sm">Submit</button>

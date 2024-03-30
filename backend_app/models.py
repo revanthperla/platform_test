@@ -12,10 +12,10 @@ class Role(models.Model):
         ('Business Development Partner Manager', 'Business Development Partner Manager'),
         ('Account Manager', 'Account Manager'),
     )
-    role = models.CharField(max_length=50, choices=ROLE_CHOICES, null=True)
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, null=True, unique=True)
 
     def __str__(self):
-        return self.name
+        return self.role
 
 class UserData(models.Model):
     fullName = models.CharField(max_length=255, blank=True, null=True)

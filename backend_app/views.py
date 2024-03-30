@@ -1,3 +1,4 @@
+import pprint
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -33,6 +34,10 @@ class WorkExperienceViewSet(viewsets.ModelViewSet):
 class ClientRegistrationViewSet(viewsets.ModelViewSet):
     queryset = ClientRegistration.objects.all()
     serializer_class = ClientRegistrationSerializer
+    
+class LoginDetailsViewSet(viewsets.ModelViewSet):
+    queryset = LoginDetails.objects.all()
+    serializer_class = LoginDetailsSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -223,16 +228,9 @@ def submit_user_data(request):
     if request.method == 'POST':
         data = request.POST
 
-        # Get the role ID from the request
-        role_id = data.get('role')
-        role_data = Role.objects.create(role=role_id)
-
-        try:
-            # Try to get the Role object based on the ID
-            role = Role.objects.get(pk=role_id)
-        except Role.DoesNotExist:
-            # If Role object does not exist, return an error response
-            return JsonResponse({'error': 'Role not found'}, status=400)
+        # Get or create the Role object based on the selected role name
+        role_name = data.get('role')
+        role, created = Role.objects.get_or_create(role=role_name)
 
         # Create UserData object with the retrieved role
         user_data = UserData.objects.create(
@@ -254,7 +252,7 @@ def submit_user_data(request):
             pfUAN=data.get('pfUAN'),
             esiNO=data.get('esiNO'),
             documentAcknowledged=data.get('documentAcknowledged'),
-            role=role_id,
+            role=role,
         )
 
         education_data = data.getlist('education')
@@ -275,7 +273,7 @@ def submit_user_data(request):
                 designation=exp.get('designation'),
                 duration=exp.get('duration'),
             )
-        return JsonResponse({'id': user_data.pk, 'id': role_data.pk})
+        return JsonResponse({'id': user_data.pk, 'created': created})
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
@@ -414,7 +412,10 @@ def get_assessment_details(request, assessment_id):
 def submit_login(request):
     if request.method == 'POST':
         data = request.POST
-
+        pprint.pprint(LoginDetails.objects.filter(pk=11))
+        for key, value in request.POST.items():
+            print(f"Parameter: {key}, Value: {value}")
+        print("Register Password",data.get('password'))
         # Create LoginDetails object
         login = LoginDetails.objects.create(
             username=data.get('username'),
@@ -432,12 +433,14 @@ def verify_login(request):
 
         # Retrieve stored login details
         stored_login = LoginDetails.objects.filter(username=data.get('username')).first()
+        print(stored_login.username)
 
         if stored_login:
             # Compare the passwords directly
             if data.get('password') == stored_login.password:
                 # Authentication successful
-                user_role = stored_login.user_data.role.role_name if stored_login.user_data and stored_login.user_data.role else None
+                user_role = stored_login.user_data.role if stored_login.user_data and stored_login.user_data.role else None
+                print(user_role)
                 return JsonResponse({'message': 'Login successful', 'role': user_role})
             else:
                 # Password does not match
