@@ -31,5 +31,6 @@ urlpatterns = [
     path('client-details/<int:client_id>/', get_client_details, name='client_details'),
     path('assessment-details/<int:assessment_id>/', get_assessment_details, name='assessment_details'),
     path('api/register/', LoginDetailsViewSet.as_view({'post': 'create'}), name='register'),
-    path('api/login/', verify_login, name='user-login'),
+    path('api/login/', LoginView.as_view(), name='user-login'),
+    path('latest-object/', get_latest_user, name='latest_object_detail'),
 ]

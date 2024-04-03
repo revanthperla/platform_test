@@ -20,7 +20,7 @@ function EmployeeRegistration() {
     emergencyContactNumber: '',
     jobTitle: '',
     departmentName: '',
-    joiningDate: '',
+    joiningDate: null,
     employmentType: '',
     education: [],
     workExperience: [],
@@ -34,23 +34,6 @@ function EmployeeRegistration() {
   const navigate = useNavigate();
 
   const [roleOptions, setRoleOptions] = useState([]);
-
-  useEffect(() => {
-    // Fetch role options from backend when component mounts
-    axios.get('http://127.0.0.1:8000/roles/')
-    .then(response => {
-      // Check if response data is an array
-      if (Array.isArray(response.data)) {
-        setRoleOptions(response.data);
-        console.log(response.data);
-      } else {
-        console.error('Invalid response data:', response.data);
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching roles:', error);
-    });
-}, []);
   
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -410,21 +393,26 @@ function EmployeeRegistration() {
         <label>
           Select Role:
           <select
-    name="role"
-    value={userData.role}
-    onChange={(event) => {
-      const roleId = event.target.value;
-      setUserData({ ...userData, role: roleId }); // Set role id instead of role name
-    }}
-  >
-    <option value="">Select</option>
-    {roleOptions.map(role => (
-      <option key={role.id} value={role.id}> {/* Use role.id as the value */}
-        {role.role}
-        console.log(role.role)
-      </option>
-    ))}
-  </select>
+            name="role"
+            value={userData.role}
+            onChange={(event) => {
+              const roleValue = event.target.value;
+              setUserData({ ...userData, role: roleValue });
+            }}
+          >
+            <option value="">Select</option>
+            {[
+              'Recruiter',
+              'Manager',
+              'Business Development Partner',
+              'Business Development Partner Manager',
+              'Account Manager'
+            ].map(role => (
+              <option key={role} value={role}>
+                {role}
+              </option>
+            ))}
+          </select>
         </label>
         <br />
         <button type="submit" class="btn btn-default btn-sm">Submit</button>

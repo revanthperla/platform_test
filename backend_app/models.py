@@ -3,8 +3,10 @@ from django.core.validators import MinValueValidator, MaxValueValidator, EmailVa
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from s3direct.fields import S3DirectField
+from django.views.generic.detail import DetailView
+from django.contrib.auth.models import AbstractUser
 
-class Role(models.Model):
+class UserData(models.Model):
     ROLE_CHOICES = (
         ('Recruiter', 'Recruiter'),
         ('Manager', 'Manager'),
@@ -12,12 +14,7 @@ class Role(models.Model):
         ('Business Development Partner Manager', 'Business Development Partner Manager'),
         ('Account Manager', 'Account Manager'),
     )
-    role = models.CharField(max_length=50, choices=ROLE_CHOICES, null=True, unique=True)
 
-    def __str__(self):
-        return self.role
-
-class UserData(models.Model):
     fullName = models.CharField(max_length=255, blank=True, null=True)
     gender = models.CharField(max_length=10, blank=True, null=True)
     aadhaarNumber = models.CharField(max_length=12, blank=True, null=True)
@@ -38,7 +35,7 @@ class UserData(models.Model):
     documentAcknowledged = models.BooleanField(default=False, null=True)
     pfUAN = models.CharField(max_length=100, blank=True, null=True)
     esiNO = models.CharField(max_length=100, blank=True, null=True)
-    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, null=True)
 
     def __str__(self):
         return self.fullName if self.fullName else "Unnamed User"
@@ -49,6 +46,7 @@ class LoginDetails(models.Model):
     password = models.CharField(max_length=255, null=True)  # Note: It's recommended to use hashed passwords in production
     def __str__(self):
         return self.username
+
 
 def current_year_validator(value):
     current_year = timezone.now().year
@@ -179,3 +177,4 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f"Appointment for {self.assessment} on {self.date} at {self.time}"
+

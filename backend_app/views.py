@@ -18,6 +18,8 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import check_password
+from django.core import serializers
+from django.views.generic import View
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -35,10 +37,6 @@ class ClientRegistrationViewSet(viewsets.ModelViewSet):
     queryset = ClientRegistration.objects.all()
     serializer_class = ClientRegistrationSerializer
     
-class LoginDetailsViewSet(viewsets.ModelViewSet):
-    queryset = LoginDetails.objects.all()
-    serializer_class = LoginDetailsSerializer
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
@@ -74,6 +72,55 @@ class LoginDetailsViewSet(viewsets.ModelViewSet):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+
+class LoginDetailsViewSet(viewsets.ModelViewSet):
+    queryset = LoginDetails.objects.all()
+    serializer_class = LoginDetailsSerializer
+
+    def retrieve(self, request, pk=None):
+        queryset = LoginDetails.objects.filter(username=request.data['username'])
+        login = get_object_or_404(queryset, username= username)
+        serializer = LoginDetailsSerializer(user)
+        return Response(serializer.data)
+
+class LoginView(APIView):
+    def post(self, request):
+        serializer = LoginDetailsSerializer(data=request.data)
+        if serializer.is_valid():
+            print(serializer.validated_data)
+            stored_login = LoginDetails.objects.get(username__iexact=serializer.validated_data['username'])
+            if serializer.validated_data['password'] == stored_login.password:
+                return JsonResponse({'message': 'Login successful'})
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@csrf_exempt
+def compare_data(request):
+    if request.method == 'POST':
+        data = request.POST  # Access data from form submission
+        # Extract relevant fields for comparison
+        print(data)
+        user_name = data.get('username')
+        pass_word = data.get('password')
+        print(user_name)
+        print(pass_word)
+
+        # Access your Django model to retrieve data from the database
+        # (Replace 'MyModel' with your actual model name)
+        try:
+            db_data = LoginDetails.objects.get(username=user_name)
+            print(db_data)  
+        except LoginDetails.DoesNotExist:
+            db_data = None
+
+        # Perform comparison logic
+        is_match = pass_word == db_data.password  # Modify this based on your comparison criteria
+
+        # Return a JSON response indicating the comparison result
+        return JsonResponse({'is_match': is_match})
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
 class JobDescriptionViewSet(viewsets.ModelViewSet):
     queryset = JobDescription.objects.all()
     serializer_class = JobDescriptionSerializer
@@ -86,6 +133,17 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
 
+class UserDataDetailView(DetailView):
+    model = UserData
+
+    def GET(self, queryset=None):
+        return UserData.objects.latest('id')
+
+    def render_to_response(self, context, **response_kwargs):
+        latest_object = context['object']
+        data = {'latest_object_id': latest_object.id}
+        return JsonResponse(data)
+
 def index(request):
     return render(request, 'index.html')
 
@@ -94,19 +152,19 @@ def get_clients(request):
     return JsonResponse({'clients': list(clients)})
 
 def get_recruiters(request):
-    recruiters = UserData.objects.filter(role__role='Recruiter').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
+    recruiters = UserData.objects.filter(role='Recruiter').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
     return JsonResponse({'recruiters': list(recruiters)})
 
 def get_accoutmanagers(request):
-    accountManagers = UserData.objects.filter(role__role='Account Manager').values('id', 'fullName')  # Assuming 'Account Manager' is the role name
-    return JsonResponse({'Account Managers': list(accountManagers)})
+    accountManagers = UserData.objects.filter(role='Account Manager').values('id', 'fullName')  # Assuming 'Account Manager' is the role name
+    return JsonResponse({'accountManagers': list(accountManagers)})
 
 def get_bdp(request):
-    bdp = UserData.objects.filter(role__role='Business Development Partner').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
+    bdp = UserData.objects.filter(role='Business Development Partner').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
     return JsonResponse({'recruiters': list(bdp)})
 
 def get_bdpm(request):
-    bdpm = UserData.objects.filter(role__role='Business Development Partner').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
+    bdpm = UserData.objects.filter(role='Business Development Partner').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
     return JsonResponse({'recruiters': list(bdpm)})
 
 @csrf_exempt  # Use this decorator to bypass CSRF protection for this view (only for demonstration, ensure to handle CSRF properly in production)
@@ -145,6 +203,15 @@ def submit_assessment(request, job_id):
 
     # Return a success response
     return JsonResponse({'success': True})
+
+def get_latest_user(request):
+    if request.method == 'GET':
+        latest_object_id = UserData.objects.latest('id').id
+        user_data = UserData.objects.get(id=latest_object_id)
+        serialized_data = serializers.serialize('json', [user_data])
+        return JsonResponse({'user_data': latest_object_id})
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 def get_job_descriptions(request):
     if request.method == 'GET':
@@ -222,60 +289,6 @@ def get_user_details(request, user_id):
         return JsonResponse(data)
     except User.DoesNotExist:
         return JsonResponse({'error': 'User data not found'}, status=404)
-    
-@csrf_exempt 
-def submit_user_data(request):
-    if request.method == 'POST':
-        data = request.POST
-
-        # Get or create the Role object based on the selected role name
-        role_name = data.get('role')
-        role, created = Role.objects.get_or_create(role=role_name)
-
-        # Create UserData object with the retrieved role
-        user_data = UserData.objects.create(
-            fullName=data.get('fullName'),
-            gender=data.get('gender'),
-            aadhaarNumber=data.get('aadhaarNumber'),
-            dateOfBirth=data.get('dateOfBirth'),
-            maritalStatus=data.get('maritalStatus'),
-            emergencyContact=data.get('emergencyContactName'),
-            address=data.get('address'),
-            phoneNumber=data.get('phoneNumber'),
-            emailID=data.get('emailID'),
-            emergencyContactNumber=data.get('emergencyContactNumber'),
-            jobTitle=data.get('jobTitle'),
-            departmentName=data.get('departmentName'),
-            joiningDate=data.get('joiningDate'),
-            employmentType=data.get('employmentType'),
-            relevantSkills=data.get('relevantSkills'),
-            pfUAN=data.get('pfUAN'),
-            esiNO=data.get('esiNO'),
-            documentAcknowledged=data.get('documentAcknowledged'),
-            role=role,
-        )
-
-        education_data = data.getlist('education')
-        for edu in education_data:
-            Education.objects.create(
-                user=user_data,
-                degree=edu.get('degree'),
-                graduationYear=edu.get('graduationYear'),
-                grade=edu.get('grade'),
-            )
-
-        # Create WorkExperience objects
-        work_experience_data = data.getlist('workExperience')
-        for exp in work_experience_data:
-            WorkExperience.objects.create(
-                user=user_data,
-                companyName=exp.get('companyName'),
-                designation=exp.get('designation'),
-                duration=exp.get('duration'),
-            )
-        return JsonResponse({'id': user_data.pk, 'created': created})
-
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 def upload_file(file_name, object_name=None):
     """Upload a file to an S3 bucket
@@ -430,9 +443,9 @@ def submit_login(request):
 def verify_login(request):
     if request.method == 'POST':
         data = request.POST
-
+        print(data)
         # Retrieve stored login details
-        stored_login = LoginDetails.objects.filter(username=data.get('username')).first()
+        stored_login = LoginDetails.objects.get(username__iexact=data.get('username'))
         print(stored_login.username)
 
         if stored_login:
