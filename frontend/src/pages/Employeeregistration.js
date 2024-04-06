@@ -11,7 +11,7 @@ function EmployeeRegistration() {
     fullName: '',
     gender: '',
     aadhaarNumber: '',
-    dateofBirth: null,
+    dateOfBirth: '',
     maritalStatus: '',
     emergencyContactName: '',
     address: '',
@@ -20,7 +20,7 @@ function EmployeeRegistration() {
     emergencyContactNumber: '',
     jobTitle: '',
     departmentName: '',
-    joiningDate: null,
+    joiningDate: '',
     employmentType: '',
     education: [],
     workExperience: [],
@@ -157,8 +157,8 @@ function EmployeeRegistration() {
         <label>
           Date of Birth:
           <DatePicker
-            selected={userData.dateofBirth}
-            onChange={(date) => setUserData({ ...userData, dateofBirth: date })}
+            selected={userData.dateOfBirth}
+            onChange={(date) => setUserData({ ...userData, dateOfBirth: date })}
             dateFormat="MMMM d, yyyy"
             scrollableYearDropdown
             showMonthDropdown
@@ -183,6 +183,15 @@ function EmployeeRegistration() {
           </select>
         </label>
         <br />
+        <label>
+          Aadhaar Card Number:
+          <input
+            type="text"
+            name="aadhaarNumber"
+            value={userData.aadhaarNumber}
+            onChange={handleInputChange}
+          />
+        </label>
         <label>
           Emergency Contact Name:
           <input

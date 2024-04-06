@@ -14,12 +14,11 @@ from botocore.exceptions import ClientError
 import os
 import logging
 from django.shortcuts import get_object_or_404
-from rest_framework import generics
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import check_password
 from django.core import serializers
-from django.views.generic import View
+import datetime
+import jwt
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -71,55 +70,49 @@ class ClientRegistrationViewSet(viewsets.ModelViewSet):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
-class LoginDetailsViewSet(viewsets.ModelViewSet):
-    queryset = LoginDetails.objects.all()
-    serializer_class = LoginDetailsSerializer
-
-    def retrieve(self, request, pk=None):
-        queryset = LoginDetails.objects.filter(username=request.data['username'])
-        login = get_object_or_404(queryset, username= username)
-        serializer = LoginDetailsSerializer(user)
+class RegisterView(APIView):
+    def post(self, request):
+        serializer = LoginDetailsSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)
+
 
 class LoginView(APIView):
     def post(self, request):
-        serializer = LoginDetailsSerializer(data=request.data)
-        if serializer.is_valid():
-            print(serializer.validated_data)
-            stored_login = LoginDetails.objects.get(username__iexact=serializer.validated_data['username'])
-            if serializer.validated_data['password'] == stored_login.password:
-                return JsonResponse({'message': 'Login successful'})
-            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-@csrf_exempt
-def compare_data(request):
-    if request.method == 'POST':
-        data = request.POST  # Access data from form submission
-        # Extract relevant fields for comparison
-        print(data)
-        user_name = data.get('username')
-        pass_word = data.get('password')
-        print(user_name)
-        print(pass_word)
+        if request.method == "POST":
+            post_data = json.loads(request.body.decode("utf-8"))
+        username = post_data.get('username')
+        password = request.data.get('password')
 
-        # Access your Django model to retrieve data from the database
-        # (Replace 'MyModel' with your actual model name)
-        try:
-            db_data = LoginDetails.objects.get(username=user_name)
-            print(db_data)  
-        except LoginDetails.DoesNotExist:
-            db_data = None
+        print(password)
 
-        # Perform comparison logic
-        is_match = pass_word == db_data.password  # Modify this based on your comparison criteria
+        user = LoginDetails.objects.filter(username=username).first()
+        print(user.password)
+        print((check_password(user.password,password)))
+        if user is None:
+            return Response({'error': 'Invalid username'}, status=status.HTTP_401_UNAUTHORIZED)
+        if user.password == password:
+            return Response({'Role': user.user_data.role}, status=status.HTTP_200_OK)
+        
+        
+        
+        payload = {
+            'id': user.id,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+            'iat': datetime.datetime.utcnow()
+        }
+        
+        token = jwt.encode(payload, 'secret', algorithm='HS256').decode('utf-8')
 
-        # Return a JSON response indicating the comparison result
-        return JsonResponse({'is_match': is_match})
-    else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        response = Response()
+
+        response.set_cookie(key='jwt', value=token, httponly=True)
+        response.data = {
+            'jwt': token
+        }
+        return response
 
 class JobDescriptionViewSet(viewsets.ModelViewSet):
     queryset = JobDescription.objects.all()
@@ -233,21 +226,11 @@ def get_assessments_for_job(request, job_id):
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
     
-#def get_interviews(request, assessment_id):
- #   if request.method == 'GET':
-  #      try:
-   #         interviews = Appointment.objects.filter(assessment=assessment_id)
-    #        data = [{'id': assessment.id, 'candidateName': assessment.candidateName} for assessment in assessments]
-     #       return JsonResponse(data, safe=False)
-      #  except JobDescription.DoesNotExist:
-       #     return JsonResponse({'error': 'Job not found'}, status=404)
-    #else:
-     #   return JsonResponse({'error': 'Method not allowed'}, status=405)
-    
-def get_user_details(request, user_id):
+def get_user_details(request):
     User = get_user_model()
     try:
-        user_data = get_object_or_404(User, pk=user_id)
+        user=request.user
+        user_data = user.user_data
         education_data = Education.objects.filter(user=user_data)
         work_experience_data = WorkExperience.objects.filter(user=user_data)
         
@@ -318,11 +301,6 @@ def user_data_list(request):
         users = UserData.objects.all()
         data = [{'id': user.id, 'fullName': user.fullName, 'emailID': user.emailID, 'phoneNumber': user.phoneNumber, 'selectedRole': user.role_id} for user in users]
         return JsonResponse(data, safe=False)
-
-@csrf_exempt
-def role_choices(request):
-    roles = [{'id': key, 'role': role} for key, role in Role.ROLE_CHOICES]
-    return JsonResponse(roles, safe=False)
     
 @csrf_exempt
 def update_user_role(request, user_id):
@@ -421,45 +399,3 @@ def get_assessment_details(request, assessment_id):
     except Assessment.DoesNotExist:
         return JsonResponse({'error': 'Assessment data not found'}, status=404)
     
-@csrf_exempt
-def submit_login(request):
-    if request.method == 'POST':
-        data = request.POST
-        pprint.pprint(LoginDetails.objects.filter(pk=11))
-        for key, value in request.POST.items():
-            print(f"Parameter: {key}, Value: {value}")
-        print("Register Password",data.get('password'))
-        # Create LoginDetails object
-        login = LoginDetails.objects.create(
-            username=data.get('username'),
-            password=data.get('password'),
-        )
-
-        return JsonResponse({'id': login.pk})
-
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
-
-@csrf_exempt
-def verify_login(request):
-    if request.method == 'POST':
-        data = request.POST
-        print(data)
-        # Retrieve stored login details
-        stored_login = LoginDetails.objects.get(username__iexact=data.get('username'))
-        print(stored_login.username)
-
-        if stored_login:
-            # Compare the passwords directly
-            if data.get('password') == stored_login.password:
-                # Authentication successful
-                user_role = stored_login.user_data.role if stored_login.user_data and stored_login.user_data.role else None
-                print(user_role)
-                return JsonResponse({'message': 'Login successful', 'role': user_role})
-            else:
-                # Password does not match
-                return JsonResponse({'error': 'Invalid password'}, status=401)
-        else:
-            # Username not found
-            return JsonResponse({'error': 'Invalid username'}, status=401)
-
-    return JsonResponse({'error': 'Invalid request method'}, status=405)

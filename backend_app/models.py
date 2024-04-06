@@ -4,7 +4,11 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from s3direct.fields import S3DirectField
 from django.views.generic.detail import DetailView
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, PermissionsMixin, BaseUserManager
+
+
+
+
 
 class UserData(models.Model):
     ROLE_CHOICES = (
@@ -15,35 +19,35 @@ class UserData(models.Model):
         ('Account Manager', 'Account Manager'),
     )
 
-    fullName = models.CharField(max_length=255, blank=True, null=True)
-    gender = models.CharField(max_length=10, blank=True, null=True)
-    aadhaarNumber = models.CharField(max_length=12, blank=True, null=True)
-    dateOfBirth = models.DateField(null=True, blank=True)
-    maritalStatus = models.CharField(max_length=20, blank=True, null=True)
-    emergencyContact = models.CharField(max_length=255, blank=True, null=True)
-    address = models.TextField(blank=True, null=True)
-    phoneNumber = models.IntegerField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)], blank=True, null=True)
-    emailID = models.EmailField(validators=[EmailValidator()], blank=True, null=True)
-    emergencyContactNumber = models.IntegerField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)], blank=True, null=True)
-    jobTitle = models.CharField(max_length=100, blank=True, null=True)
-    departmentName = models.CharField(max_length=100, blank=True, null=True)
-    joiningDate = models.DateField(blank=True, null=True)
-    employmentType = models.CharField(max_length=100, blank=True, null=True)
-    prevCompany = models.CharField(max_length=255, blank=True, null=True)
-    prevDesignation = models.CharField(max_length=100, blank=True, null=True)
-    relevantSkills = models.TextField(blank=True, null=True)
-    documentAcknowledged = models.BooleanField(default=False, null=True)
-    pfUAN = models.CharField(max_length=100, blank=True, null=True)
-    esiNO = models.CharField(max_length=100, blank=True, null=True)
-    role = models.CharField(max_length=50, choices=ROLE_CHOICES, null=True)
+    fullName = models.CharField(max_length=255)
+    gender = models.CharField(max_length=10)
+    aadhaarNumber = models.CharField(max_length=12)
+    dateOfBirth = models.CharField(max_length=30)
+    maritalStatus = models.CharField(max_length=20)
+    emergencyContactName = models.CharField(max_length=255)
+    address = models.TextField()
+    phoneNumber = models.IntegerField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)])
+    emailID = models.EmailField(validators=[EmailValidator()])
+    emergencyContactNumber = models.IntegerField(validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)])
+    jobTitle = models.CharField(max_length=100)
+    departmentName = models.CharField(max_length=100)
+    joiningDate = models.CharField(max_length=30)
+    employmentType = models.CharField(max_length=100)
+    relevantSkills = models.TextField()
+    documentAcknowledged = models.BooleanField(default=False)
+    pfUAN = models.CharField(max_length=100)
+    esiNO = models.CharField(max_length=100)
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES)
 
     def __str__(self):
         return self.fullName if self.fullName else "Unnamed User"
-    
-class LoginDetails(models.Model):
+
+class LoginDetails(AbstractUser):
     user_data = models.OneToOneField(UserData, on_delete=models.CASCADE, null = True)
     username = models.CharField(max_length=255, unique=True, null=True)
     password = models.CharField(max_length=255, null=True)  # Note: It's recommended to use hashed passwords in production
+
+    USERNAME_FIELD = 'username'
     def __str__(self):
         return self.username
 

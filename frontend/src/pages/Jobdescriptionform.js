@@ -85,9 +85,9 @@ function JobDescription() {
 
     const fetchAm = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/am'); // Update the API endpoint
+            const response = await fetch('http://127.0.0.1:8000/api/amanager'); // Update the API endpoint
             const data = await response.json();
-            setRecruiterOptions(data.accountManager); // Assuming the response contains a 'recruiters' key with the list of recruiter users
+            setAmOptions(data.accountManagers); // Assuming the response contains a 'recruiters' key with the list of recruiter users
         } catch (error) {
             console.error('Error fetching Account Managers:', error);
         }

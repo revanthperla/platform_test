@@ -28,33 +28,13 @@ function JobDescriptionDetails() {
         desirableSkills: 'Python, MongoDB',
     };
 
-    const handleUploadResume = () => {
-        // Assuming 'resumeFile' is the name of your file input field
-        const fileInput = document.querySelector('input[type="file"]');
-        const formData = new FormData();
-        formData.append('resume', fileInput.files[0]);
-    
-        axios.post('/upload_file/', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-        .then(response => {
-            console.log('File uploaded successfully:', response.data);
-            // Reset the form after successful submission
-            fileInput.value = ''; // Clear the file input field
-        })
-        .catch(error => {
-            console.error('Error uploading file:', error);
-        });
-    };
-
     const handleUploadAssesment = () => {
         // Implement your logic to handle resume upload
         console.log('Upload resume button clicked');
     };
 
-    
+    const handleUploadResume = () => {  
+    };
 
     const handleCloseModal = () => {
         // Close the modal
