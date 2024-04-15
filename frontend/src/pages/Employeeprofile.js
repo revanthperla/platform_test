@@ -4,18 +4,28 @@ import axios from 'axios';
 
 function Profile() {
   const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState(null);
+  const [profileData, setProfileData] = useState();
 
   useEffect(() => {
-    axios.get('http://43.204.201.158:8000/api/get_user_details/')
-      .then(response => {
-        setProfileData(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching user details:', error);
-      });
+    fetch('http://127.0.0.1:8000/api/get_user_details/', {
+      method: 'GET',
+      credentials: 'include', // Include credentials (cookies) with the request
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      setProfileData(data);
+    })
+    .catch(error => {
+      console.error('Error fetching user details:', error);
+    });
   }, []);
-
+  
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   };
@@ -115,40 +125,27 @@ function Profile() {
         ) : (
           // Render profile details in view mode
           <>
-            <p><span className="static-text">Full Name:</span> {profileData.fullName}</p>
-            <p><span className="static-text">Gender:</span> {profileData.gender}</p>
-            <p><span className="static-text">Aadhaar Number:</span> {profileData.aadhaarNumber}</p>
-            <p><span className="static-text">Date of Birth:</span> {profileData.dateOfBirth}</p>
-            <p><span className="static-text">Marital Status:</span> {profileData.maritalStatus}</p>
-            <p><span className="static-text">Emergency Contact Name:</span> {profileData.emergencyContactName}</p>
-            <p><span className="static-text">Address:</span> {profileData.address}</p>
-            <p><span className="static-text">Phone Number:</span> {profileData.phoneNumber}</p>
-            <p><span className="static-text">Email ID:</span> {profileData.emailID}</p>
-            <p><span className="static-text">Emergency Contact Number:</span> {profileData.emergencyContactNumber}</p>
-            <p><span className="static-text">Job Title:</span> {profileData.jobTitle}</p>
-            <p><span className="static-text">Department Name:</span> {profileData.departmentName}</p>
-            <p><span className="static-text">Joining Date:</span> {profileData.joiningDate}</p>
-            <p><span className="static-text">Employment Type:</span> {profileData.employmentType}</p>
+            <p><span className="static-text">Full Name:</span></p>
+            <p><span className="static-text">Gender:</span></p>
+            <p><span className="static-text">Aadhaar Number:</span></p>
+            <p><span className="static-text">Date of Birth:</span></p>
+            <p><span className="static-text">Marital Status:</span></p>
+            <p><span className="static-text">Emergency Contact Name:</span></p>
+            <p><span className="static-text">Address:</span></p>
+            <p><span className="static-text">Phone Number:</span></p>
+            <p><span className="static-text">Email ID:</span></p>
+            <p><span className="static-text">Emergency Contact Number:</span></p>
+            <p><span className="static-text">Job Title:</span></p>
+            <p><span className="static-text">Department Name:</span> </p>
+            <p><span className="static-text">Joining Date:</span> </p>
+            <p><span className="static-text">Employment Type:</span> </p>
             <h3>Education</h3>
-            {profileData.education.map((educationItem, index) => (
-              <div key={index}>
-                <p>Degree: {educationItem.degree}</p>
-                <p>Graduation Year: {educationItem.graduationYear}</p>
-                <p>Grade: {educationItem.grade}</p>
-              </div>
-            ))}
-            {/* Render work experience details in view mode */}
+            
             <h3>Work Experience</h3>
-            {profileData.workExperience.map((experience, index) => (
-              <div key={index}>
-                <p>Company Name: {experience.companyName}</p>
-                <p>Designation: {experience.designation}</p>
-                <p>Duration: {experience.duration}</p>
-              </div>
-            ))}
-            <p><span className="static-text">Relevant Skills:</span> {profileData.relevantSkills}</p>
-            <p><span className="static-text">PF UAN:</span> {profileData.pfUAN}</p>
-            <p><span className="static-text">ESI NO:</span> {profileData.esiNO}</p>
+            
+            <p><span className="static-text">Relevant Skills:</span></p>
+            <p><span className="static-text">PF UAN:</span></p>
+            <p><span className="static-text">ESI NO:</span></p>
             {/* Add more profile details */}
           </>
         )}

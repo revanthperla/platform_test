@@ -140,3 +140,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'backend_app.LoginDetails'
+
+CORS_ALLOW_CREDENTIALS = True
