@@ -70,7 +70,7 @@ function JobDescription() {
 
     const fetchRecruiters = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/recruiters'); // Update the API endpoint
+            const response = await fetch('http://43.204.201.158:8000/api/recruiters'); // Update the API endpoint
             const data = await response.json();
             setRecruiterOptions(data.recruiters); // Assuming the response contains a 'recruiters' key with the list of recruiter users
         } catch (error) {

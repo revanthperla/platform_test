@@ -274,7 +274,6 @@ def get_user_details(request):
     User = get_user_model()
     try:
         user=request.user
-        print(request.user)
         user_data = user.user_data
         education_data = Education.objects.filter(user=user_data)
         work_experience_data = WorkExperience.objects.filter(user=user_data)
