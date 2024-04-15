@@ -19,6 +19,9 @@ from django.contrib.auth.hashers import check_password
 from django.core import serializers
 import datetime
 import jwt
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate
+
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -74,46 +77,38 @@ class ClientRegistrationViewSet(viewsets.ModelViewSet):
 class RegisterView(APIView):
     def post(self, request):
         serializer = LoginDetailsSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+        if serializer.is_valid():
+            # Hash the password before saving the user
+            validated_data = serializer.validated_data
+            validated_data['password'] = make_password(validated_data['password'])
+            user = serializer.save()
+            return Response({'message': 'User registered successfully.'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(APIView):
     def post(self, request):
-        if request.method == "POST":
-            post_data = json.loads(request.body.decode("utf-8"))
-        username = post_data.get('username')
+        username = request.data.get('username')
         password = request.data.get('password')
 
-        print(password)
+        # Validate that both username and password are provided
+        if not username or not password:
+            return Response({'error': 'Username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = LoginDetails.objects.filter(username=username).first()
-        print(user.password)
-        print((check_password(user.password,password)))
+        # Authenticate user
+        user = authenticate(username=username, password=password)
+
         if user is None:
-            return Response({'error': 'Invalid username'}, status=status.HTTP_401_UNAUTHORIZED)
-        if user.password == password:
-            return Response({'Role': user.user_data.role}, status=status.HTTP_200_OK)
-        
-        
-        
-        payload = {
-            'id': user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-            'iat': datetime.datetime.utcnow()
-        }
-        
-        token = jwt.encode(payload, 'secret', algorithm='HS256').decode('utf-8')
+            return Response({'error': 'Invalid username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        response = Response()
+        # Generate JWT token
+        token = jwt.encode({'user_id': user.id}, 'your_secret_key', algorithm='HS256')
+        response_data = {'token': token, 'Role': user.user_data.role}
+        response = Response(response_data, status=status.HTTP_200_OK)
+        response.set_cookie('jwt', token)
 
-        response.set_cookie(key='jwt', value=token, httponly=True)
-        response.data = {
-            'jwt': token
-        }
         return response
-
+    
 class JobDescriptionViewSet(viewsets.ModelViewSet):
     queryset = JobDescription.objects.all()
     serializer_class = JobDescriptionSerializer
@@ -201,7 +196,6 @@ def get_latest_user(request):
     if request.method == 'GET':
         latest_object_id = UserData.objects.latest('id').id
         user_data = UserData.objects.get(id=latest_object_id)
-        serialized_data = serializers.serialize('json', [user_data])
         return JsonResponse({'user_data': latest_object_id})
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
@@ -226,10 +220,61 @@ def get_assessments_for_job(request, job_id):
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
     
+class GetUserDetails(APIView):
+    def get(self, request):
+        print(request.COOKIES)
+        token = request.COOKIES.get('jwt')
+        
+    
+        if token:
+            try:
+                # Decode the JWT token to extract user ID
+                payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+                user_id = payload.get('id')
+                user = LoginDetails.objects.get(pk=user_id)
+
+                user_data = user.user_data
+
+                # Fetch and format user details
+                education_data = list(Education.objects.filter(user=user_data).values())
+                work_experience_data = list(WorkExperience.objects.filter(user=user_data).values())
+
+                data = {
+                    'user': {
+                        'fullName': user_data.fullName,
+                        'gender': user_data.gender,
+                        'aadhaarNumber': user_data.aadhaarNumber,
+                        'dateOfBirth': user_data.dateOfBirth,
+                        'maritalStatus': user_data.maritalStatus,
+                        'emergencyContactName': user_data.emergencyContactName,
+                        'address': user_data.address,
+                        'phoneNumber': user_data.phoneNumber,
+                        'emailID': user_data.emailID,
+                        'emergencyContactNumber': user_data.emergencyContactNumber,
+                        'jobTitle': user_data.jobTitle,
+                        'departmentName': user_data.departmentName,
+                        'joiningDate': user_data.joiningDate,
+                        'employmentType': user_data.employmentType,
+                        'relevantSkills': user_data.relevantSkills,
+                    },
+                    'education': education_data,
+                    'workExperience': work_experience_data
+                }
+                return JsonResponse(data)
+            except jwt.ExpiredSignatureError:
+                return JsonResponse({'error': 'Token expired'}, status=401)
+            except jwt.InvalidTokenError:
+                return JsonResponse({'error': 'Invalid token'}, status=401)
+            except LoginDetails.DoesNotExist:
+                return JsonResponse({'error': 'User not found'}, status=404)
+        else:
+            return JsonResponse({'error': 'You are not logged in'}, status=401)
+
 def get_user_details(request):
     User = get_user_model()
     try:
         user=request.user
+        print(request.user)
         user_data = user.user_data
         education_data = Education.objects.filter(user=user_data)
         work_experience_data = WorkExperience.objects.filter(user=user_data)

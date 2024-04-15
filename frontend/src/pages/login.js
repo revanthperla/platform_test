@@ -2,6 +2,7 @@ import React, { useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/login.css';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 function Login() {
   const initalFormData={
@@ -30,7 +31,9 @@ function Login() {
       });
 
       if (response.ok) {
-        const responseData = await response.json(); // Parse JSON response
+        const responseData = await response.json();
+        console.log(responseData);
+        const token = responseData.token; 
         if (responseData.Role) {
             // Login successful, navigate to appropriate dashboard
             switch (responseData.Role) {
