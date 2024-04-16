@@ -122,7 +122,7 @@ function JobDescription() {
     const handleSubmit = async (event) => {
       event.preventDefault();
       
-      axios.post('http://127.0.0.1:8000/api/submit_job_description/', userData)
+      axios.post('http://43.204.201.158:8000/api/submit_job_description/', userData)
       .then(response => {
         console.log('Data sent successfully:', response.data);
         // Reset the form after successful submission
