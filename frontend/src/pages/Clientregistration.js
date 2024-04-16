@@ -64,7 +64,7 @@ function ClientRegistration() {
             const data = await response.json();
             setbdpOptions(data.bdp); // Assuming the response contains a 'recruiters' key with the list of recruiter users
         } catch (error) {
-            console.error('Error fetching recruiters:', error);
+            console.error('Error fetching bdp:', error);
         }
     };
 
@@ -79,7 +79,7 @@ function ClientRegistration() {
             const data = await response.json();
             setbdpmOptions(data.bdpm); // Assuming the response contains a 'recruiters' key with the list of recruiter users
         } catch (error) {
-            console.error('Error fetching recruiters:', error);
+            console.error('Error fetching bdpm:', error);
         }
     };  
 
@@ -337,7 +337,7 @@ function ClientRegistration() {
         </label>
         <br />
         <label>
-          Business Development Manager Name:
+          Business Development Partner Manager Name:
           <select
               name="bdpmName"
               value={userData.bdpmName}
