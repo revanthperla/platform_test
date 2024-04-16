@@ -15,6 +15,8 @@ function ClientList() {
           const response = await fetch('http://43.204.201.158:8000/api/clientlist/');
           const data = await response.json();
           setClients(data.clients);
+          console.log(data.clients);
+          console.log(clients);
       } catch (error) {
           console.error('Error fetching clients:', error);
       }
