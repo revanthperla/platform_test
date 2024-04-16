@@ -77,7 +77,7 @@ function ClientRegistration() {
         try {
             const response = await fetch('http://43.204.201.158:8000/api/bdpm'); // Update the API endpoint
             const data = await response.json();
-            setbdpOptions(data.recruiters); // Assuming the response contains a 'recruiters' key with the list of recruiter users
+            setbdpmOptions(data.recruiters); // Assuming the response contains a 'recruiters' key with the list of recruiter users
         } catch (error) {
             console.error('Error fetching recruiters:', error);
         }
