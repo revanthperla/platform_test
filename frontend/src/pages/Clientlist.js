@@ -3,7 +3,7 @@ import axios from 'axios';
 import ClientDetails from './Clientview';
 
 function ClientList() {
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState({});
   const [selectedClientId, setSelectedClientId] = useState(null);
 
   useEffect(() => {
@@ -32,33 +32,33 @@ const handleCloseDetails = () => {
 };
 
 return (
-    <div>
-        <h1>List of Clients</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {clients.map(client => (
-                    <tr key={client.id}>
-                        <td>{client.entityName}</td> {/* Assuming entityName is the client's name */}
-                        <td>
-                            <button onClick={() => handleViewDetails(client.id)}>View Details</button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-        {selectedClientId && (
-            <div>
-                <ClientDetails client={clients.find(client => client.id === selectedClientId)} />
-                <button onClick={handleCloseDetails}>Close</button>
-            </div>
-        )}
-    </div>
+  <div>
+      <h1>List of Clients</h1>
+      <table>
+          <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Actions</th>
+              </tr>
+          </thead>
+          <tbody>
+              {Object.values(clients).map(client => (
+                  <tr key={client.id}>
+                      <td>{client.entityName}</td> {/* Assuming entityName is the client's name */}
+                      <td>
+                          <button onClick={() => handleViewDetails(client.id)}>View Details</button>
+                      </td>
+                  </tr>
+              ))}
+          </tbody>
+      </table>
+      {selectedClientId && (
+          <div>
+              <ClientDetails client={clients[selectedClientId]} />
+              <button onClick={handleCloseDetails}>Close</button>
+          </div>
+      )}
+  </div>
 );
 }
 
