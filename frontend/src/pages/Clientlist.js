@@ -8,17 +8,17 @@ function ClientList() {
 
   useEffect(() => {
     fetchClients();
-}, []);
+  }, []);
 
-const fetchClients = async () => {
-    try {
-        const response = await fetch('http://43.204.201.158:8000/api/clients');
-        const data = await response.json();
-        setClients(data.clients);
-    } catch (error) {
-        console.error('Error fetching clients:', error);
-    }
-}
+  const fetchClients = async () => {
+      try {
+          const response = await fetch('http://43.204.201.158:8000/api/clientlist/');
+          const data = await response.json();
+          setClients(data.clients);
+      } catch (error) {
+          console.error('Error fetching clients:', error);
+      }
+  }
 
   const handleViewDetails = (clientId) => {
     setSelectedClientId(clientId);

@@ -19,6 +19,7 @@ urlpatterns = [
     path('api/amanager/', get_accoutmanagers, name='get_accountmanagers'),
     path('api/bdp/', get_bdp, name='get_bdp'),
     path('api/bdpm/', get_bdpm, name='get_bdpm'),
+    path('api/clientlist', ClientRegistrationViewSet.as_view({'get': 'list'}), name='clientlist'),
     path('api/job-descriptions/', get_job_descriptions, name='get_job_descriptions'),
     path('api/job-descriptions/<int:job_id>/assessments/', get_assessments_for_job, name='get_assessments_for_job'),
     path('clientregistration/', ClientRegistrationViewSet.as_view({'post': 'create'}), name='clientregistration'),
