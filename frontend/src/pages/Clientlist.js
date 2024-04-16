@@ -22,41 +22,41 @@ function ClientList() {
 
   const handleViewDetails = (clientId) => {
     setSelectedClientId(clientId);
-  };
+};
 
-  const handleCloseDetails = () => {
+const handleCloseDetails = () => {
     setSelectedClientId(null);
-  };
+};
 
-  return (
+return (
     <div>
-      <h1>List of Clients</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clients.map(client => (
-            <tr key={client.id}>
-              <td>{client.name}</td>
-              <td>
-                <button onClick={() => handleViewDetails(client.id)}>View Details</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {selectedClientId && (
-        <div>
-          <ClientDetails clientId={selectedClientId} />
-          <button onClick={handleCloseDetails}>Close</button>
-        </div>
-      )}
+        <h1>List of Clients</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {clients.map(client => (
+                    <tr key={client.id}>
+                        <td>{client.entityName}</td> {/* Assuming entityName is the client's name */}
+                        <td>
+                            <button onClick={() => handleViewDetails(client.id)}>View Details</button>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+        {selectedClientId && (
+            <div>
+                <ClientDetails client={clients.find(client => client.id === selectedClientId)} />
+                <button onClick={handleCloseDetails}>Close</button>
+            </div>
+        )}
     </div>
-  );
+);
 }
 
 export default ClientList;
