@@ -149,11 +149,11 @@ def get_accoutmanagers(request):
 
 def get_bdp(request):
     bdp = UserData.objects.filter(role='Business Development Partner').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
-    return JsonResponse({'recruiters': list(bdp)})
+    return JsonResponse({'bdp': list(bdp)})
 
 def get_bdpm(request):
     bdpm = UserData.objects.filter(role='Business Development Partner').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
-    return JsonResponse({'recruiters': list(bdpm)})
+    return JsonResponse({'bdpm': list(bdpm)})
 
 @csrf_exempt  # Use this decorator to bypass CSRF protection for this view (only for demonstration, ensure to handle CSRF properly in production)
 @require_POST  # Ensure that this view only accepts POST requests
