@@ -11,17 +11,15 @@ function ClientList() {
   }, []);
 
   const fetchClients = async () => {
-      try {
-          const response = await fetch('http://43.204.201.158:8000/api/clientlist/');
-          const data = await response.json();
-          console.log(data);
-          setClients(data[0]);
-          console.log(data.clients);
-          console.log(clients);
-      } catch (error) {
-          console.error('Error fetching clients:', error);
-      }
-  }
+    try {
+        const response = await fetch('http://43.204.201.158:8000/api/clientlist/');
+        const data = await response.json();
+        console.log(data);
+        setClients(data); // Set clients to the entire array
+    } catch (error) {
+        console.error('Error fetching clients:', error);
+    }
+}
 
   const handleViewDetails = (clientId) => {
     setSelectedClientId(clientId);
@@ -42,15 +40,15 @@ return (
                 </tr>
             </thead>
             <tbody>
-                {clients.map(client => (
-                    <tr key={client.id}>
-                        <td>{client.entityName}</td> {/* Assuming entityName is the client's name */}
-                        <td>
-                            <button onClick={() => handleViewDetails(client.id)}>View Details</button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
+    {clients && clients.map(client => (
+        <tr key={client.id}>
+            <td>{client.entityName}</td> {/* Assuming entityName is the client's name */}
+            <td>
+                <button onClick={() => handleViewDetails(client.id)}>View Details</button>
+            </td>
+        </tr>
+    ))}
+</tbody>
         </table>
         {selectedClientId && (
             <div>
