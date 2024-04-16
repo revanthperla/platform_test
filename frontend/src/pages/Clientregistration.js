@@ -70,7 +70,7 @@ function ClientRegistration() {
 
     const [bdpmOptions, setbdpmOptions] = useState([]);
       useEffect(() => {
-        fetchbdp();
+        fetchbdpm();
     }, []);
 
     const fetchbdpm = async () => {
