@@ -26,7 +26,7 @@ function AssesmentModal({ onClose }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
       
-        axios.post('http://43.204.201.158:8000/api/submit_job_description/', formData)
+        axios.post('http://43.204.201.158:8000/api/submit_assessment/', formData)
         .then(response => {
             console.log('Data sent successfully:', response.data);
             // Reset the form after successful submission
