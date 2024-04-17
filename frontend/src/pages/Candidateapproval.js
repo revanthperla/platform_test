@@ -14,7 +14,7 @@ function JobListWithAssessment() {
     
       const fetchJobs = async () => {
         try {
-            const response = await fetch('http://43.204.201.158:8000/api/clientlist/');
+            const response = await fetch('http://43.204.201.158:8000/api/joblist/');
             const data = await response.json();
             console.log(data);
             setJobs(data); // Set clients to the entire array
