@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function AssesmentModal({ onClose }) {
-    const [formData, setFormData] = useState({
+    const initialFormData = {
         candidateName: '',
         position: '',
         location: '',
@@ -13,31 +14,28 @@ function AssesmentModal({ onClose }) {
         relocate: '',
         comments: '',
         remarks: '',
-    });
+    };
+
+    const [formData, setFormData] = useState({ ...initialFormData});
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
+        setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
-        const handleSubmit = async (event) => {
-            event.preventDefault();
-            
-            axios.post('http://43.204.201.158:8000/api/submit_job_description/', formData)
-            .then(response => {
-              console.log('Data sent successfully:', response.data);
-              // Reset the form after successful submission
-              window.alert('Submitted successfully!');
-              setUserData({ ...userData, /* reset fields */ });
-            })
-            .catch(error => {
-              console.error('Error sending data:', error);
-            });
-          };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+      
+        axios.post('http://43.204.201.158:8000/api/submit_job_description/', formData)
+        .then(response => {
+            console.log('Data sent successfully:', response.data);
+            // Reset the form after successful submission
+            window.alert('Submitted successfully!');
+            setUserData({ ...formData, /* reset fields */ });
+        })
+        .catch(error => {
+            console.error('Error sending data:', error);
+        });
         onClose();
     };
 
