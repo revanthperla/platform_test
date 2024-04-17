@@ -31,7 +31,7 @@ function AssesmentModal({ onClose }) {
             console.log('Data sent successfully:', response.data);
             // Reset the form after successful submission
             window.alert('Submitted successfully!');
-            setUserData({ ...formData, /* reset fields */ });
+            setFormData({ ...formData, /* reset fields */ });
         })
         .catch(error => {
             console.error('Error sending data:', error);
