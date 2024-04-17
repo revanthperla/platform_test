@@ -129,7 +129,6 @@ class JobDescription(models.Model):
     titleDesignation = models.CharField(max_length=255, null=True)
     clientName = models.CharField(max_length=255, null=True)
     accountManager = models.CharField(max_length=255)
-    added_by = models.CharField(max_length=255)
     assignedRecruiters = models.CharField(max_length=255)
     startDate = models.CharField(max_length=30)
     closureDate = models.CharField(max_length=30)
