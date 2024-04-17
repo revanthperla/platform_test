@@ -24,10 +24,20 @@ function AssesmentModal({ onClose }) {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        // Do something with the form data, like submitting it to a server
-        console.log('Form data submitted:', formData);
-        // Close the modal
+        const handleSubmit = async (event) => {
+            event.preventDefault();
+            
+            axios.post('http://43.204.201.158:8000/api/submit_job_description/', formData)
+            .then(response => {
+              console.log('Data sent successfully:', response.data);
+              // Reset the form after successful submission
+              window.alert('Submitted successfully!');
+              setUserData({ ...userData, /* reset fields */ });
+            })
+            .catch(error => {
+              console.error('Error sending data:', error);
+            });
+          };
         onClose();
     };
 

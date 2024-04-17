@@ -1,8 +1,6 @@
 import React , { useState, useEffect } from 'react';
 import '../css/Jobdescriptionview.css';
 import AssesmentModal from './Assesmentmodal.js';
-import { Navigate, useNavigate } from 'react-router-dom'; 
-import axios from 'axios';
 
 function JobDescriptionDetails({job}) {
 
@@ -45,6 +43,7 @@ function JobDescriptionDetails({job}) {
             </div>
             <button onClick={handleUploadResume}>Upload Resume</button>
             {/* Render the modal if showModal is true */}
+            <button onClick={handleAddAssessment}>Add Assessment</button>
             {showModal && <AssesmentModal onClose={handleCloseModal} />}
         </div>
     );

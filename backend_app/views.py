@@ -155,43 +155,6 @@ def get_bdpm(request):
     bdpm = UserData.objects.filter(role='Business Development Partner Manager').values('id', 'fullName')  # Assuming 'Recruiter' is the role name
     return JsonResponse({'bdpm': list(bdpm)})
 
-@csrf_exempt  # Use this decorator to bypass CSRF protection for this view (only for demonstration, ensure to handle CSRF properly in production)
-@require_POST  # Ensure that this view only accepts POST requests
-def submit_assessment(request, job_id):
-    # Parse the JSON data from the request body
-    try:
-        data = json.loads(request.body)
-    except json.JSONDecodeError:
-        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
-
-    # Validate the required fields
-    required_fields = ['candidateName', 'position', 'location', 'currentEmployer', 'totalExperience', 'ctc', 'ectc', 'noticePeriod', 'relocate', 'comments', 'remarks']
-    for field in required_fields:
-        if field not in data:
-            return JsonResponse({'error': f'Missing required field: {field}'}, status=400)
-
-    # Create a new Assessment instance and save it to the database
-    try:
-        assessment = Assessment.objects.create(
-            candidateName=data['candidateName'],
-            position=data['position'],
-            location=data['location'],
-            currentEmployer=data['currentEmployer'],
-            totalExperience=data['totalExperience'],
-            ctc=data['ctc'],
-            ectc=data['ectc'],
-            noticePeriod=data['noticePeriod'],
-            relocate=data['relocate'],
-            comments=data['comments'],
-            remarks=data['remarks']
-        )
-        assessment.save()
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-
-    # Return a success response
-    return JsonResponse({'success': True})
-
 def get_latest_user(request):
     if request.method == 'GET':
         latest_object_id = UserData.objects.latest('id').id
@@ -357,35 +320,6 @@ def update_user_role(request, user_id):
             return JsonResponse({'success': True})
         except UserData.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'User not found'})
-        
-@csrf_exempt
-def submit_job_description(request):
-    if request.method == 'POST':
-        data = request.POST
-
-        # Create JobDescription object
-        job_description = JobDescription.objects.create(
-            titleDesignation=data.get('titleDesignation'),
-            clientName=data.get('clientName'),
-            accountManager=data.get('accountManager'),
-            assignedRecruiters=data.get('assignedRecruiters'),
-            startDate=data.get('startDate'),
-            closureDate=data.get('closureDate'),
-            jobType=data.get('jobType'),
-            jobStatus=data.get('jobStatus'),
-            workExperience=data.get('workExperience'),
-            industryNature=data.get('industryNature'),
-            compensation=data.get('compensation'),
-            location=data.get('location'),
-            eligibilityCriteria=data.get('eligibilityCriteria'),
-            primaryResponsibilities=data.get('primaryResponsibilities'),
-            mandatorySkills=data.get('mandatorySkills'),
-            desirableSkills=data.get('desirableSkills'),
-        )
-
-        return JsonResponse({'id': job_description.pk})
-
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 def get_client_details(request, client_id):
     Client = ClientRegistration

@@ -15,7 +15,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api/recruiters/', get_recruiters, name='get_recruiters'),
     path('api/clients/', get_clients, name='get_clients'),
-    path('submit-assessment/', submit_assessment, name='submit_assessment'),
+    path('submit-assessment/', AssessmentViewSet.as_view({'post': 'create'}), name='submit_assessment'),
     path('api/amanager/', get_accoutmanagers, name='get_accountmanagers'),
     path('api/bdp/', get_bdp, name='get_bdp'),
     path('api/bdpm/', get_bdpm, name='get_bdpm'),
