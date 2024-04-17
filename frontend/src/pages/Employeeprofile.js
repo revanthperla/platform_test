@@ -7,7 +7,7 @@ function Profile() {
   const [profileData, setProfileData] = useState();
 
   useEffect(() => {
-    fetch('http://43.204.201.158:8000/api/get_user_details/', {
+    fetch('http://127.0.0.1:8000/api/get_user_details/', {
       method: 'GET',
       credentials: 'include', // Include credentials (cookies) with the request
     })

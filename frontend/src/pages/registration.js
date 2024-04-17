@@ -13,7 +13,7 @@ const RegistrationPage = () => {
   useEffect(() => {
     const fetchLatestObject = async () => {
       try {
-        const response = await axios.get('http://43.204.201.158:8000/latest-object/');
+        const response = await axios.get('http://127.0.0.1:8000/latest-object/');
         console.log(response)
         setUserData(response.data.user_data);
         console.log(response.data.user_data)
@@ -28,7 +28,7 @@ const RegistrationPage = () => {
   
   const handleRegister = () => {
     console.log(username, password)
-    axios.post('http://43.204.201.158:8000/api/register/', {
+    axios.post('http://127.0.0.1:8000/api/register/', {
       'username': username,
       'password': password,
       'user_data': latestUserData

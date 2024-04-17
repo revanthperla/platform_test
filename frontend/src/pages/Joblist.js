@@ -12,7 +12,7 @@ function JobList() {
 
   const fetchJobs = async () => {
     try {
-      const response = await fetch('http://43.204.201.158:8000/api/joblist/');
+      const response = await fetch('http://127.0.0.1:8000/api/joblist/');
       const data = await response.json();
       console.log(data);
       setJobs(data);
