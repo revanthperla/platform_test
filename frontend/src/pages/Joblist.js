@@ -42,7 +42,7 @@ function JobList() {
         <tbody>
         {jobs && jobs.map(job => (
         <tr key={job.id}>
-            <td>{job.entityName}</td> {/* Assuming entityName is the client's name */}
+            <td>{job.titleDesignation}</td> {/* Assuming entityName is the client's name */}
             <td>
                 <button onClick={() => handleViewDetails(job.id)}>View Details</button>
             </td>
@@ -52,7 +52,7 @@ function JobList() {
       </table>
       {selectedJobId && (
         <div>
-          <JobDescriptionDetails jobId={selectedJobId} />
+          <JobDescriptionDetails job={jobs.find(job => job.id === selectedJobId)} />
           <button onClick={handleCloseDetails}>Close</button>
         </div>
       )}
