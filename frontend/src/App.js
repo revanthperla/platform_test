@@ -24,6 +24,7 @@ import JobListWithAssessments from './pages/Candidateapproval';
 import JobAndCandidateList from './pages/Reportgeneration';
 import JobAndCandidateSelection from './pages/Inovicerequest';
 import GenerateInvoice from './pages/Generateinvoice';
+import Profile from './pages/Employeeprofile';
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
         <Route path="/jobform" element={<JobDescription />} />
         <Route path="/joblist" element={<JobList />} />
         <Route path="/jobview" element={<JobDescriptionDetails />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );

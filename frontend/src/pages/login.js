@@ -23,7 +23,7 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(formData);
-      const response = await fetch('http://127.0.0.1:8000/api/login/', {
+      const response = await fetch('http://43.204.201.158:8000/api/login/', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         credentials: 'include',

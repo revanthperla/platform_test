@@ -3,52 +3,61 @@ import axios from 'axios';
 import JobDescriptionDetails from './Jobdescriptionview';
 
 function JobList() {
-    const [jobs] = useState([
-        { id: 1, name: 'Job 1' },
-        { id: 2, name: 'Job 2' },
-        { id: 3, name: 'Job 3' },
-        // Add more dummy clients as needed
-      ]);
-    
-      const [selectedJobId, setSelectedJobId] = useState(null);
-    
-      const handleViewDetails = (JobId) => {
-        setSelectedJobId(JobId);
-      };
+  const [jobs, setJobs] = useState([]);
+  const [selectedJobId, setSelectedJobId] = useState(null);
 
-      const handleCloseDetails = () => {
-        setSelectedJobId(null);
-      };    
-    
-      return (
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  const fetchJobs = async () => {
+    try {
+      const response = await fetch('http://43.204.201.158:8000/api/joblist/');
+      const data = await response.json();
+      console.log(data);
+      setJobs(data);
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+    }
+  };
+
+  const handleViewDetails = (jobId) => {
+    setSelectedJobId(jobId);
+  };
+
+  const handleCloseDetails = () => {
+    setSelectedJobId(null);
+  };
+
+  return (
+    <div>
+      <h1>List of Jobs</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {jobs && jobs.map(job => (
+        <tr key={job.id}>
+            <td>{job.titleDesignation}</td> {/* Assuming entityName is the client's name */}
+            <td>
+                <button onClick={() => handleViewDetails(job.id)}>View Details</button>
+            </td>
+        </tr>
+    ))}
+</tbody>
+      </table>
+      {selectedJobId && (
         <div>
-          <h1>List of Jobs</h1>
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {jobs.map(Job => (
-                <tr key={Job.id}>
-                  <td>{Job.name}</td>
-                  <td>
-                    <button onClick={() => handleViewDetails(Job.id)}>View Details</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-            </table>
-            {selectedJobId && (
-            <div>
-                <JobDescriptionDetails JobId={selectedJobId} />
-                <button onClick={handleCloseDetails}>Close</button>
-            </div>
+          <JobDescriptionDetails job={jobs.find(job => job.id === selectedJobId)} />
+          <button onClick={handleCloseDetails}>Close</button>
+        </div>
       )}
     </div>
-      );
-    }    
+  );
+}
 
 export default JobList;

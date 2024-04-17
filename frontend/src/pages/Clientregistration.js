@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../css/Clientregistration.css';
 
@@ -52,6 +52,51 @@ function ClientRegistration() {
     'Semiconductor',
     'Insurance',
   ];
+
+  const [bdpOptions, setbdpOptions] = useState([]);
+      useEffect(() => {
+        fetchbdp();
+    }, []);
+
+    const fetchbdp = async () => {
+        try {
+            const response = await fetch('http://43.204.201.158:8000/api/bdp'); // Update the API endpoint
+            const data = await response.json();
+            setbdpOptions(data.bdp); // Assuming the response contains a 'recruiters' key with the list of recruiter users
+        } catch (error) {
+            console.error('Error fetching bdp:', error);
+        }
+    };
+
+    const [bdpmOptions, setbdpmOptions] = useState([]);
+      useEffect(() => {
+        fetchbdpm();
+    }, []);
+
+    const fetchbdpm = async () => {
+        try {
+            const response = await fetch('http://43.204.201.158:8000/api/bdpm'); // Update the API endpoint
+            const data = await response.json();
+            setbdpmOptions(data.bdpm); // Assuming the response contains a 'recruiters' key with the list of recruiter users
+        } catch (error) {
+            console.error('Error fetching bdpm:', error);
+        }
+    };  
+
+    const [AmOptions, setAmOptions] = useState([]);
+      useEffect(() => {
+        fetchAm();
+    }, []);
+
+    const fetchAm = async () => {
+        try {
+            const response = await fetch('http://43.204.201.158:8000/api/amanager'); // Update the API endpoint
+            const data = await response.json();
+            setAmOptions(data.accountManagers); // Assuming the response contains a 'recruiters' key with the list of recruiter users
+        } catch (error) {
+            console.error('Error fetching Account Managers:', error);
+        }
+    };
   
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,6 +106,7 @@ function ClientRegistration() {
       
       console.log('Form submitted successfully:', response.data);
       // You can add any additional logic here after the form is successfully submitted
+      window.alert('Submitted successfully!');
     } catch (error) {
       console.error('Error submitting form:', error);
       // Handle any errors here
@@ -276,33 +322,51 @@ function ClientRegistration() {
         </label>
         <br />
         <label>
-          Business Development  Partner Name
-          <input
-            type="text"
-            name="bdpName"
-            value={userData.bdpName}
-            onChange={handleInputChange}
-          />
+          Business Development Partner Name
+          <select
+              name="bdpName"
+              value={userData.bdpName}
+              onChange={handleInputChange}
+              >
+                <option value="">Select</option>
+                {bdpOptions.map((bdpName) => (
+                  <option key={bdpName.id} value={bdpName.fullName}>
+                    {bdpName.fullName}
+                  </option>
+                  ))}
+              </select>
         </label>
         <br />
         <label>
-          Business Development Manager Name:
-          <input
-            type="text"
-            name="bdpmName"
-            value={userData.bdpmName}
-            onChange={handleInputChange}
-          />
+          Business Development Partner Manager Name:
+          <select
+              name="bdpmName"
+              value={userData.bdpmName}
+              onChange={handleInputChange}
+              >
+                <option value="">Select</option>
+                {bdpmOptions.map((bdpmName) => (
+                  <option key={bdpmName.id} value={bdpmName.fullName}>
+                    {bdpmName.fullName}
+                  </option>
+                  ))}
+              </select>
         </label>
         <br />
         <label>
           Account Manager:
-          <input
-            type="text"
-            name="accountManager"
-            value={userData.accountManager}
-            onChange={handleInputChange}
-          />
+          <select
+              name="accountManager"
+              value={userData.accountManager}
+              onChange={handleInputChange}
+              >
+                <option value="">Select</option>
+                {AmOptions.map((accountManager) => (
+                  <option key={accountManager.id} value={accountManager.fullName}>
+                    {accountManager.fullName}
+                  </option>
+                  ))}
+              </select>
         </label>
         <br />
         <label>
