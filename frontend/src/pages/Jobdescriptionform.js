@@ -126,6 +126,7 @@ function JobDescription() {
       .then(response => {
         console.log('Data sent successfully:', response.data);
         // Reset the form after successful submission
+        window.alert('Submitted successfully!');
         setUserData({ ...userData, /* reset fields */ });
       })
       .catch(error => {
