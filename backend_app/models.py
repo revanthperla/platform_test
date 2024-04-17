@@ -128,9 +128,9 @@ class Notification(models.Model):
 class JobDescription(models.Model):
     titleDesignation = models.CharField(max_length=255, null=True)
     clientName = models.CharField(max_length=255, null=True)
-    accountManager = models.ForeignKey(UserData, null=True, on_delete=models.CASCADE, related_name='job_descriptions_as_account_manager', limit_choices_to={'role__role': 'Account Manager'})
+    accountManager = models.ForeignKey(UserData, null=True, on_delete=models.CASCADE, related_name='job_descriptions_as_account_manager')
     added_by = models.ForeignKey(UserData, null=True, on_delete=models.CASCADE, related_name='added_job_descriptions')
-    assignedRecruiters = models.ForeignKey(UserData, null=True, on_delete=models.CASCADE, related_name='assigned_job_descriptions', limit_choices_to={'role__role': 'Recruiter'})
+    assignedRecruiters = models.ForeignKey(UserData, null=True, on_delete=models.CASCADE, related_name='assigned_job_descriptions')
     startDate = models.DateField(null=True)
     closureDate = models.DateField(null=True)
     jobType = models.CharField(max_length=255, null=True)
