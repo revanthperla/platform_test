@@ -4,15 +4,24 @@ import AssessmentForm from './Assessmentview'; // Assuming you have the Assessme
 import '../css/Candidateapproval.css';
 
 function JobListWithAssessment() {
-    const [jobs] = useState([
-        { id: 1, name: 'Job 1' },
-        { id: 2, name: 'Job 2' },
-        { id: 3, name: 'Job 3' },
-        // Add more dummy jobs as needed
-    ]);
-
+    const [jobs, setJobs] = useState([]);
     const [selectedJobId, setSelectedJobId] = useState(null);
     const [selectedCandidateId, setSelectedCandidateId] = useState(null);
+
+    useEffect(() => {
+        fetchJobs();
+      }, []);
+    
+      const fetchJobs = async () => {
+        try {
+            const response = await fetch('http://43.204.201.158:8000/api/clientlist/');
+            const data = await response.json();
+            console.log(data);
+            setJobs(data); // Set clients to the entire array
+        } catch (error) {
+            console.error('Error fetching clients:', error);
+        }
+    }
 
     const handleViewDetails = (jobId) => {
         setSelectedJobId(jobId);
@@ -50,19 +59,15 @@ function JobListWithAssessment() {
                             {selectedJobId === job.id && (
                                 <tr>
                                     <td colSpan="2">
-                                        {/* Assuming you have a list of candidates for each job */}
+                                        {/* Display list of candidates from the assessments of the selected job */}
                                         <ul>
-                                            <li>
-                                                Candidate 1
-                                                <button onClick={() => handleViewCandidateDetails(1)}>View Resume</button>
-                                                <button onClick={() => handleViewCandidateDetails(1)}>View Assessment</button>
-                                            </li>
-                                            <li>
-                                                Candidate 2
-                                                <button onClick={() => handleViewCandidateDetails(2)}>View Resume</button>
-                                                <button onClick={() => handleViewCandidateDetails(2)}>View Assessment</button>
-                                            </li>
-                                            {/* Add more candidates as needed */}
+                                            {job.assessments.map(candidate => (
+                                                <li key={candidate.id}>
+                                                    {candidate.candidateName}
+                                                    <button onClick={() => handleViewCandidateDetails(candidate.id)}>View Resume</button>
+                                                    <button onClick={() => handleViewCandidateDetails(candidate.id)}>View Assessment</button>
+                                                </li>
+                                            ))}
                                         </ul>
                                     </td>
                                 </tr>
