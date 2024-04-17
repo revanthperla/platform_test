@@ -12,8 +12,8 @@ function JobList() {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://43.204.201.158:8000/api/joblist/');
-      const data = response.data;
+      const response = await fetch('http://43.204.201.158:8000/api/joblist/');
+      const data = response.json();
       console.log(data);
       setJobs(data);
     } catch (error) {
@@ -40,15 +40,15 @@ function JobList() {
           </tr>
         </thead>
         <tbody>
-          {jobs.map((job) => (
-            <tr key={job.id}>
-              <td>{job.name}</td>
-              <td>
+        {jobs && jobs.map(job => (
+        <tr key={job.id}>
+            <td>{job.entityName}</td> {/* Assuming entityName is the client's name */}
+            <td>
                 <button onClick={() => handleViewDetails(job.id)}>View Details</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+            </td>
+        </tr>
+    ))}
+</tbody>
       </table>
       {selectedJobId && (
         <div>
