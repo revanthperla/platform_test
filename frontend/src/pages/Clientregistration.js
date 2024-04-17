@@ -106,6 +106,7 @@ function ClientRegistration() {
       
       console.log('Form submitted successfully:', response.data);
       // You can add any additional logic here after the form is successfully submitted
+      window.alert('Submitted successfully!');
     } catch (error) {
       console.error('Error submitting form:', error);
       // Handle any errors here
