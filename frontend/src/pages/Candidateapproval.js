@@ -51,7 +51,7 @@ function JobListWithAssessment() {
                     {jobs.map((job) => (
                         <React.Fragment key={job.id}>
                             <tr>
-                                <td>{job.name}</td>
+                                <td>{job.titleDesignation}</td>
                                 <td>
                                     <button onClick={() => handleViewDetails(job.id)}>View Details</button>
                                 </td>
