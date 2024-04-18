@@ -186,9 +186,8 @@ def get_assessments_for_job(request, job_id):
 class GetUserDetails(APIView):
     def get(self, request):
         print(request.COOKIES)
-        token = request.COOKIES.get('jwt')
+        token = request.headers.get('Authorization')
         
-    
         if token:
             try:
                 # Decode the JWT token to extract user ID

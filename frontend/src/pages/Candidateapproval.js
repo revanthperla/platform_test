@@ -23,6 +23,21 @@ function JobListWithAssessment() {
         }
     }
 
+    useEffect(() => {
+        fetchCandidates();
+      }, []);
+    
+      const fetchCandidates = async () => {
+        try {
+            const response = await fetch('http://43.204.201.158:8000/api/joblist/');
+            const data = await response.json();
+            console.log(data);
+            setJobs(data); // Set clients to the entire array
+        } catch (error) {
+            console.error('Error fetching clients:', error);
+        }
+    }
+
     const handleViewDetails = (jobId) => {
         setSelectedJobId(jobId);
         setSelectedCandidateId(null); // Reset selected candidate when viewing job details

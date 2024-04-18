@@ -6,8 +6,13 @@ function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState();
 
+  const header = {
+    Authentication: `Bearer ${Cookie.get(cookieName)}`,
+    // rest of the headers
+ };
+  
   useEffect(() => {
-    fetch('http://43.204.201.158:8000/api/get_user_details/', {
+    fetch('http://43.204.201.158:8000/api/get_user_details/', header, {
       method: 'GET',
       credentials: 'include', // Include credentials (cookies) with the request
     })

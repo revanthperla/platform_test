@@ -33,6 +33,13 @@ function Login() {
       if (response.ok) {
         const responseData = await response.json();
         console.log(responseData);
+        const token = responseData.token;
+        Cookies.set(cookieName, token);
+      }
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log(responseData);
         const token = responseData.token; 
         if (responseData.Role) {
             // Login successful, navigate to appropriate dashboard
