@@ -8,7 +8,7 @@ router.register(r'education', EducationViewSet)
 router.register(r'workexperience', WorkExperienceViewSet)
 router.register(r'clientregistration', ClientRegistrationViewSet)
 router.register(r'jobdescription', JobDescriptionViewSet)
-router.register(r'assessment', AssessmentViewSet)
+router.register(r'assessment', AssessmentViewSet, basename='Assesment')
 router.register(r'appointment', AppointmentViewSet)
 
 urlpatterns = [
