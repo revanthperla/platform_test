@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import '../css/Employeeprofile.css';
 import axios from 'axios';
+import Cookie from 'js-cookie';
 
 function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState();
 
   const header = {
-    Authentication: `Bearer ${Cookie.get(cookieName)}`,
+    Authentication: `Bearer ${Cookie.get(jwt)}`,
     // rest of the headers
  };
   
