@@ -114,8 +114,16 @@ class JobDescriptionViewSet(viewsets.ModelViewSet):
     serializer_class = JobDescriptionSerializer
 
 class AssessmentViewSet(viewsets.ModelViewSet):
-    queryset = Assessment.objects.all()
     serializer_class = AssessmentSerializer
+
+    def get_queryset(self):
+        # Retrieve job ID from URL parameters
+        jobId = self.kwargs.get('job_id')
+
+        # Filter assessments based on job ID
+        queryset = Assessment.objects.filter(job_description__id=jobId)
+
+        return queryset
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()

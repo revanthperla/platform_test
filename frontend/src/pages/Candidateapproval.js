@@ -27,9 +27,9 @@ function JobListWithAssessment() {
         fetchCandidates();
       }, []);
     
-      const fetchCandidates = async () => {
+      const fetchCandidates = async (jobId) => {
         try {
-            const response = await fetch('http://43.204.201.158:8000/api/joblist/');
+            const response = await fetch('http://43.204.201.158:8000/api/job_descriptions/${jobId}/assesments/');
             const data = await response.json();
             console.log(data);
             setJobs(data); // Set clients to the entire array
@@ -40,7 +40,8 @@ function JobListWithAssessment() {
 
     const handleViewDetails = (jobId) => {
         setSelectedJobId(jobId);
-        setSelectedCandidateId(null); // Reset selected candidate when viewing job details
+        setSelectedCandidateId(null); 
+        fetchCandidates(jobId);
     };
 
     const handleViewCandidateDetails = (candidateId) => {
