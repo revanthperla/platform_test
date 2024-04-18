@@ -8,7 +8,7 @@ function Profile() {
   const [profileData, setProfileData] = useState();
 
   const header = {
-    Authentication: `Bearer ${Cookie.get(jwt)}`,
+    Authentication: `Bearer ${Cookie.get('jwt')}`,
     // rest of the headers
  };
   

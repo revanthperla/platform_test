@@ -34,7 +34,7 @@ function Login() {
         const responseData = await response.json();
         console.log(responseData);
         const token = responseData.token;
-        Cookies.set(jwt, token);
+        Cookies.set('jwt', token);
       }
 
       if (response.ok) {
