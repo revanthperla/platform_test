@@ -39,6 +39,63 @@ function JobListWithAssessment() {
     }
   };
 
-  // ... rest of the code for handleViewCandidateDetails, handleCloseDetails, and return section remains the same
+  const handleViewCandidateDetails = (candidateId) => {
+    setSelectedCandidateId(candidateId);
+  };
 
+  const handleCloseDetails = () => {
+    setSelectedJobId(null);
+    setSelectedCandidateId(null);
+  };
+
+  return (
+    <div>
+      <h1>List of Jobs</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {jobs.map((job) => (
+            <React.Fragment key={job.id}>
+              <tr>
+                <td>{job.titleDesignation}</td>
+                <td>
+                  <button onClick={() => handleViewDetails(job.id)}>View Details</button>
+                </td>
+              </tr>
+              {selectedJobId === job.id && (
+                <tr>
+                  <td colSpan="2">
+                    {/* Display list of candidates from the assessments of the selected job */}
+                    <ul>
+                      {job.assessments && job.assessments.map((candidate) => (
+                        <li key={candidate.id}>
+                          {candidate.candidateName}
+                          <button onClick={() => handleViewCandidateDetails(candidate.id)}>View Resume</button>
+                          <button onClick={() => handleViewCandidateDetails(candidate.id)}>View Assessment</button>
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
+      {selectedCandidateId && (
+        <div>
+          {/* Render AssessmentForm for the selected candidate */}
+          <AssessmentForm jobId={selectedJobId} candidateId={selectedCandidateId} />
+          <button onClick={handleCloseDetails}>Close</button>
+        </div>
+      )}
+    </div>
+  );
 }
+
+export default JobListWithAssessment;
