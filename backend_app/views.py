@@ -1,13 +1,10 @@
-import pprint
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
 from django.http import JsonResponse
-from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-import json
 from django.contrib.auth import get_user_model
 import boto3
 from botocore.exceptions import ClientError
@@ -15,13 +12,9 @@ import os
 import logging
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
-from django.contrib.auth.hashers import check_password
-from django.core import serializers
-import datetime
 import jwt
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
-
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -84,7 +77,6 @@ class RegisterView(APIView):
             user = serializer.save()
             return Response({'message': 'User registered successfully.'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class LoginView(APIView):
     def post(self, request):
@@ -155,7 +147,6 @@ def get_bdpm(request):
 def get_latest_user(request):
     if request.method == 'GET':
         latest_object_id = UserData.objects.latest('id').id
-        user_data = UserData.objects.get(id=latest_object_id)
         return JsonResponse({'user_data': latest_object_id})
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
