@@ -122,7 +122,6 @@ class Notification(models.Model):
     
 class JobDescription(models.Model):
     titleDesignation = models.CharField(max_length=255)
-    clientName = models.CharField(max_length=255)
     accountManager = models.CharField(max_length=255)
     assignedRecruiters = models.CharField(max_length=255)
     startDate = models.CharField(max_length=30)
@@ -137,7 +136,7 @@ class JobDescription(models.Model):
     primaryResponsibilities = models.TextField()
     mandatorySkills = models.TextField()
     desirableSkills = models.TextField()
-    client = models.ForeignKey(ClientRegistration, on_delete=models.CASCADE)
+    clientName = models.ForeignKey(ClientRegistration, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=False)
     done = models.BooleanField(default=False)
     resume = S3DirectField(dest='primary_destination', blank=True, null=True)
