@@ -33,14 +33,8 @@ function Login() {
       if (response.ok) {
         const responseData = await response.json();
         console.log(responseData);
-        const token = responseData.token;
-        Cookies.set('jwt', token);
-      }
-
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log(responseData);
         const token = responseData.token; 
+        Cookies.set('jwt', token);
         if (responseData.Role) {
             // Login successful, navigate to appropriate dashboard
             switch (responseData.Role) {
