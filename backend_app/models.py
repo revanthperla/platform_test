@@ -3,12 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator, EmailVa
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from s3direct.fields import S3DirectField
-from django.views.generic.detail import DetailView
-from django.contrib.auth.models import AbstractUser, PermissionsMixin, BaseUserManager
-
-
-
-
+from django.contrib.auth.models import AbstractUser
 
 class UserData(models.Model):
     ROLE_CHOICES = (
@@ -43,9 +38,9 @@ class UserData(models.Model):
         return self.fullName if self.fullName else "Unnamed User"
 
 class LoginDetails(AbstractUser):
-    user_data = models.OneToOneField(UserData, on_delete=models.CASCADE, null = True)
-    username = models.CharField(max_length=255, unique=True, null=True)
-    password = models.CharField(max_length=255, null=True)  # Note: It's recommended to use hashed passwords in production
+    user_data = models.OneToOneField(UserData, on_delete=models.CASCADE)
+    username = models.CharField(max_length=255, unique=True)
+    password = models.CharField(max_length=255)  # Note: It's recommended to use hashed passwords in production
 
     USERNAME_FIELD = 'username'
     def __str__(self):
@@ -83,8 +78,8 @@ class ClientRegistration(models.Model):
     organizationStatus = models.CharField(max_length=255)
     estYear = models.CharField(max_length=4)  # Assuming year is a string field
     proprieterName = models.CharField(max_length=255)
-    officeAddress = models.CharField(max_length=255, blank=True)
-    branchAddress = models.CharField(max_length=255, blank=True)
+    officeAddress = models.CharField(max_length=255)
+    branchAddress = models.CharField(max_length=255)
     companyPerson = models.CharField(max_length=255)
     companyDesignation = models.CharField(max_length=255)
     companyNumber = models.CharField(max_length=255, default=0000000000)  # Assuming company number is a string field
@@ -126,25 +121,25 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
 class JobDescription(models.Model):
-    titleDesignation = models.CharField(max_length=255, null=True)
-    clientName = models.CharField(max_length=255, null=True)
+    titleDesignation = models.CharField(max_length=255)
+    clientName = models.CharField(max_length=255)
     accountManager = models.CharField(max_length=255)
     assignedRecruiters = models.CharField(max_length=255)
     startDate = models.CharField(max_length=30)
     closureDate = models.CharField(max_length=30)
-    jobType = models.CharField(max_length=255, null=True)
-    jobStatus = models.CharField(max_length=255, null=True)
-    workExperience = models.CharField(max_length=255, null=True)
-    industryNature = models.CharField(max_length=255, null=True)
-    compensation = models.CharField(max_length=255, null=True)
-    location = models.CharField(max_length=255, null=True)
-    eligibilityCriteria = models.TextField(null=True)
-    primaryResponsibilities = models.TextField(null=True)
-    mandatorySkills = models.TextField(null=True)
-    desirableSkills = models.TextField(null=True)
-    client = models.ForeignKey(ClientRegistration, on_delete=models.CASCADE, null=True)
-    is_active = models.BooleanField(default=False, null=True)
-    done = models.BooleanField(default=False, null=True)
+    jobType = models.CharField(max_length=255)
+    jobStatus = models.CharField(max_length=255)
+    workExperience = models.CharField(max_length=255)
+    industryNature = models.CharField(max_length=255)
+    compensation = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+    eligibilityCriteria = models.TextField()
+    primaryResponsibilities = models.TextField()
+    mandatorySkills = models.TextField()
+    desirableSkills = models.TextField()
+    client = models.ForeignKey(ClientRegistration, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=False)
+    done = models.BooleanField(default=False)
     resume = S3DirectField(dest='primary_destination', blank=True, null=True)
 
     def __str__(self):
@@ -152,7 +147,7 @@ class JobDescription(models.Model):
 
     
 class Assessment(models.Model):
-    job_description = models.ForeignKey(JobDescription, on_delete=models.SET_NULL, null=True)
+    job_description = models.ForeignKey(JobDescription, on_delete=models.CASCADE)
     candidateName = models.CharField(max_length=255)
     position = models.CharField(max_length=255)
     location = models.CharField(max_length=255)

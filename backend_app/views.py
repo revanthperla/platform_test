@@ -129,17 +129,6 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
 
-class UserDataDetailView(DetailView):
-    model = UserData
-
-    def GET(self, queryset=None):
-        return UserData.objects.latest('id')
-
-    def render_to_response(self, context, **response_kwargs):
-        latest_object = context['object']
-        data = {'latest_object_id': latest_object.id}
-        return JsonResponse(data)
-
 def index(request):
     return render(request, 'index.html')
 
