@@ -157,7 +157,7 @@ function JobDescription() {
               >
                 <option value="">Select</option>
                 {clientOptions.map((client) => (
-                  <option key={client.id} value={client.entityName}>
+                  <option key={client.id} value={client.id}>
                     {client.entityName}
                   </option>
                   ))}
