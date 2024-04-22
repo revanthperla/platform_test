@@ -41,14 +41,14 @@ function JobDescriptionDetails({job}) {
         }
     };
 
-    client_name = clientOptions.find(client => client.id === job.clientName).name;
+    const client_name = clientOptions.find(client => client.id === job.clientName);
 
     return (
         <div className="container">
             <h1>Job Description Details</h1>
             <div className="job-details">
                 <p><span className="static-text">Title/Designation:</span> {job.titleDesignation}</p>
-                <p><span className="static-text">Client Name:</span> {client_name}</p>
+                <p><span className="static-text">Client Name:</span> {client_name.entityName}</p>
                 <p><span className="static-text">Account Manager:</span> {job.accountManager}</p>
                 <p><span className="static-text">Assigned Recruiters:</span> {job.assignedRecruiters}</p>
                 <p><span className="static-text">Start Date:</span> {job.startDate}</p>
