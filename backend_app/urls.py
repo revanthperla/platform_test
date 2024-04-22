@@ -22,7 +22,6 @@ urlpatterns = [
     path('api/clientlist/', ClientRegistrationViewSet.as_view({'get': 'list'}), name='clientlist'),
     path('api/joblist/', JobDescriptionViewSet.as_view({'get': 'list'}), name='clientlist'),
     path('api/job-descriptions/', get_job_descriptions, name='get_job_descriptions'),
-    path('api/job_descriptions/<int:job_id>/assessments/', AssessmentViewSet.get_queryset(), name='get_assessments_for_job'),
     path('clientregistration/', ClientRegistrationViewSet.as_view({'post': 'create'}), name='clientregistration'),
     path('api/get_user_details/', get_user_details, name='get_user_details'),
     path('submit_user_data/', UserDataViewSet.as_view({'post': 'create'}), name='submit_user_data'),
