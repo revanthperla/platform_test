@@ -136,7 +136,7 @@ class JobDescription(models.Model):
     primaryResponsibilities = models.TextField()
     mandatorySkills = models.TextField()
     desirableSkills = models.TextField()
-    clientName = models.ForeignKey(ClientRegistration, on_delete=models.CASCADE)
+    clientName = models.CharField(max_length=255)
     is_active = models.BooleanField(default=False)
     done = models.BooleanField(default=False)
     resume = S3DirectField(dest='primary_destination', blank=True, null=True)
