@@ -3,6 +3,7 @@ import axios from 'axios';
 
 function AssesmentModal({ onClose }) {
     const initialFormData = {
+        job_description: '',
         candidateName: '',
         position: '',
         location: '',
@@ -22,6 +23,24 @@ function AssesmentModal({ onClose }) {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+
+    const [jobs, setJobs] = useState([]);
+
+    useEffect(() => {
+        fetchJobs();
+    }, []);
+
+    const fetchJobs = async () => {
+        try {
+        const response = await fetch('http://43.204.201.158:8000/api/joblist/');
+        const data = await response.json();
+        console.log(data);
+        setJobs(data);
+        } catch (error) {
+        console.error('Error fetching jobs:', error);
+        }
+    };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -45,6 +64,21 @@ function AssesmentModal({ onClose }) {
             <span className="close" onClick={onClose}>&times;</span>
             <h2>Assessment Information</h2>
             <form onSubmit={handleSubmit}>
+            <label>
+            Job:
+            <select
+              name="job_description"
+              value={formData.job_description}
+              onChange={handleChange}
+              >
+                <option value="">Select</option>
+                {jobs.map((job) => (
+                  <option key={job.id} value={job.id}>
+                    {job.titleDesignation}
+                  </option>
+                  ))}
+              </select>
+          </label>
                 <label>Candidate Name:</label>
                 <input type="text" name="candidateName" value={formData.candidateName} onChange={handleChange} />
                 <label>Position Applied for:</label>
