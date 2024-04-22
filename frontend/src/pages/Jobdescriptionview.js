@@ -42,6 +42,7 @@ function JobDescriptionDetails({job}) {
     };
 
     const client_name = clientOptions.find(client => client.id === job.clientName);
+    console.log(client_name);
 
     return (
         <div className="container">
