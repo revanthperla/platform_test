@@ -146,7 +146,7 @@ class JobDescription(models.Model):
 
     
 class Assessment(models.Model):
-    job_description = models.ForeignKey(JobDescription, on_delete=models.CASCADE)
+    job_description = models.CharField(max_length=255)
     candidateName = models.CharField(max_length=255)
     position = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
