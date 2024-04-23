@@ -5,7 +5,7 @@ import '../css/Assessmentview.css'; // Update the path to your CSS file
 function AssessmentForm({ candidate }) {
     const [isEditing, setIsEditing] = useState(false);
     const [rejectionReason, setRejectionReason] = useState('');
-    const [setCandidate] = useState()
+    const [editedCandidate, setEditedCandidate] = useState({});
 
     const handleApprove = async () => {
         try {
@@ -47,10 +47,11 @@ function AssessmentForm({ candidate }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // Create a new candidate object with updated value
-        const updatedCandidate = { ...candidate, [name]: value };
-        // Update the state with the new candidate object
-        setCandidate(updatedCandidate);
+        // Update the state with the new value for the specific field
+        setEditedCandidate(prevCandidate => ({
+            ...prevCandidate,
+            [name]: value
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -61,7 +62,7 @@ function AssessmentForm({ candidate }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(setCandidate),
+                body: JSON.stringify(editedCandidate),
             });
             if (response.ok) {
                 // Handle success
