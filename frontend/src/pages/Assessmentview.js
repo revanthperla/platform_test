@@ -5,7 +5,7 @@ import '../css/Assessmentview.css'; // Update the path to your CSS file
 function AssessmentForm({ candidate }) {
     const [isEditing, setIsEditing] = useState(false);
     const [rejectionReason, setRejectionReason] = useState('');
-    const [candidate, setCandidate] = useState({ candidate});
+    const [candidate, setCandidate] = useState(candidate);
 
     const handleApprove = async () => {
         try {
