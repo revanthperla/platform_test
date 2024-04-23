@@ -7,7 +7,7 @@ function AssessmentForm({ candidate }) {
     const [rejectionReason, setRejectionReason] = useState('');
 
     const handleApprove = async () => {
-        const updateData = { is_active: true };
+        const updateData = { is_active: True };
         try {
             const response = await fetch(`http://43.204.201.158:8000/api/update_assessment_status/${candidate.id}/`, {
               method: 'PATCH',
@@ -49,7 +49,7 @@ function AssessmentForm({ candidate }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://43.204.201.158:8000/api/update_assessment/${candidate.id}`, {
+            const response = await fetch(`http://43.204.201.158:8000/api/update_assessment/${candidate.id}/`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
