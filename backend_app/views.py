@@ -315,9 +315,9 @@ from django.http import JsonResponse
 
 @csrf_exempt
 @require_http_methods(["PATCH"])
-def update_assessment(request, assessment_id):
+def update_assessment(request, pk):
     try:
-        assessment = Assessment.objects.get(pk=assessment_id)
+        assessment = Assessment.objects.get(pk=pk)
         # Load JSON data from request body
         data = json.loads(request.body)
         # Update the assessment object with the data from the request
