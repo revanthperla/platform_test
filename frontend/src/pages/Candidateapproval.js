@@ -16,7 +16,7 @@ function JobListWithAssessment() {
       const data = await response.json();
       console.log(data);
       // Filter candidates with is_active set to false and rejection_reason null
-      const filteredCandidates = data.filter(candidate => !candidate.is_active && candidate.rejection_reason === '');
+      const filteredCandidates = data.filter(candidate => !candidate.is_active && candidate.rejection_reason === null);
       setCandidates(filteredCandidates);
     } catch (error) {
       console.error('Error fetching Candidates:', error);
