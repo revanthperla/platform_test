@@ -45,17 +45,32 @@ function AssesmentModal({ onClose }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
       
-        axios.post('http://43.204.201.158:8000/api/submit_assessment/', formData)
-        .then(response => {
-            console.log('Data sent successfully:', response.data);
-            // Reset the form after successful submission
+        try {
+            const response = await axios.post('http://43.204.201.158:8000/api/submit_assessment/', formData);
+            
+            console.log('Form submitted successfully:', response.data);
+            // You can add any additional logic here after the form is successfully submitted
             window.alert('Submitted successfully!');
-            setFormData({ ...formData, /* reset fields */ });
-        })
-        .catch(error => {
-            console.error('Error sending data:', error);
-        });
-        onClose();
+          } catch (error) {
+            console.error('Error submitting form:', error);
+            // Handle any errors here
+          }
+      
+          // Reset the form after submission
+          setUserData({
+            job_description: '',
+            candidateName: '',
+            position: '',
+            location: '',
+            currentEmployer: '',
+            totalExperience: '',
+            ctc: '',
+            ectc: '',
+            noticePeriod: '',
+            relocate: '',
+            comments: '',
+            remarks: '',
+          });
     };
 
     return (
