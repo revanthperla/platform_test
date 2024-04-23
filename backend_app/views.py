@@ -109,30 +109,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 class AssessmentViewSet(viewsets.ModelViewSet):
-    serializer_class = AssessmentSerializer
-
-    @action(detail=False, methods=['get'], url_path='assessments')
-    def get_assessments_for_job(self, request, job_id=None):
-        """
-        Retrieves assessments filtered by the provided job ID.
-
-        This endpoint allows you to fetch assessments associated with a specific job description.
-
-        Parameters:
-            job_id (int, optional): The ID of the job description to filter assessments by.
-                Defaults to None (returns all assessments).
-
-        Returns:
-            Response: A JSON response containing the serialized assessments.
-        """
-
-        if job_id:
-            queryset = Assessment.objects.filter(job_description__titleDesignation=job_id)
-        else:
-            queryset = Assessment.objects.all()
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+    queryset = JobDescription.objects.all()
+    serializer_class = JobDescriptionSerializer
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()

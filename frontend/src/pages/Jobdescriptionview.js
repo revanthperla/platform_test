@@ -12,6 +12,7 @@ function JobDescriptionDetails({job}) {
         console.log('Upload resume button clicked');
     };
 
+
     const handleAddAssessment = () => {
         // Show the modal when "Add Assessment" button is clicked
         setShowModal(true);
