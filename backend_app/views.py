@@ -305,8 +305,7 @@ def update_user_role(request, user_id):
 def update_assessment_status(request, pk):
     try:
         instance = Assessment.objects.get(pk=pk)
-        new_value = request.POST.get('is_active')  # Assuming fieldToUpdate is the field you want to update
-        instance.is_active = new_value
+        instance.is_active = True
         instance.save()
         return JsonResponse({'message': 'Field updated successfully'})
     except Assessment.DoesNotExist:
