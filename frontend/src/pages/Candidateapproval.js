@@ -13,7 +13,7 @@ function JobListWithAssessment() {
   const fetchCandidates = async () => {
     try {
       const response = await fetch('http://43.204.201.158:8000/api/assessments/');
-      const data = await response.data;
+      const data = await response.json();
       console.log(data);
       setCandidates(data);
     } catch (error) {
