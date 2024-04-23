@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import Axios for making API requests
 import '../css/Assessmentview.css'; // Update the path to your CSS file
 
 function AssessmentForm({ candidate }) {
@@ -30,7 +31,7 @@ function AssessmentForm({ candidate }) {
         const reason = prompt('Enter rejection reason:');
         if (reason) {
             const updateData = { rejection_reason: reason };
-            fetch(`http://43.204.201.158:8000/api/assessment_rejection/${candidate.id}/`, {
+            fetch(`http://43.204.201.158:8000/api/update_assessment_rejection/${candidate.id}/`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -89,68 +90,62 @@ function AssessmentForm({ candidate }) {
         }
     };
 
-    // Add condition to render only if is_active is false and rejection_reason is null
-    if (!candidate.is_active && !candidate.rejection_reason) {
-        return (
-            <div className="assessment-form-container">
-                <h2>Assessment Information</h2>
-                {isEditing ? (
-                    <form onSubmit={handleSubmit}>
-                    <label>Candidate Name:</label>
-                    <input type="text" name="candidateName" value={editedCandidate.candidateName || ''} onChange={handleChange} />
-                    <label>Position Applied for:</label>
-                    <input type="text" name="position" value={editedCandidate.position || ''} onChange={handleChange} />
-                    <label>Current Location:</label>
-                    <input type="text" name="location" value={editedCandidate.location || ''} onChange={handleChange} />
-                    <label>Current Employer:</label>
-                    <input type="text" name="currentEmployer" value={editedCandidate.currentEmployer || ''} onChange={handleChange} />
-                    <label>Total Experience:</label>
-                    <input type="text" name="totalExperience" value={editedCandidate.totalExperience || ''} onChange={handleChange} />
-                    <label>CTC:</label>
-                    <input type="text" name="ctc" value={editedCandidate.ctc || ''} onChange={handleChange} />
-                    <label>Expected CTC:</label>
-                    <input type="text" name="ectc" value={editedCandidate.ectc || ''} onChange={handleChange} />
-                    <label>Notice Period:</label>
-                    <input type="text" name="noticePeriod" value={editedCandidate.noticePeriod || ''} onChange={handleChange} />
-                    <label>Willingness to Relocate:</label>
-                    <input type="text" name="relocate" value={editedCandidate.relocate || ''} onChange={handleChange} />
-                    <label>Assessment Comments(HR Inputs):</label>
-                    <input type="text" name="comments" value={editedCandidate.comments || ''} onChange={handleChange} />
-                    <label>Remarks:</label>
-                    <input type="text" name="remarks" value={editedCandidate.remarks || ''} onChange={handleChange} />
-                    <button type="submit">Submit</button>
-                </form>
-                ) : (
-                    <div>
-                        <p>Candidate Name: {candidate.candidateName}</p>
-                        <p>Position Applied for: {candidate.position}</p>
-                        <p>Current Location: {candidate.location}</p>
-                        <p>Current Employer: {candidate.currentEmployer}</p>
-                        <p>Total Experience: {candidate.totalExperience}</p>
-                        <p>CTC: {candidate.ctc}</p>
-                        <p>Expected CTC: {candidate.ectc}</p>
-                        <p>Notice Period: {candidate.noticePeriod}</p>
-                        <p>Willingness to Relocate: {candidate.relocate}</p>
-                        <p>Assesment Comments(HRInputs): {candidate.comments}</p>
-                        <p>Remarks: {candidate.remarks}</p>
-                        <button onClick={handleEdit}>Edit</button>
-                        <button onClick={handleApprove}>Approve</button>
-                        <button onClick={handleReject}>Reject</button>
-                        {/* Text input for rejection reason */}
-                        {rejectionReason && (
-                            <div>
-                                <label>Rejection Reason:</label>
-                                <input type="text" value={rejectionReason} onChange={(e) => setRejectionReason(e.target.value)} />
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
-        );
-    } else {
-        // If the candidate doesn't meet the criteria, return null or an empty div
-        return null;
-    }
+    return (
+        <div className="assessment-form-container">
+            <h2>Assessment Information</h2>
+            {isEditing ? (
+                <form onSubmit={handleSubmit}>
+                <label>Candidate Name:</label>
+                <input type="text" name="candidateName" value={editedCandidate.candidateName || ''} onChange={handleChange} />
+                <label>Position Applied for:</label>
+                <input type="text" name="position" value={editedCandidate.position || ''} onChange={handleChange} />
+                <label>Current Location:</label>
+                <input type="text" name="location" value={editedCandidate.location || ''} onChange={handleChange} />
+                <label>Current Employer:</label>
+                <input type="text" name="currentEmployer" value={editedCandidate.currentEmployer || ''} onChange={handleChange} />
+                <label>Total Experience:</label>
+                <input type="text" name="totalExperience" value={editedCandidate.totalExperience || ''} onChange={handleChange} />
+                <label>CTC:</label>
+                <input type="text" name="ctc" value={editedCandidate.ctc || ''} onChange={handleChange} />
+                <label>Expected CTC:</label>
+                <input type="text" name="ectc" value={editedCandidate.ectc || ''} onChange={handleChange} />
+                <label>Notice Period:</label>
+                <input type="text" name="noticePeriod" value={editedCandidate.noticePeriod || ''} onChange={handleChange} />
+                <label>Willingness to Relocate:</label>
+                <input type="text" name="relocate" value={editedCandidate.relocate || ''} onChange={handleChange} />
+                <label>Assessment Comments(HR Inputs):</label>
+                <input type="text" name="comments" value={editedCandidate.comments || ''} onChange={handleChange} />
+                <label>Remarks:</label>
+                <input type="text" name="remarks" value={editedCandidate.remarks || ''} onChange={handleChange} />
+                <button type="submit">Submit</button>
+            </form>
+            ) : (
+                <div>
+                    <p>Candidate Name: {candidate.candidateName}</p>
+                    <p>Position Applied for: {candidate.position}</p>
+                    <p>Current Location: {candidate.location}</p>
+                    <p>Current Employer: {candidate.currentEmployer}</p>
+                    <p>Total Experience: {candidate.totalExperience}</p>
+                    <p>CTC: {candidate.ctc}</p>
+                    <p>Expected CTC: {candidate.ectc}</p>
+                    <p>Notice Period: {candidate.noticePeriod}</p>
+                    <p>Willingness to Relocate: {candidate.relocate}</p>
+                    <p>Assesment Comments(HRInputs): {candidate.comments}</p>
+                    <p>Remarks: {candidate.remarks}</p>
+                    <button onClick={handleEdit}>Edit</button>
+                    <button onClick={handleApprove}>Approve</button>
+                    <button onClick={handleReject}>Reject</button>
+                    {/* Text input for rejection reason */}
+                    {rejectionReason && (
+                        <div>
+                            <label>Rejection Reason:</label>
+                            <input type="text" value={rejectionReason} onChange={(e) => setRejectionReason(e.target.value)} />
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default AssessmentForm;

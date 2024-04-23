@@ -15,7 +15,9 @@ function JobListWithAssessment() {
       const response = await fetch('http://43.204.201.158:8000/api/assessments/');
       const data = await response.json();
       console.log(data);
-      setCandidates(data);
+      // Filter candidates with is_active set to false and rejection_reason null
+      const filteredCandidates = data.filter(candidate => !candidate.is_active && candidate.rejection_reason === null);
+      setCandidates(filteredCandidates);
     } catch (error) {
       console.error('Error fetching Candidates:', error);
     }
@@ -40,15 +42,15 @@ function JobListWithAssessment() {
           </tr>
         </thead>
         <tbody>
-        {candidates && candidates.map(candidate => (
-        <tr key={candidate.id}>
-            <td>{candidate.candidateName}</td> {/* Assuming entityName is the client's name */}
-            <td>
+          {candidates.map(candidate => (
+            <tr key={candidate.id}>
+              <td>{candidate.candidateName}</td> {/* Assuming entityName is the client's name */}
+              <td>
                 <button onClick={() => handleViewDetails(candidate.id)}>View Details</button>
-            </td>
-        </tr>
-    ))}
-</tbody>
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
       {selectedCanId && (
         <div>
