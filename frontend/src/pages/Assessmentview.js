@@ -5,6 +5,7 @@ import '../css/Assessmentview.css'; // Update the path to your CSS file
 function AssessmentForm({ candidate }) {
     const [isEditing, setIsEditing] = useState(false);
     const [rejectionReason, setRejectionReason] = useState('');
+    const [candidate, setCandidate] = useState({ candidate});
 
     const handleApprove = async () => {
         try {
@@ -68,8 +69,10 @@ function AssessmentForm({ candidate }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // Update the candidate object directly
-        candidate[name] = value;
+        // Create a new candidate object with updated value
+        const updatedCandidate = { ...candidate, [name]: value };
+        // Update the state with the new candidate object
+        setCandidate(updatedCandidate);
     };
 
     return (
