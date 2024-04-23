@@ -330,6 +330,7 @@ def update_assessment(request, pk):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+@csrf_exempt
 def assessment_rejection(request, pk):
     try:
         assessment = Assessment.objects.get(pk=pk)
