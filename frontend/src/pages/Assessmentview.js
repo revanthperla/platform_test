@@ -84,27 +84,27 @@ function AssessmentForm({ candidate }) {
             {isEditing ? (
                 <form onSubmit={handleSubmit}>
                 <label>Candidate Name:</label>
-                <input type="text" name="candidateName" value={candidate.candidateName} onChange={handleChange} />
+                <input type="text" name="candidateName" value={editedCandidate.candidateName || ''} onChange={handleChange} />
                 <label>Position Applied for:</label>
-                <input type="text" name="position" value={candidate.position} onChange={handleChange} />
+                <input type="text" name="position" value={editedCandidate.position || ''} onChange={handleChange} />
                 <label>Current Location:</label>
-                <input type="text" name="location" value={candidate.location} onChange={handleChange} />
+                <input type="text" name="location" value={editedCandidate.location || ''} onChange={handleChange} />
                 <label>Current Employer:</label>
-                <input type="text" name="currentEmployer" value={candidate.currentEmployer} onChange={handleChange} />
+                <input type="text" name="currentEmployer" value={editedCandidate.currentEmployer || ''} onChange={handleChange} />
                 <label>Total Experience:</label>
-                <input type="text" name="totalExperience" value={candidate.totalExperience} onChange={handleChange} />
+                <input type="text" name="totalExperience" value={editedCandidate.totalExperience || ''} onChange={handleChange} />
                 <label>CTC:</label>
-                <input type="text" name="ctc" value={candidate.ctc} onChange={handleChange} />
+                <input type="text" name="ctc" value={editedCandidate.ctc || ''} onChange={handleChange} />
                 <label>Expected CTC:</label>
-                <input type="text" name="ectc" value={candidate.ectc} onChange={handleChange} />
+                <input type="text" name="ectc" value={editedCandidate.ectc || ''} onChange={handleChange} />
                 <label>Notice Period:</label>
-                <input type="text" name="noticePeriod" value={candidate.noticePeriod} onChange={handleChange} />
-                <label>Willingness:</label>
-                <input type="text" name="relocate" value={candidate.relocate} onChange={handleChange} />
+                <input type="text" name="noticePeriod" value={editedCandidate.noticePeriod || ''} onChange={handleChange} />
+                <label>Willingness to Relocate:</label>
+                <input type="text" name="relocate" value={editedCandidate.relocate || ''} onChange={handleChange} />
                 <label>Assessment Comments(HR Inputs):</label>
-                <input type="text" name="comments" value={candidate.comments} onChange={handleChange} />
+                <input type="text" name="comments" value={editedCandidate.comments || ''} onChange={handleChange} />
                 <label>Remarks:</label>
-                <input type="text" name="remarks" value={candidate.remarks} onChange={handleChange} />
+                <input type="text" name="remarks" value={editedCandidate.remarks || ''} onChange={handleChange} />
                 <button type="submit">Submit</button>
             </form>
             ) : (
