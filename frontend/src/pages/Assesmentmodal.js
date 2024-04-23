@@ -57,7 +57,7 @@ function AssesmentModal({ onClose }) {
           }
       
           // Reset the form after submission
-          setUserData({
+          setFormData({
             job_description: '',
             candidateName: '',
             position: '',
