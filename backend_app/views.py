@@ -313,6 +313,7 @@ def update_assessment_status(request, pk):
     
 from django.http import JsonResponse
 
+@csrf_exempt
 @require_http_methods(["PATCH"])
 def update_assessment(request, assessment_id):
     try:
