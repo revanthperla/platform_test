@@ -301,6 +301,7 @@ def update_user_role(request, user_id):
         except UserData.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'User not found'})
 
+@csrf_exempt
 def update_assessment_status(request, pk):
     try:
         instance = Assessment.objects.get(pk=pk)
