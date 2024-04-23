@@ -161,6 +161,7 @@ class Assessment(models.Model):
     is_active = models.BooleanField(default=False)
     done = models.BooleanField(default=False)
     interview = models.BooleanField(default=False)
+    rejection_reason = models.TextField(null=True)
 
     def __str__(self):
         return self.candidateName  # Change this based on what you want to display for each instance
