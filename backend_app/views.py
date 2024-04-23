@@ -10,11 +10,12 @@ import boto3
 from botocore.exceptions import ClientError
 import os
 import logging
-from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 import jwt
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
+from django.views.decorators.http import require_http_methods
+import json
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -300,59 +301,30 @@ def update_user_role(request, user_id):
         except UserData.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'User not found'})
 
-def get_client_details(request, client_id):
-    Client = ClientRegistration
+def update_assessment_status(request, pk):
     try:
-        client_data = get_object_or_404(Client, pk=client_id, user = request.user)
-        data = {
-            'entityName': client_data.entityName,
-            'organizationStatus': client_data.organizationStatus,
-            'estYear': client_data.estYear,
-            'proprieterName': client_data.proprieterName,
-            'officeAddress': client_data.officeAddress,
-            'branchAddress': client_data.branchAddress,
-            'companyPerson': client_data.companyPerson,
-            'companyDesignation': client_data.companyDesignation,
-            'companyNumber': client_data.companyNumber,
-            'companyFax': client_data.companyFax,
-            'companyEmail': client_data.companyEmail,
-            'industryNature': client_data.industryNature,
-            'companyCIN': client_data.companyCIN,
-            'companyPAN': client_data.companyPAN,
-            'companyGST': client_data.companyGST,
-            'bdpName': client_data.bdpName,
-            'bdpmName': client_data.bdpmName,
-            'accountManager': client_data.accountManager,
-            'billingCity': client_data.billingCity,
-            'billingCountry': client_data.billingCountry,
-        }
-        return JsonResponse(data)
-    except Client.DoesNotExist:
-        return JsonResponse({'error': 'Client data not found'}, status=404)
-    
-def get_assessment_details(request, assessment_id):
-    Assess = Assessment
-    try:
-        assessment_data = get_object_or_404(Assess, pk=assessment_id)
-        
-        data = {
-            'job_description': assessment_data.job_description.id if assessment_data.job_description else None,
-            'candidateName': assessment_data.candidateName,
-            'position': assessment_data.position,
-            'location': assessment_data.location,
-            'currentEmployer': assessment_data.currentEmployer,
-            'totalExperience': assessment_data.totalExperience,
-            'ctc': assessment_data.ctc,
-            'ectc': assessment_data.ectc,
-            'noticePeriod': assessment_data.noticePeriod,
-            'relocate': assessment_data.relocate,
-            'comments': assessment_data.comments,
-            'remarks': assessment_data.remarks,
-            'is_active': assessment_data.is_active,
-            'done': assessment_data.done,
-            'interview': assessment_data.interview,
-        }
-        return JsonResponse(data)
+        instance = Assessment.objects.get(pk=pk)
+        new_value = request.POST.get('is_active')  # Assuming fieldToUpdate is the field you want to update
+        instance.is_active = new_value
+        instance.save()
+        return JsonResponse({'message': 'Field updated successfully'})
     except Assessment.DoesNotExist:
-        return JsonResponse({'error': 'Assessment data not found'}, status=404)
+        return JsonResponse({'error': 'Object does not exist'}, status=404)
     
+from django.http import JsonResponse
+
+@require_http_methods(["PATCH"])
+def update_assessment(request, assessment_id):
+    try:
+        assessment = Assessment.objects.get(pk=assessment_id)
+        # Load JSON data from request body
+        data = json.loads(request.body)
+        # Update the assessment object with the data from the request
+        for key, value in data.items():
+            setattr(assessment, key, value)
+        assessment.save()
+        return JsonResponse({'message': 'Assessment updated successfully'})
+    except Assessment.DoesNotExist:
+        return JsonResponse({'error': 'Assessment not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
