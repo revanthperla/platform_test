@@ -15,7 +15,7 @@ function JobListWithAssessment() {
       const response = await fetch('http://43.204.201.158:8000/api/assessments/');
       const data = response.data;
       console.log(data);
-      setJobs(data);
+      setCandidates(data);
     } catch (error) {
       console.error('Error fetching Candidates:', error);
     }
