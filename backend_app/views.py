@@ -329,3 +329,17 @@ def update_assessment(request, pk):
         return JsonResponse({'error': 'Assessment not found'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+def assessment_rejection(request, pk):
+    try:
+        assessment = Assessment.objects.get(pk=pk)
+    except Assessment.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PATCH':
+        serializer = AssessmentSerializer(assessment, data=request.data, partial=True)
+        if serializer.is_valid():
+            # Update the assessment object with the rejection reason
+            serializer.save(rejection_reason=request.data.get('rejection_reason'))
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

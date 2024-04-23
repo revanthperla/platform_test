@@ -30,14 +30,26 @@ function AssessmentForm({ candidate }) {
     const handleReject = () => {
         const reason = prompt('Enter rejection reason:');
         if (reason) {
-            const updateData = { is_active: false, rejection_reason: reason };
-            axios.patch(`http://43.204.201.158:8000/api/assessments/${candidate.id}/`, updateData)
-                .then(response => {
-                    console.log('Assessment rejected:', response.data);
-                })
-                .catch(error => {
-                    console.error('Error rejecting assessment:', error);
-                });
+            const updateData = { rejection_reason: reason };
+            fetch(`http://43.204.201.158:8000/api/assessment_rejection/${candidate.id}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updateData),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to reject assessment');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Assessment rejected with reason:', data);
+            })
+            .catch(error => {
+                console.error('Error rejecting assessment:', error);
+            });
         }
     };
 
@@ -67,7 +79,7 @@ function AssessmentForm({ candidate }) {
                 body: JSON.stringify(editedCandidate),
             });
             if (response.ok) {
-                // Handle success
+                window.alert('Assessment updated successfully, please refresh the page to see the changes.');
                 console.log('Field updated successfully');
             } else {
                 // Handle error
@@ -77,8 +89,6 @@ function AssessmentForm({ candidate }) {
             console.error('Error:', error);
         }
     };
-
-    
 
     return (
         <div className="assessment-form-container">
