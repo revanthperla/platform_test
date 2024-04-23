@@ -42,6 +42,8 @@ function AssessmentForm({ candidate }) {
     };
 
     const handleEdit = () => {
+        // Initialize editedCandidate state with current candidate data
+        setEditedCandidate(candidate);
         setIsEditing(true);
     };
 
