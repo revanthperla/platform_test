@@ -88,7 +88,7 @@ function AssesmentModal({ onClose }) {
               >
                 <option value="">Select</option>
                 {jobs.map((job) => (
-                  <option key={job.id} value={job.id}>
+                  <option key={job.id} value={job.titleDesignation}>
                     {job.titleDesignation}
                   </option>
                   ))}
