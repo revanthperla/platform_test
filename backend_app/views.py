@@ -109,8 +109,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 class AssessmentViewSet(viewsets.ModelViewSet):
-    queryset = JobDescription.objects.all()
-    serializer_class = JobDescriptionSerializer
+    queryset = Assessment.objects.all()
+    serializer_class = AssessmentSerializer
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
