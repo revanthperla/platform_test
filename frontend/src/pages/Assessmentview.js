@@ -15,7 +15,7 @@ function AssessmentForm({ candidate }) {
                 },
             });
             if (response.ok) {
-                // Handle success
+                window.alert('Approved Candidate');
                 console.log('Field updated successfully');
             } else {
                 // Handle error
@@ -77,30 +77,30 @@ function AssessmentForm({ candidate }) {
             <h2>Assessment Information</h2>
             {isEditing ? (
                 <form onSubmit={handleSubmit}>
-                    <label>Candidate Name:</label>
-                    <input type="text" name="candidateName" value={candidate.candidateName} onChange={handleChange} />
-                    <label>Position Applied for:</label>
-                    <input type="text" name="position" value={candidate.position} onChange={handleChange} />
-                    <label>Current Location:</label>
-                    <input type="text" name="location" value={candidate.location} onChange={handleChange} />
-                    <label>Current Employer:</label>
-                    <input type="text" name="location" value={candidate.currentEmployer} onChange={handleChange} />
-                    <label>Total Experience:</label>
-                    <input type="text" name="location" value={candidate.totalExperience} onChange={handleChange} />
-                    <label>CTC:</label>
-                    <input type="text" name="location" value={candidate.ctc} onChange={handleChange} />
-                    <label>Expected CTC:</label>
-                    <input type="text" name="location" value={candidate.ectc} onChange={handleChange} />
-                    <label>Notice Period:</label>
-                    <input type="text" name="location" value={candidate.noticePeriod} onChange={handleChange} />
-                    <label>Willingness:</label>
-                    <input type="text" name="location" value={candidate.relocate} onChange={handleChange} />
-                    <label>Assesment Comments(HRInputs):</label>
-                    <input type="text" name="location" value={candidate.comments} onChange={handleChange} />
-                    <label>Remarks:</label>
-                    <input type="text" name="location" value={candidate.remarks} onChange={handleChange} />
-                    <button type="submit">Submit</button>
-                </form>
+                <label>Candidate Name:</label>
+                <input type="text" name="candidateName" value={candidate.candidateName} onChange={handleChange} />
+                <label>Position Applied for:</label>
+                <input type="text" name="position" value={candidate.position} onChange={handleChange} />
+                <label>Current Location:</label>
+                <input type="text" name="location" value={candidate.location} onChange={handleChange} />
+                <label>Current Employer:</label>
+                <input type="text" name="currentEmployer" value={candidate.currentEmployer} onChange={handleChange} />
+                <label>Total Experience:</label>
+                <input type="text" name="totalExperience" value={candidate.totalExperience} onChange={handleChange} />
+                <label>CTC:</label>
+                <input type="text" name="ctc" value={candidate.ctc} onChange={handleChange} />
+                <label>Expected CTC:</label>
+                <input type="text" name="ectc" value={candidate.ectc} onChange={handleChange} />
+                <label>Notice Period:</label>
+                <input type="text" name="noticePeriod" value={candidate.noticePeriod} onChange={handleChange} />
+                <label>Willingness:</label>
+                <input type="text" name="relocate" value={candidate.relocate} onChange={handleChange} />
+                <label>Assessment Comments(HR Inputs):</label>
+                <input type="text" name="comments" value={candidate.comments} onChange={handleChange} />
+                <label>Remarks:</label>
+                <input type="text" name="remarks" value={candidate.remarks} onChange={handleChange} />
+                <button type="submit">Submit</button>
+            </form>
             ) : (
                 <div>
                     <p>Candidate Name: {candidate.candidateName}</p>
