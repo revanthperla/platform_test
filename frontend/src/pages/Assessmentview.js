@@ -9,7 +9,7 @@ function AssessmentForm({ candidate }) {
     const handleApprove = async () => {
         const updateData = { is_active: true };
         try {
-            const response = await fetch(`http://43.204.201.158:8000/api/update_assessment_status/${candidate.id}}`, {
+            const response = await fetch(`http://43.204.201.158:8000/api/update_assessment_status/${candidate.id}/`, {
               method: 'PATCH',
               headers: {
                 'Content-Type': 'application/json',
