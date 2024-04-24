@@ -96,7 +96,7 @@ function JobAndCandidateList() {
         <ul className="job-table">
           {jobs.map((job) => (
             <li key={job.id} onClick={() => HandleJobClick(job.id)}>
-              {job.title}
+              {job.titleDesignation}
             </li>
           ))}
         </ul>
