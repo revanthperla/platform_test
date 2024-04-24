@@ -51,7 +51,6 @@ function JobAndCandidateList() {
     };
   
     const keywords = {
-      'Candidate name': 'candidateName',
       'Position applied for': 'position',
       'Current location': 'location',
       'Current employer': 'currentEmployer',

@@ -356,17 +356,35 @@ def generate_report(request):
     job = JobDescription.objects.get(id=jobId)
     assessments = Assessment.objects.filter(job_description=job.titleDesignation)
     
-    # Prepare data for Excel
+    # Mapping between keywords and other strings for column names in the DataFrame
+    keyword_to_column_mapping = {
+        'location': 'Location',
+        'currentEmployer': 'Employer',
+        'totalExperience': 'Experience',
+        'position': 'Position',
+        'ctc': 'CTC',
+        'ectc': 'Expected CTC',
+        'noticePeriod': 'Notice Period',
+        'relocate': 'Relocate',
+        'comments': 'HR Comments',
+        'remarks': 'Remarks'
+    }
+    
+    # Prepare data for DataFrame
     assessment_data = []
     for assessment in assessments:
         assessment_row = {'Candidate': assessment.candidateName}  # Add candidate name
         for keyword in keywords:
+            # Map keyword to column name
+            column_name = keyword_to_column_mapping.get(keyword, keyword)
             # Assuming the keyword is a field in the Assessment model
-            assessment_row[keyword] = getattr(assessment, keyword, None)
+            assessment_row[column_name] = getattr(assessment, keyword, None)
         assessment_data.append(assessment_row)
     
     # Convert data to DataFrame
     df = pd.DataFrame(assessment_data)
+    
+    # Convert DataFrame to JSON
     df_json = df.to_json(orient='records')
     
     # Define Excel file path
