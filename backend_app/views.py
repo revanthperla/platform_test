@@ -367,7 +367,7 @@ def generate_report(request):
     
     # Convert data to DataFrame
     df = pd.DataFrame(assessment_data)
-    df_ser = serialize('json', df)
+    df_json = df.to_json(orient='records')
     
     # Define Excel file path
     excel_file_path = 'assessment_report.xlsx'
@@ -379,7 +379,7 @@ def generate_report(request):
     response_data = {
         'jobId': jobId,
         'keywords': keywords,
-        'df': df_ser,
+        'df': df_json,
         'message': 'Excel report generated successfully.',
         'excel_file_path': excel_file_path
     }
