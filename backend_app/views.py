@@ -354,7 +354,7 @@ def generate_report(request):
     jobId = data.get('jobId', None)
     keywords = data.get('keywords', [])
     job = JobDescription.objects.get(id=jobId)
-    assessments = Assessment.objects.filter(job_description=job.titleDesignation)
+    assessments = Assessment.objects.filter(job_description=job.titleDesignation, is_active=True, rejection_reason='')
     
     # Mapping between keywords and other strings for column names in the DataFrame
     keyword_to_column_mapping = {
