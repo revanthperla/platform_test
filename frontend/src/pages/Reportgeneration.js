@@ -145,20 +145,20 @@ function JobAndCandidateList() {
           {/* Select fields for generating report */}
           <h2>Select fields to be used for generating report</h2>
           <div>
-            {keywords.map(keyword => (
-              <div className="checkbox-wrapper" key={keyword}>
-                <div className="checkbox-container">
-                  <input
-                    type="checkbox"
-                    id={keyword}
-                    value={keyword}
-                    checked={selectedKeywords.includes(keyword)}
-                    onChange={handleKeywordChange}
-                  />
-                </div>
-                <label htmlFor={keyword}>{keyword}</label>
+          {Object.keys(keywords).map(keyword => (
+            <div className="checkbox-wrapper" key={keyword}>
+              <div className="checkbox-container">
+                <input
+                  type="checkbox"
+                  id={keyword}
+                  value={keyword}
+                  checked={selectedKeywords.includes(keyword)}
+                  onChange={handleKeywordChange}
+                />
               </div>
-            ))}
+              <label htmlFor={keyword}>{keyword}</label>
+            </div>
+          ))}
           </div>
           <button onClick={handleClearCheckboxes}>Clear Checkboxes</button>
           <button className="report" onClick={handleReport}>Generate Report</button>
