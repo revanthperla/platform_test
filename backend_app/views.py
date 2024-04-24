@@ -358,7 +358,7 @@ def generate_report(request):
     # Prepare data for Excel
     assessment_data = []
     for assessment in assessments:
-        assessment_row = {'Candidate': assessment.candidate_name}  # Add candidate name
+        assessment_row = {'Candidate': assessment.candidateName}  # Add candidate name
         for keyword in keywords:
             # Assuming the keyword is a field in the Assessment model
             assessment_row[keyword] = getattr(assessment, keyword, None)
