@@ -12,28 +12,40 @@ function JobAndCandidateList() {
     const [selectedKeywords, setSelectedKeywords] = useState([]);
   
     useEffect(() => {
-      // Fetch jobs from Django backend
-      axios.get('http://43.204.201.158:8000/api/jobs')
-        .then(response => {
-          setJobs(response.data);
-        })
-        .catch(error => {
-          console.error('Error fetching jobs:', error);
-        });
-    }, []); // Empty dependency array to fetch data only once when the component mounts
+      fetchJobs();
+    }, []);
   
-    // Function to handle job selection
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch('http://43.204.201.158:8000/api/joblist/');
+        const data = await response.json();
+        console.log(data);
+        setJobs(data);
+      } catch (error) {
+        console.error('Error fetching jobs:', error);
+      }
+    };
+   
     const handleJobClick = (jobId) => {
       setSelectedJob(jobId);
+
+      useEffect(() => {
+        fetchCandidates();
+      }, []);
+    
+      const fetchCandidates = async () => {
+        try {
+          const response = await fetch('http://43.204.201.158:8000/api/assessments/');
+          const data = await response.json();
+          console.log(data);
+          // Filter candidates with is_active set to false and rejection_reason null
+          const filteredCandidates = data.filter(candidate => !candidate.is_active && candidate.rejection_reason === '');
+          setCandidates(filteredCandidates);
+        } catch (error) {
+          console.error('Error fetching Candidates:', error);
+        }
+      };
       setShowCandidates(true); // Show candidates when a job is clicked
-      // Fetch candidates for selected job from Django backend
-      axios.get(`/api/jobs/${jobId}/candidates`)
-        .then(response => {
-          setCandidates(response.data);
-        })
-        .catch(error => {
-          console.error('Error fetching candidates:', error);
-        });
     };
   
     // Function to handle close button click
