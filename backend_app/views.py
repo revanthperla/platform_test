@@ -401,4 +401,9 @@ def generate_report(request):
         'message': 'Excel report generated successfully.',
         'excel_file_path': excel_file_path
     }
+
+    response = JsonResponse(response_data)
+
+    # Add Content-Disposition header to force download
+    response['Content-Disposition'] = 'attachment; filename="assessment_report.xlsx"'
     return JsonResponse(response_data)
