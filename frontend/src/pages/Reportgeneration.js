@@ -96,25 +96,41 @@ function JobAndCandidateList() {
         const response = await fetch('http://43.204.201.158:8000/api/report/', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+              'Content-Type': 'application/json'
           },
           body: JSON.stringify(requestData)
-        });
+      });
 
-        const responseData = await response.json(); // Parsing response JSON data
-        console.log('Response:', responseData); 
-    
-        if (response.ok) {
-          console.log('Data sent successfully!');
-          // Optionally, you can handle success response here
-        } else {
+      if (!response.ok) {
           console.error('Failed to send data:', response.statusText);
-          // Optionally, you can handle error response here
-        }
-      } catch (error) {
-        console.error('Error sending data:', error);
-        // Handle any network or other errors here
+          return;
       }
+
+      const responseData = await response.json(); // Parsing response JSON data
+      console.log('Response:', responseData);
+
+      // Check if the response contains the file path
+      if (responseData && responseData.excel_file_path) {
+          // Create a hidden anchor tag
+          const downloadLink = document.createElement('a');
+          downloadLink.href = responseData.excel_file_path;
+          downloadLink.download = 'assessment_report.xlsx';
+
+          // Append the anchor tag to the body and trigger a click event
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+
+          // Remove the anchor tag from the body
+          document.body.removeChild(downloadLink);
+
+          console.log('Excel file downloaded successfully.');
+      } else {
+          console.error('Excel file path not found in response.');
+      }
+  } catch (error) {
+      console.error('Error sending data:', error);
+      // Handle any network or other errors here
+  }
     };
   
     return (
