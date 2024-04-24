@@ -103,43 +103,38 @@ function JobAndCandidateList() {
   
         {/* Display selected job's candidates */}
         {selectedJob && showCandidates && (
-          <div className="candidate-list">
-            <button className="close-button" onClick={handleCloseButtonClick}>Close</button> {/* Close button */}
-            <h2>Candidates for Selected Job</h2>
-            <ul>
-              {candidates.map((candidate) => (
-                <li key={candidate.id}>
+        <div className="candidate-list">
+          <button className="close-button" onClick={handleCloseButtonClick}>Close</button> {/* Close button */}
+          <h2>Candidates for Selected Job</h2>
+          <ul>
+            {candidates.map((candidate) => (
+              <li key={candidate.id}>
+                {candidate.name}
+              </li>
+            ))}
+          </ul>
+          {/* Select fields for generating report */}
+          <h2>Select fields to be used for generating report</h2>
+          <div>
+            {keywords.map(keyword => (
+              <div className="checkbox-wrapper" key={keyword}>
+                <div className="checkbox-container">
                   <input
                     type="checkbox"
-                    onChange={() => handleCandidateSelection(candidate.id)}
+                    id={keyword}
+                    value={keyword}
+                    checked={selectedKeywords.includes(keyword)}
+                    onChange={handleKeywordChange}
                   />
-                  {candidate.candidateName}
-                </li>
-              ))}
-            </ul>
-  
-            {/* Select fields for generating report */}
-            <h2>Select fields to be used for generating report</h2>
-            <div>
-              {keywords.map(keyword => (
-                <div className="checkbox-wrapper" key={keyword}>
-                  <div className="checkbox-container">
-                    <input
-                      type="checkbox"
-                      id={keyword}
-                      value={keyword}
-                      checked={selectedKeywords.includes(keyword)}
-                      onChange={handleKeywordChange}
-                    />
-                  </div>
-                  <label htmlFor={keyword}>{keyword}</label>
                 </div>
-              ))}
-            </div>
-            <button onClick={handleClearCheckboxes}>Clear Checkboxes</button>
-            <button className="report" onClick={handleReport}>Generate Report</button>
+                <label htmlFor={keyword}>{keyword}</label>
+              </div>
+            ))}
           </div>
-        )}
+          <button onClick={handleClearCheckboxes}>Clear Checkboxes</button>
+          <button className="report" onClick={handleReport}>Generate Report</button>
+        </div>
+      )}
       </div>
     );
   }
