@@ -26,7 +26,7 @@ function JobAndCandidateList() {
       }
     };
    
-    const handleJobClick = (jobId) => {
+    const HandleJobClick = (jobId) => {
       setSelectedJob(jobId);
 
       useEffect(() => {
@@ -95,7 +95,7 @@ function JobAndCandidateList() {
         {/* Display list of jobs */}
         <ul className="job-table">
           {jobs.map((job) => (
-            <li key={job.id} onClick={() => handleJobClick(job.id)}>
+            <li key={job.id} onClick={() => HandleJobClick(job.id)}>
               {job.title}
             </li>
           ))}
