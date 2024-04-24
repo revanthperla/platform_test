@@ -352,12 +352,14 @@ def generate_report(request):
     jobId = data.get('jobId', None)
     keywords = data.get('keywords', [])
     job = JobDescription.objects.get(id=jobId)
+    job_serializer = JobDescriptionSerializer(job)
+    
     assessments = Assessment.objects.filter(job_description=job.titleDesignation)
     
     response_data = {
         'jobId': jobId,
         'keywords': keywords,
-        'job': job,
+        'job': job_serializer,  # Include serialized job object
         'candidates': assessments,
         'message': 'Report generation request received successfully.'
     }
