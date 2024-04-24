@@ -45,7 +45,7 @@ function JobAndCandidateList() {
     const HandleJobClick = (jobId) => {
       setSelectedJob(jobId);
       fetchCandidates(jobId);
-
+      setShowCandidates(true);
     };
   
     // Function to handle close button click
@@ -66,8 +66,8 @@ function JobAndCandidateList() {
       'Total-experience',
       'Total CTC',
       'Expected CTC',
-      'Notice period (also if there is an option to buy-out)',
-      'Willingness to relocate with FAMILY – at the time of joining itself',
+      'Notice period',
+      'Willingness to relocate',
       'Assessment Comments by HRINPUTS',
       'Remarks'
     ];
