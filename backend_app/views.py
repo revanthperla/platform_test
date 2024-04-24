@@ -355,26 +355,30 @@ def generate_report(request):
     job = JobDescription.objects.get(id=jobId)
     assessments = Assessment.objects.filter(job_description=job.titleDesignation)
     
-    # Create a DataFrame to store assessment data
+    # Prepare data for Excel
     assessment_data = []
     for assessment in assessments:
-        assessment_row = {
-            'Candidate Name': assessment.candidateName,
-        }
+        assessment_row = {'Candidate': assessment.candidate_name}  # Add candidate name
         for keyword in keywords:
-            assessment_row[keyword] = assessment.keyword_scores.get(keyword, 0)
+            # Assuming the keyword is a field in the Assessment model
+            assessment_row[keyword] = getattr(assessment, keyword, None)
         assessment_data.append(assessment_row)
     
     # Convert data to DataFrame
     df = pd.DataFrame(assessment_data)
     
-    # Generate Excel file
-    excel_file_path = f'report_{jobId}.xlsx'
+    # Define Excel file path
+    excel_file_path = 'assessment_report.xlsx'
+    
+    # Write DataFrame to Excel
     df.to_excel(excel_file_path, index=False)
     
+    # Response data
     response_data = {
+        'jobId': jobId,
+        'keywords': keywords,
+        'df': df,
         'message': 'Excel report generated successfully.',
-        'excel_file_path': excel_file_path,
-        'df': df
+        'excel_file_path': excel_file_path
     }
     return JsonResponse(response_data)
