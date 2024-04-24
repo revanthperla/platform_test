@@ -359,9 +359,7 @@ def generate_report(request):
     assessment_data = []
     for assessment in assessments:
         assessment_row = {
-            'Candidate Name': assessment.candidate_name,
-            'Assessment Date': assessment.date,
-            'Score': assessment.score
+            'Candidate Name': assessment.candidateName,
         }
         for keyword in keywords:
             assessment_row[keyword] = assessment.keyword_scores.get(keyword, 0)
