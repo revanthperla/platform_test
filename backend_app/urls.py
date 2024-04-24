@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/update_assessment_status/<int:pk>/', update_assessment_status, name='update_assessment_status'),
     path('api/assessment_rejection/<int:pk>/', assessment_rejection, name='assessment_rejection'),
     path('api/update_assessment/<int:pk>/', update_assessment, name='update_assessment'),
+    path('api/report/', generate_report, name='generate_report'),
     path('api/get_user_details/', get_user_details, name='get_user_details'),
     path('submit_user_data/', UserDataViewSet.as_view({'post': 'create'}), name='submit_user_data'),
     path('upload_file/', upload_file, name='upload_file'),

@@ -1,8 +1,6 @@
 // JobAndCandidateList.js
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import '../css/Reportgeneration.css';
-
 
 function JobAndCandidateList() {
     const [jobs, setJobs] = useState([]);
@@ -41,7 +39,6 @@ function JobAndCandidateList() {
       }
     };
     
-    
     const HandleJobClick = (jobId) => {
       setSelectedJob(jobId);
       fetchCandidates(jobId);
@@ -51,11 +48,6 @@ function JobAndCandidateList() {
     // Function to handle close button click
     const handleCloseButtonClick = () => {
       setShowCandidates(false); // Hide candidates when close button is clicked
-    };
-  
-    // Function to handle candidate selection
-    const handleCandidateSelection = (candidateId) => {
-      // Implement your logic to handle candidate selection
     };
   
     const keywords = [
@@ -85,8 +77,40 @@ function JobAndCandidateList() {
       setSelectedKeywords([]);
     };
   
-    const handleReport = () => {
-      // Implement your logic to handle report generation
+    const handleReport = async () => {
+      try {
+        if (!selectedJob) {
+          console.error('No job selected.');
+          return;
+        }
+    
+        const requestData = {
+          jobId: selectedJob,
+          keywords: selectedKeywords
+        };
+    
+        const response = await fetch('http://43.204.201.158:8000/api/report/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+        });
+
+        const responseData = await response.json(); // Parsing response JSON data
+        console.log('Response:', responseData); 
+    
+        if (response.ok) {
+          console.log('Data sent successfully!');
+          // Optionally, you can handle success response here
+        } else {
+          console.error('Failed to send data:', response.statusText);
+          // Optionally, you can handle error response here
+        }
+      } catch (error) {
+        console.error('Error sending data:', error);
+        // Handle any network or other errors here
+      }
     };
   
     return (
@@ -109,7 +133,7 @@ function JobAndCandidateList() {
           <ul>
             {candidates.map((candidate) => (
               <li key={candidate.id}>
-                {candidate.name}
+                {candidate.candidateName}
               </li>
             ))}
           </ul>

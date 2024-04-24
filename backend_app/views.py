@@ -152,17 +152,6 @@ def get_job_descriptions(request):
         return JsonResponse(data, safe=False)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
-
-def get_assessments_for_job(request, job_id):
-    if request.method == 'GET':
-        try:
-            assessments = Assessment.objects.filter(job_description=job_id)
-            data = [{'id': assessment.id, 'candidateName': assessment.candidateName} for assessment in assessments]
-            return JsonResponse(data, safe=False)
-        except JobDescription.DoesNotExist:
-            return JsonResponse({'error': 'Job not found'}, status=404)
-    else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
     
 class GetUserDetails(APIView):
     def get(self, request):
@@ -353,3 +342,22 @@ def get_assessment_for_job(request, pk):
         return JsonResponse(data, safe=False)
     except JobDescription.DoesNotExist:
         return JsonResponse({'error': 'Job not found'}, status=404)
+    
+def generate_report(request):
+    # Retrieve data from the request body
+    data = json.loads(request.body.decode('utf-8'))
+    
+    # Extract jobId and keywords from the data
+    jobId = data.get('jobId', None)
+    keywords = data.get('keywords', [])
+    
+    # Process the received data as needed
+    # For example, you can perform actions based on jobId and keywords
+    
+    # Return a JsonResponse with any relevant data
+    response_data = {
+        'jobId': jobId,
+        'keywords': keywords,
+        'message': 'Report generation request received successfully.'
+    }
+    return JsonResponse(response_data)
