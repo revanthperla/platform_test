@@ -339,7 +339,7 @@ def assessment_rejection(request, pk):
 def get_assessment_for_job(request, pk):
     try:
         job = JobDescription.objects.get(pk=pk)
-        assessments = Assessment.objects.filter(job_description=job.titleDesignation)
+        assessments = Assessment.objects.filter(job_description=job.titleDesignation, is_active=True, rejection_reason='')
         data = [{'id': assessment.id, 'candidateName': assessment.candidateName} for assessment in assessments]
         return JsonResponse(data, safe=False)
     except JobDescription.DoesNotExist:
