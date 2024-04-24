@@ -17,6 +17,7 @@ from django.contrib.auth import authenticate
 from django.views.decorators.http import require_http_methods
 import json
 import pandas as pd
+from django.core.serializers import serialize
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -366,6 +367,7 @@ def generate_report(request):
     
     # Convert data to DataFrame
     df = pd.DataFrame(assessment_data)
+    df_ser = serialize('json', df)
     
     # Define Excel file path
     excel_file_path = 'assessment_report.xlsx'
@@ -377,7 +379,7 @@ def generate_report(request):
     response_data = {
         'jobId': jobId,
         'keywords': keywords,
-        'df': df,
+        'df': df_ser,
         'message': 'Excel report generated successfully.',
         'excel_file_path': excel_file_path
     }
