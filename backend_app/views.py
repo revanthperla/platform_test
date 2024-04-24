@@ -16,6 +16,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 from django.views.decorators.http import require_http_methods
 import json
+from django.core.serializers import serialize
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -352,14 +353,14 @@ def generate_report(request):
     jobId = data.get('jobId', None)
     keywords = data.get('keywords', [])
     job = JobDescription.objects.get(id=jobId)
-    job_serializer = JobDescriptionSerializer(job)
+    job_json = serialize('json', [job])
     
     assessments = Assessment.objects.filter(job_description=job.titleDesignation)
     
     response_data = {
         'jobId': jobId,
         'keywords': keywords,
-        'job': job_serializer,  # Include serialized job object
+        'job': job_json,  # Include serialized job object
         'candidates': assessments,
         'message': 'Report generation request received successfully.'
     }
