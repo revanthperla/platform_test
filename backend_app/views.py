@@ -359,14 +359,14 @@ def generate_report(request):
     # Mapping between keywords and other strings for column names in the DataFrame
     keyword_to_column_mapping = {
         'location': 'Location',
-        'currentEmployer': 'Employer',
-        'totalExperience': 'Experience',
+        'currentEmployer': 'Current Employer',
+        'totalExperience': 'Total Experience',
         'position': 'Position',
         'ctc': 'CTC',
         'ectc': 'Expected CTC',
         'noticePeriod': 'Notice Period',
-        'relocate': 'Relocate',
-        'comments': 'HR Comments',
+        'relocate': 'Willing to Relocate',
+        'comments': 'HRInputs Comments',
         'remarks': 'Remarks'
     }
     
