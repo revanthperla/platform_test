@@ -344,3 +344,12 @@ def assessment_rejection(request, pk):
             serializer.save(rejection_reason=request.data.get('rejection_reason'))
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+def get_assessment_for_job(request, pk):
+    try:
+        job = JobDescription.objects.get(pk=pk)
+        assessments = Assessment.objects.filter(job_description=job.titleDesignation)
+        data = [{'id': assessment.id, 'candidateName': assessment.candidateName} for assessment in assessments]
+        return JsonResponse(data, safe=False)
+    except JobDescription.DoesNotExist:
+        return JsonResponse({'error': 'Job not found'}, status=404)

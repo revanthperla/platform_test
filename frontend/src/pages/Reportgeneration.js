@@ -26,26 +26,26 @@ function JobAndCandidateList() {
       }
     };
    
+    useEffect(() => {
+      fetchCandidates();
+    }, []);
+  
+    const fetchCandidates = async (jobId) => {
+      try {
+        const response = await fetch(`http://43.204.201.158:8000/api/assessments/${jobId}/`);
+        const data = await response.json();
+        console.log(data);
+        setCandidates(data);
+      } catch (error) {
+        console.error('Error fetching Candidates:', error);
+      }
+    };
+    
+    
     const HandleJobClick = (jobId) => {
       setSelectedJob(jobId);
+      fetchCandidates(jobId);
 
-      useEffect(() => {
-        fetchCandidates();
-      }, []);
-    
-      const fetchCandidates = async () => {
-        try {
-          const response = await fetch('http://43.204.201.158:8000/api/assessments/');
-          const data = await response.json();
-          console.log(data);
-          // Filter candidates with is_active set to false and rejection_reason null
-          const filteredCandidates = data.filter(candidate => !candidate.is_active && candidate.rejection_reason === '');
-          setCandidates(filteredCandidates);
-        } catch (error) {
-          console.error('Error fetching Candidates:', error);
-        }
-      };
-      setShowCandidates(true); // Show candidates when a job is clicked
     };
   
     // Function to handle close button click
