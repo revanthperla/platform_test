@@ -353,15 +353,17 @@ def generate_report(request):
     jobId = data.get('jobId', None)
     keywords = data.get('keywords', [])
     job = JobDescription.objects.get(id=jobId)
-    job_json = serialize('json', [job])
+    job_json = serialize('json', [job])  # Serialize job object
     
     assessments = Assessment.objects.filter(job_description=job.titleDesignation)
-    
+    # Serialize queryset to JSON
+    assessments_json = serialize('json', assessments)
+
     response_data = {
         'jobId': jobId,
         'keywords': keywords,
         'job': job_json,  # Include serialized job object
-        'candidates': assessments,
+        'candidates': assessments_json,  # Include serialized queryset
         'message': 'Report generation request received successfully.'
     }
     return JsonResponse(response_data)
