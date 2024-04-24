@@ -50,7 +50,7 @@ function JobAndCandidateList() {
       setShowCandidates(false); // Hide candidates when close button is clicked
     };
   
-    const keywordToFieldMapping = {
+    const keywords = {
       'Candidate name': 'candidateName',
       'Position applied for': 'position',
       'Current location': 'location',
@@ -66,7 +66,7 @@ function JobAndCandidateList() {
 
     // Function to map selected keywords to their corresponding field names in the database
     const mapKeywordsToFields = () => {
-      return selectedKeywords.map(keyword => keywordToFieldMapping[keyword]);
+      return selectedKeywords.map(keyword => keywords[keyword]);
     };
   
     const handleKeywordChange = (e) => {
