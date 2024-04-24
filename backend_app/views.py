@@ -16,7 +16,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 from django.views.decorators.http import require_http_methods
 import json
-from django.core.serializers import serialize
+import pandas as pd
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -353,17 +353,30 @@ def generate_report(request):
     jobId = data.get('jobId', None)
     keywords = data.get('keywords', [])
     job = JobDescription.objects.get(id=jobId)
-    job_json = serialize('json', [job])  # Serialize job object
-    
     assessments = Assessment.objects.filter(job_description=job.titleDesignation)
-    # Serialize queryset to JSON
-    assessments_json = serialize('json', assessments)
-
+    
+    # Create a DataFrame to store assessment data
+    assessment_data = []
+    for assessment in assessments:
+        assessment_row = {
+            'Candidate Name': assessment.candidate_name,
+            'Assessment Date': assessment.date,
+            'Score': assessment.score
+        }
+        for keyword in keywords:
+            assessment_row[keyword] = assessment.keyword_scores.get(keyword, 0)
+        assessment_data.append(assessment_row)
+    
+    # Convert data to DataFrame
+    df = pd.DataFrame(assessment_data)
+    
+    # Generate Excel file
+    excel_file_path = f'report_{jobId}.xlsx'
+    df.to_excel(excel_file_path, index=False)
+    
     response_data = {
-        'jobId': jobId,
-        'keywords': keywords,
-        'job': job_json,  # Include serialized job object
-        'candidates': assessments_json,  # Include serialized queryset
-        'message': 'Report generation request received successfully.'
+        'message': 'Excel report generated successfully.',
+        'excel_file_path': excel_file_path,
+        'df': df
     }
     return JsonResponse(response_data)
