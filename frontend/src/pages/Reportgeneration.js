@@ -50,19 +50,24 @@ function JobAndCandidateList() {
       setShowCandidates(false); // Hide candidates when close button is clicked
     };
   
-    const keywords = [
-      'Candidate name',
-      'Position applied for',
-      'Current location',
-      'Current employer',
-      'Total-experience',
-      'Total CTC',
-      'Expected CTC',
-      'Notice period',
-      'Willingness to relocate',
-      'Assessment Comments by HRINPUTS',
-      'Remarks'
-    ];
+    const keywordToFieldMapping = {
+      'Candidate name': 'candidateName',
+      'Position applied for': 'position',
+      'Current location': 'location',
+      'Current employer': 'currentEmployer',
+      'Total-experience': 'totalExperience',
+      'Total CTC': 'ctc',
+      'Expected CTC': 'ectc',
+      'Notice period': 'noticePeriod',
+      'Willingness to relocate': 'relocate',
+      'Assessment Comments by HRINPUTS': 'comments',
+      'Remarks': 'remarks'
+    };
+
+    // Function to map selected keywords to their corresponding field names in the database
+    const mapKeywordsToFields = () => {
+      return selectedKeywords.map(keyword => keywordToFieldMapping[keyword]);
+    };
   
     const handleKeywordChange = (e) => {
       const { value, checked } = e.target;
@@ -86,7 +91,7 @@ function JobAndCandidateList() {
     
         const requestData = {
           jobId: selectedJob,
-          keywords: selectedKeywords
+          keywords: mapKeywordsToFields()
         };
     
         const response = await fetch('http://43.204.201.158:8000/api/report/', {

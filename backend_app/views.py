@@ -351,13 +351,9 @@ def generate_report(request):
     # Extract jobId and keywords from the data
     jobId = data.get('jobId', None)
     keywords = data.get('keywords', [])
-    job = JobDescription.objects.filter(id=jobId)
+    job = JobDescription.objects.get(id=jobId)
     assessments = Assessment.objects.filter(job_description=job.titleDesignation)
     
-    # Process the received data as needed
-    # For example, you can perform actions based on jobId and keywords
-    
-    # Return a JsonResponse with any relevant data
     response_data = {
         'jobId': jobId,
         'keywords': keywords,
