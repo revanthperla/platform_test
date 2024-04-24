@@ -343,6 +343,7 @@ def get_assessment_for_job(request, pk):
     except JobDescription.DoesNotExist:
         return JsonResponse({'error': 'Job not found'}, status=404)
     
+@csrf_exempt
 def generate_report(request):
     # Retrieve data from the request body
     data = json.loads(request.body.decode('utf-8'))
