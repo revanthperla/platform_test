@@ -113,7 +113,7 @@ function JobAndCandidateList() {
                     type="checkbox"
                     onChange={() => handleCandidateSelection(candidate.id)}
                   />
-                  {candidate.name}
+                  {candidate.candidateName}
                 </li>
               ))}
             </ul>
