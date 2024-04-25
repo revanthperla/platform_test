@@ -1,10 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../css/Interviewscheduling.css';
 
 function InterviewScheduling() {
   const [date, setDate] = useState(new Date());
+  const [candidates, setCandidates] = useState([]);
+  const [selectedCandidate, setSelectedCandidate] = useState('');
+
+  useEffect(() => {
+    fetchCandidates();
+  }, []);
+
+  const fetchCandidates = async () => {
+    try {
+      const response = await fetch('http://43.204.201.158:8000/api/assessments/');
+      const data = await response.json();
+      console.log(data);
+      // Filter candidates with is_active set to false and rejection_reason null
+      const filteredCandidates = data.filter(candidate => !candidate.is_active && candidate.rejection_reason === '');
+      setCandidates(filteredCandidates);
+    } catch (error) {
+      console.error('Error fetching Candidates:', error);
+    }
+  };
 
   const onChange = date => {
     setDate(date);
@@ -22,6 +41,10 @@ function InterviewScheduling() {
     } else {
       return 'custom-other-month';
     }
+  };
+
+  const handleCandidateChange = event => {
+    setSelectedCandidate(event.target.value);
   };
 
   return (
@@ -43,6 +66,15 @@ function InterviewScheduling() {
           <input type="text" value={date.toDateString()} disabled />
           <label>Time:</label>
           <input type="time" />
+          <label>Candidate:</label>
+          <select value={selectedCandidate} onChange={handleCandidateChange}>
+            <option value="">Select a candidate</option>
+            {candidates.map(candidate => (
+              <option key={candidate.id} value={candidate.id}>
+                {candidate.name}
+              </option>
+            ))}
+          </select>
           <label>Appointment Description:</label>
           <textarea></textarea>
           <button type="submit">Add Appointment</button>
