@@ -7,7 +7,7 @@ function InterviewScheduling() {
   const [formData, setFormData] = useState({
     date: new Date(),
     time: '',
-    candidate: '',
+    assessment: '',
     description: ''
   });
   const [candidates, setCandidates] = useState([]);
@@ -103,7 +103,7 @@ function InterviewScheduling() {
           <label>Time:</label>
           <input type="time" name="time" value={formData.time} onChange={handleChange} />
           <label>Candidate:</label>
-          <select name="candidate" value={formData.candidate} onChange={handleChange}>
+          <select name="assessment" value={formData.assessment} onChange={handleChange}>
             <option value="">Select a candidate</option>
             {candidates.map(candidate => (
               <option key={candidate.id} value={candidate.id}>
