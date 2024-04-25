@@ -21,7 +21,6 @@ urlpatterns = [
     path('api/bdpm/', get_bdpm, name='get_bdpm'),
     path('api/clientlist/', ClientRegistrationViewSet.as_view({'get': 'list'}), name='clientlist'),
     path('api/joblist/', JobDescriptionViewSet.as_view({'get': 'list'}), name='clientlist'),
-    path('api/job-descriptions/', get_job_descriptions, name='get_job_descriptions'),
     path('api/assessments/', AssessmentViewSet.as_view({'get': 'list'}), name='get_assessments'),
     path('api/assessments/<int:pk>/', get_assessment_for_job, name='get_assessments_for_job'), 
     path('clientregistration/', ClientRegistrationViewSet.as_view({'post': 'create'}), name='clientregistration'),
@@ -31,6 +30,8 @@ urlpatterns = [
     path('api/report/', generate_report, name='generate_report'),
     path('api/get_user_details/', get_user_details, name='get_user_details'),
     path('submit_user_data/', UserDataViewSet.as_view({'post': 'create'}), name='submit_user_data'),
+    path('api/submit_appointment/', AppointmentViewSet.as_view({'post': 'create'}), name='submit_appointment'),
+    
     path('upload_file/', upload_file, name='upload_file'),
     path('userlist/', user_data_list, name='user_data_list'),
     path('userlist/<int:user_id>/', update_user_role, name='update_user_role'),

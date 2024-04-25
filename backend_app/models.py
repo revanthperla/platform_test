@@ -167,7 +167,7 @@ class Assessment(models.Model):
         return self.candidateName  # Change this based on what you want to display for each instance
     
 class Appointment(models.Model):
-    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
+    assessment = models.CharField(max_length=255)
     date = models.DateField()
     time = models.TimeField()
     description = models.TextField()

@@ -4,9 +4,13 @@ import 'react-calendar/dist/Calendar.css';
 import '../css/Interviewscheduling.css';
 
 function InterviewScheduling() {
-  const [date, setDate] = useState(new Date());
+  const [formData, setFormData] = useState({
+    date: new Date(),
+    time: '',
+    candidate: '',
+    description: ''
+  });
   const [candidates, setCandidates] = useState([]);
-  const [selectedCandidate, setSelectedCandidate] = useState('');
 
   useEffect(() => {
     fetchCandidates();
@@ -26,7 +30,10 @@ function InterviewScheduling() {
   };
 
   const onChange = date => {
-    setDate(date);
+    setFormData(prevData => ({
+      ...prevData,
+      date: date
+    }));
   };
 
   const tileClassName = ({ date }) => {
@@ -43,8 +50,37 @@ function InterviewScheduling() {
     }
   };
 
-  const handleCandidateChange = event => {
-    setSelectedCandidate(event.target.value);
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+    try {
+      // Dummy endpoint, replace with your actual endpoint
+      const response = await fetch('http://43.204.201.158:8000/api/submit_appointment/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json();
+      console.log('Appointment created:', data);
+      // Reset form fields after successful submission
+      setFormData({
+        date: new Date(),
+        time: '',
+        candidate: '',
+        description: ''
+      });
+    } catch (error) {
+      console.error('Error creating appointment:', error);
+    }
   };
 
   return (
@@ -55,19 +91,19 @@ function InterviewScheduling() {
       <div className="calendar-container">
         <Calendar
           onChange={onChange}
-          value={date}
+          value={formData.date}
           tileClassName={tileClassName}
         />
       </div>
       <div className="appointment-form">
         <h2>Add Appointment</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <label>Date:</label>
-          <input type="text" value={date.toDateString()} disabled />
+          <input type="text" value={formData.date.toDateString()} disabled />
           <label>Time:</label>
-          <input type="time" />
+          <input type="time" name="time" value={formData.time} onChange={handleChange} />
           <label>Candidate:</label>
-          <select value={selectedCandidate} onChange={handleCandidateChange}>
+          <select name="candidate" value={formData.candidate} onChange={handleChange}>
             <option value="">Select a candidate</option>
             {candidates.map(candidate => (
               <option key={candidate.id} value={candidate.id}>
@@ -76,7 +112,7 @@ function InterviewScheduling() {
             ))}
           </select>
           <label>Appointment Description:</label>
-          <textarea></textarea>
+          <textarea name="description" value={formData.description} onChange={handleChange}></textarea>
           <button type="submit">Add Appointment</button>
         </form>
       </div>
