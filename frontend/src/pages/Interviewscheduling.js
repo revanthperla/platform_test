@@ -71,7 +71,7 @@ function InterviewScheduling() {
             <option value="">Select a candidate</option>
             {candidates.map(candidate => (
               <option key={candidate.id} value={candidate.id}>
-                {candidate.name}
+                {candidate.candidateName}
               </option>
             ))}
           </select>
