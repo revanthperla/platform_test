@@ -92,6 +92,7 @@ function InterviewScheduling() {
         <Calendar
           onChange={onChange}
           value={formData.date}
+          dateFormat="MMMM d, yyyy"
           tileClassName={tileClassName}
         />
       </div>
