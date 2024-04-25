@@ -62,7 +62,7 @@ function InterviewScheduling() {
     event.preventDefault();
     try {
       // Dummy endpoint, replace with your actual endpoint
-      const response = await fetch('http://dummyendpoint.com', {
+      const response = await fetch('http://43.204.201.158:8000/api/submit_appointmnet/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
