@@ -62,7 +62,7 @@ function InterviewScheduling() {
     event.preventDefault();
     try {
       // Dummy endpoint, replace with your actual endpoint
-      const response = await fetch('http://43.204.201.158:8000/api/submit_appointment/', {
+      const response = await fetch('http://dummyendpoint.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -92,7 +92,6 @@ function InterviewScheduling() {
         <Calendar
           onChange={onChange}
           value={formData.date}
-          dateFormat="MMMM d, yyyy"
           tileClassName={tileClassName}
         />
       </div>
@@ -100,7 +99,7 @@ function InterviewScheduling() {
         <h2>Add Appointment</h2>
         <form onSubmit={handleSubmit}>
           <label>Date:</label>
-          <input type="text" value={formData.date.toDateString()} disabled />
+          <input type="date" name="date" value={formData.date.toISOString().split('T')[0]} onChange={handleChange} />
           <label>Time:</label>
           <input type="time" name="time" value={formData.time} onChange={handleChange} />
           <label>Candidate:</label>
