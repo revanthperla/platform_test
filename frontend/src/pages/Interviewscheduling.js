@@ -61,13 +61,18 @@ function InterviewScheduling() {
   const handleSubmit = async event => {
     event.preventDefault();
     try {
+      const formattedDate = formData.date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+      const requestData = {
+        ...formData,
+        date: formattedDate
+      };
       // Dummy endpoint, replace with your actual endpoint
       const response = await fetch('http://43.204.201.158:8000/api/submit_appointment/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(requestData)
       });
       const data = await response.json();
       console.log('Appointment created:', data);
@@ -82,6 +87,7 @@ function InterviewScheduling() {
       console.error('Error creating appointment:', error);
     }
   };
+  
 
   return (
     <div className="InterviewScheduling">
