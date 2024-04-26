@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Import Axios for making API requests
 import '../css/Assessmentview.css'; // Update the path to your CSS file
 
 function AssessmentForm({ candidate }) {

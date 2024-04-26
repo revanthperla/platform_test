@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import Profile from './Employeeprofile';
-import ClientRegistration from './Clientregistration';
-import ClientDetails from './Clientview';
 import ClientApproval from './Clientapproval';
 import { Link } from 'react-router-dom';
 import profileImage from '../images/user.png';

@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import Profile from './Employeeprofile';
-import ClientRegistration from './Clientregistration';
-import ClientDetails from './Clientview';
 import { Link } from 'react-router-dom';
 import profileImage from '../images/user.png';
 import ClientList from './Clientlist';
 import '../css/Bdpdashboard.css'
 import JobDescription from './Jobdescriptionform';
-import JobList from './Joblist';
 import JobListWithAssessment from './Candidateapproval';
 import JobAndCandidateList from './Reportgeneration';
 

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import DatePicker from 'react-datepicker';
-import { Document, Page } from 'react-pdf';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../css/Employeeregistration.css'
 import axios from 'axios'; // Import Axios

@@ -87,7 +87,6 @@ function InterviewScheduling() {
       console.error('Error creating appointment:', error);
     }
   };
-  
 
   return (
     <div className="InterviewScheduling">
