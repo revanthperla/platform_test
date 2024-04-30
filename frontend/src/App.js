@@ -1,7 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-
 import ClientRegistration from './pages/Clientregistration';
 import Login from './pages/login';
 import JobDescription from './pages/Jobdescriptionform';

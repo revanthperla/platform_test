@@ -26,8 +26,7 @@ function BdpDashboard() {
             </li>
             </ul>
         </div>
-        <div className="employee-content"> {/* Apply CSS class */}
-            {/* Render content based on activeTab */}
+        <div className="employee-content">
             {activeTab === 'Profile' && <Profile />}
             {activeTab === 'Clients' && <ClientList />}
             {activeTab === 'Client Registration' && <ClientRegistration />}

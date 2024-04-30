@@ -26,8 +26,7 @@ function Dashboard() {
             </li>
             </ul>
         </div>
-        <div className="employee-content"> {/* Apply CSS class */}
-            {/* Render content based on activeTab */}
+        <div className="employee-content">
             {activeTab === 'Profile' && <Profile />}
             {activeTab === 'Assigned Jobs' && <JobList />}
             {activeTab === 'Interview Scheduling' && <InterviewScheduling />}
