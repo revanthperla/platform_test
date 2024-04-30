@@ -6,7 +6,7 @@ import '../css/Employeedashboard.css'; // Import CSS file
 import { Link } from 'react-router-dom';
 import profileImage from '../images/user.png';
 
-function Dashboard() {
+function ADashboard() {
     const [activeTab, setActiveTab] = useState('Profile');
 
     const handleTabChange = (tab) => {
@@ -35,4 +35,4 @@ function Dashboard() {
     );
 }
   
-  export default Dashboard;
+  export default ADashboard;

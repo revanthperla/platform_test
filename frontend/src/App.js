@@ -23,6 +23,7 @@ import JobAndCandidateList from './pages/Reportgeneration';
 import JobAndCandidateSelection from './pages/Inovicerequest';
 import GenerateInvoice from './pages/Generateinvoice';
 import Profile from './pages/Employeeprofile';
+import ADashboard from './pages/Amanagersashboard';
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/bdpmdashboard" element={<BdpmDashboard />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/managerdashboard" element={<ManagerDashboard />} />
+        <Route path="/amanagerdashboard" element={<ADashboard />} />
         <Route path="/clientregistration" element={<ClientRegistration />} />
         <Route path="/jobform" element={<JobDescription />} />
         <Route path="/joblist" element={<JobList />} />
