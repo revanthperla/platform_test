@@ -118,6 +118,7 @@ function EmployeeRegistration() {
         navigate('/usernameregistration');
       })
       .catch(error => {
+        window.alert('Please check if fields have been filled correctly.');
         console.error('Error sending data:', error);
       });
   };
