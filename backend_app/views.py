@@ -18,6 +18,7 @@ from django.views.decorators.http import require_http_methods
 import json
 import pandas as pd
 from django.core.serializers import serialize
+from django.views.decorators.http import require_GET, require_POST
 
 class UserDataViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
@@ -407,3 +408,21 @@ def generate_report(request):
     # Add Content-Disposition header to force download
     response['Content-Disposition'] = 'attachment; filename="assessment_report.xlsx"'
     return JsonResponse(response_data)
+
+@require_GET
+def client_list(request):
+    clients = ClientRegistration.objects.all()
+    data = [{'id': client.id, 'entityName': client.entityName} for client in clients]
+    return JsonResponse(data, safe=False)
+
+@require_GET
+def jobs_for_client(request, client_id):
+    jobs = JobDescription.objects.filter(clientName_id=client_id)
+    data = [{'id': job.id, 'titleDesignation': job.titleDesignation} for job in jobs]
+    return JsonResponse(data, safe=False)
+
+@require_GET
+def candidates_for_job(request, job_id):
+    candidates = Assessment.objects.filter(job_description_id=job_id)
+    data = [{'id': candidate.id, 'candidateName': candidate.candidateName} for candidate in candidates]
+    return JsonResponse(data, safe=False)
