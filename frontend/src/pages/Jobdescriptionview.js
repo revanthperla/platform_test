@@ -32,7 +32,7 @@ function JobDescriptionDetails({job}) {
             <h1>Job Description Details</h1>
             <div className="job-details">
                 <p><span className="static-text">Title/Designation:</span> {job.titleDesignation}</p>
-                <p><span className="static-text">Client Name:</span> {job.entityName}</p>
+                <p><span className="static-text">Client Name:</span> {job.clientName}</p>
                 <p><span className="static-text">Account Manager:</span> {job.accountManager}</p>
                 <p><span className="static-text">Assigned Recruiters:</span> {job.assignedRecruiters}</p>
                 <p><span className="static-text">Start Date:</span> {job.startDate}</p>
