@@ -6,6 +6,7 @@ function GenerateInvoice() {
     const [candidates, setCandidates] = useState([]);
     const [selectedClient, setSelectedClient] = useState(null);
     const [selectedJob, setSelectedJob] = useState(null);
+    const [selectedCandidate, setSelectedCandidate] = useState(null);
 
     useEffect(() => {
         fetchClients();
@@ -44,12 +45,18 @@ function GenerateInvoice() {
     const handleClientClick = async (clientId) => {
         setSelectedClient(clientId);
         setSelectedJob(null);
+        setSelectedCandidate(null);
         await fetchJobs(clientId);
     };
 
     const handleJobClick = async (jobId) => {
         setSelectedJob(jobId);
+        setSelectedCandidate(null);
         await fetchCandidates(jobId);
+    };
+
+    const handleCandidateSelection = (candidateId) => {
+        setSelectedCandidate(candidateId);
     };
 
     return (
@@ -80,7 +87,12 @@ function GenerateInvoice() {
                     <ul>
                         {candidates.map(candidate => (
                             <li key={candidate.id}>
-                                {candidate.candidateName}
+                                <input
+                                    type="checkbox"
+                                    checked={selectedCandidate === candidate.id}
+                                    onChange={() => handleCandidateSelection(candidate.id)}
+                                />
+                                <label>{candidate.candidateName}</label>
                             </li>
                         ))}
                     </ul>
