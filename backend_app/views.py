@@ -417,12 +417,12 @@ def client_list(request):
 
 @require_GET
 def jobs_for_client(request, client_id):
-    jobs = JobDescription.objects.filter(clientName_id=client_id)
+    jobs = JobDescription.objects.filter(id=client_id)
     data = [{'id': job.id, 'titleDesignation': job.titleDesignation} for job in jobs]
     return JsonResponse(data, safe=False)
 
 @require_GET
 def candidates_for_job(request, job_id):
-    candidates = Assessment.objects.filter(job_description_id=job_id)
+    candidates = Assessment.objects.filter(id=job_id)
     data = [{'id': candidate.id, 'candidateName': candidate.candidateName} for candidate in candidates]
     return JsonResponse(data, safe=False)
