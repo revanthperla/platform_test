@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ClientDetails from './Clientview';
+import '../css/Clientlist.css'
 
 function ClientList() {
   const [clients, setClients] = useState([]);

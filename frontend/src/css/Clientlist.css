@@ -1,0 +1,23 @@
+table {
+    width: 100%; /* Set table to full width */
+    border-collapse: collapse; /* Remove borders between cells */
+  }
+  
+  th,
+  td {
+    padding: 10px; /* Add padding to cells */
+    border: 1px solid #ddd; /* Add a thin border to cells */
+    text-align: left; /* Align text to the left */
+  }
+  
+  th {
+    background-color: #f2f2f2; /* Add a light gray background to headers */
+    font-weight: bold; /* Make headers bold */
+  }
+  
+  tr {
+    /* Add zebra striping for alternating row colors */
+    &:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  }
